@@ -1,0 +1,17 @@
+---
+declared-services:
+  discovery-news-service:
+    label: discovery
+    plan: lite
+applications:
+- path: .
+  name: watson-discovery-news
+  buildpack: sdk-for-nodejs
+  memory: 256M
+  instances: 1
+  disk_quota: 256M
+  random-route: false
+  services:
+  - discovery-news-service
+env:
+  SLACK_BOT_TOKEN: placeholder

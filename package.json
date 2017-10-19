@@ -1,0 +1,56 @@
+{
+  "name": "watson-discovery-news",
+  "version": "1.0.0",
+  "private": true,
+  "main": "app.js",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IBM/watson-discovery-news.git"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "start:watch": "nodemon app.js",
+    "bootstrap": "cp env.sample .env",
+    "test": "jest",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "babelify": "^7.3.0",
+    "bluebird": "^3.5.0",
+    "botkit": "^0.5.4",
+    "cfenv": "^1.0.3",
+    "dotenv": "^4.0.0",
+    "express": "^4.15.3",
+    "express-browserify": "^1.0.2",
+    "express-react-views": "^0.10.2",
+    "moment": "^2.18.1",
+    "prop-types": "^15.5.10",
+    "query-string": "^4.3.4",
+    "react": "^15.5.10",
+    "react-dom": "^15.5.4",
+    "semantic-ui": "^2.2.13",
+    "semantic-ui-css": "^2.2.12",
+    "semantic-ui-react": "^0.75.0",
+    "uglifyify": "^3.0.4",
+    "vcap_services": "^0.2.0",
+    "watson-developer-cloud": "^2.32.1"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "react"
+    ],
+    "ignore": "node_modules"
+  },
+  "devDependencies": {
+    "enzyme": "^2.8.2",
+    "eslint": "^3.19.0",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-react": "^7.0.1",
+    "jest": "^20.0.4",
+    "nodemon": "^1.11.0",
+    "react-addons-test-utils": "^15.5.1"
+  }
+}

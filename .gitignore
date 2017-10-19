@@ -36,6 +36,10 @@ build/Release
 node_modules/
 jspm_packages/
 
+# Semantic-ui components
+semantic/
+semantic.json
+
 # Typescript v1 declaration files
 typings/
 
@@ -44,6 +48,9 @@ typings/
 
 # Optional eslint cache
 .eslintcache
+
+# Virtual Studio code
+.vscode/
 
 # Optional REPL history
 .node_repl_history
@@ -57,3 +64,5 @@ typings/
 # dotenv environment variables file
 .env
 
+# Mac files
+.DS_Store

@@ -24,6 +24,7 @@ const { parseData, topicStory } = utils;
 /*eslint no-unused-vars: ["error", {"argsIgnorePattern": "response"}]*/
 const WatsonNewsServer = new Promise((resolve, reject) => {
   // getInvironments as sanity check to ensure creds are valid
+  var entities;
   discovery.getEnvironments({})
     .then(response => {
       // environment and collection ids are always the same for Watson News
@@ -31,6 +32,7 @@ const WatsonNewsServer = new Promise((resolve, reject) => {
       const collectionId = discovery.collectionId;
       queryBuilder.setEnvironmentId(environmentId);
       queryBuilder.setCollectionId(collectionId);
+      // resolve(createServer());
     })
     .then(response => {
       const params = Object.assign({
@@ -41,20 +43,15 @@ const WatsonNewsServer = new Promise((resolve, reject) => {
         aggregation: 'term(enriched_text.entities.text, count:7)'
         // aggregation: 'term(enriched_text.sentiment.document.label).term(enriched_text.categories.label,count:3)'
       });
-      return new Promise((resolve, reject) => {
-        discovery.query(params)
+      discovery.query(params)
         .then(response =>  {
-          // entities are in the response
-          resolve(response);
+          entities = response;
+          resolve(createServer(entities));
         })
         .catch(error => {
           console.error(error);
           reject(error);
         });
-      });
-    })
-    .then(response => {
-      resolve(createServer(response));
     })
     .catch(error => {
       // eslint-disable-next-line no-console
@@ -63,6 +60,32 @@ const WatsonNewsServer = new Promise((resolve, reject) => {
     });
 });
 
+// const getEntities = new Promise((resolve, reject) => {
+//   const params = Object.assign({
+//     environment_id: "e52e21d1-0295-4c62-991c-1f0686b65fc9",
+//     collection_id: "05f0711c-db65-4344-994b-ec2c9353dd5a",
+//     sort: '-_score',
+//     return: 'enriched_text.entities.text',
+//     aggregation: 'term(enriched_text.sentiment.document.label).term(enriched_text.entities.text, count:5)'
+//     // aggregation: 'term(enriched_text.sentiment.document.label).term(enriched_text.categories.label,count:3)'
+//   });
+
+//   // discovery.query((params), function(error, data) {
+//   //   entities = JSON.stringify(data, null, 2);
+//   //   console.log(entities);
+//   //   return entities;
+//   // });
+
+//   discovery.query(params)
+//     .then(response =>  {
+//       resolve(JSON.stringify(response, null, 2));
+//     })
+//     .catch(error => {
+//       console.error(error);
+//       reject(error);
+//     });
+// });
+
 function createServer(entities) {
   const server = require('./express');
 
@@ -70,15 +93,17 @@ function createServer(entities) {
     const { query } = req.query;
 
     console.log("In /api/search: query = " + query);
+
     if (entities) {
       console.log("A entities is set");
     } else {
       console.log("A entities is null");
     }
-  
+
     discovery.query(queryBuilder.search({ natural_language_query: query }))
       .then(response => res.json(response))
       .catch(error => {
+        console.log("In /api/search: error.code = " + error.code);
         if (error.message === 'Number of free queries per month exceeded') {
           res.status(429).json(error);
         } else {
@@ -93,12 +118,13 @@ function createServer(entities) {
     const fullUrl = req.protocol + '://' + req.get('host');
 
     console.log("In /:search: query = " + qs);
+
     if (entities) {
       console.log("B entities is set");
     } else {
       console.log("B entities is null");
     }
-
+    
     fetch(fullUrl + `/api/search?${qs}`)
       .then(response => {
         if (response.ok) {
@@ -117,20 +143,26 @@ function createServer(entities) {
       });
   });
 
- server.get('/*', function(req, res) {
+  server.get('/*', function(req, res) {
     const category = req.params[0];
     const props = category ? { category } : {};
 
-    console.log("In /*");
+    // GetEntities()
+    //   .then(function (dd) {
+    //     entities = JSON.parse(dd);
+    //   });
+
     if (entities) {
       console.log("C entities is set");
     } else {
       console.log("C entities is null");
     }
-    
-    res.render('index', { entities: entities });
-  });
 
+    searchQuery = ' ';
+    // res.render('index', { entities: entities, data: null, searchQuery, error: null });
+    res.render('index', props);
+  });
+    
   return server;
 }
 

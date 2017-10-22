@@ -50,7 +50,7 @@ class DefaultLayout extends React.Component {
             id="bootstrap-data"
             dangerouslySetInnerHTML={{__html: `window.__INITIAL_STATE__ = ${this.props.initialData};`}}
           ></script>
-          <script type="text/javascript" src="/js/search/bundle.js" />
+          <script type="text/javascript" src="/js/bundle.js" />
         </body>
       </html>
     );

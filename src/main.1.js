@@ -30,7 +30,6 @@ class Main extends React.Component {
     super(...props);
     const { entities, data, searchQuery, error } = this.props;
 
-    // change in state fires re-render of components
     this.state = {
       error: error,
       data: data && parseData(data),
@@ -45,13 +44,15 @@ class Main extends React.Component {
 
     this.setState({
       loading: true,
-      searchQuery
+      searchQuery,
+      entities: entities
     });
 
     scrollToMain();
     history.pushState({}, {}, `/${searchQuery.replace(/ /g, '+')}`);
 
     const qs = queryString.stringify({ query: searchQuery });
+    console.log("In fetchData(): query = " + query);
     fetch(`/api/search?${qs}`)
     .then(response => {
       if (response.ok) {
@@ -61,14 +62,15 @@ class Main extends React.Component {
       }
     })
     .then(json => {
-      this.setState({ data: parseData(json), loading: false, error: null });
+      this.setState({ entities: entities, data: parseData(json), loading: false, error: null });
       scrollToMain();
     })
     .catch(response => {
       this.setState({
         error: (response.status === 429) ? 'Number of free queries per month exceeded' : 'Error fetching results',
         loading: false,
-        data: null
+        data: null,
+        entities: entities
       });
       // eslint-disable-next-line no-console
       console.error(response);
@@ -77,22 +79,26 @@ class Main extends React.Component {
 
   getMatches() {
     const { data } = this.state;
+
     if (!data) {
       return null;
     }
+
     return <Matches matches={data.results} />;
   }
 
   getEntities() {
     const { entities } = this.state;
+
     if (!entities) {
       return null;
     }
+
     return <Entities entities={entities.results} />;
   }
-  
+
   render() {
-    const { loading, data, error, searchQuery } = this.state;
+    const { entities, loading, data, error, searchQuery } = this.state;
 
     return (
       <Grid celled className='search-grid'>
@@ -105,7 +111,7 @@ class Main extends React.Component {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-        <Grid.Column width={4} textAlign='center'>
+          <Grid.Column width={4} textAlign='center'>
             <div className="row">
               {this.getEntities()}
             </div>
@@ -144,6 +150,7 @@ class Main extends React.Component {
 }
 
 Main.propTypes = {
+  entities: PropTypes.object,
   data: PropTypes.object,
   searchQuery: PropTypes.string,
   error: PropTypes.object

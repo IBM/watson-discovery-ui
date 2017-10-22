@@ -42,6 +42,6 @@ if (!isDev) {
 }
 
 // Client Side Bundle route
-app.get('/js/search/bundle.js', searchBrowserifyier);
+app.get('/js/bundle.js', searchBrowserifyier);
 
 module.exports = app;

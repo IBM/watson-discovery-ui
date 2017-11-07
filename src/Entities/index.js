@@ -23,75 +23,75 @@ class Entity extends React.Component {
   constructor(...props) {
     super(...props);
     this.state = {
-      isChecked: false,
-      label: this.props.entity,
+      isChecked: false
     };
   }
 
-  handleOnChange(event) {
-    this.state.isChecked = ! this.state.isChecked;
-    console.log('checkbox change event');
-    console.log('isChecked: ' + this.state.isChecked);
-    console.log('entity: ' + this.state.label);
-    
-    console.log('selectedEntities: ' + this.props.selectedEntities);
-    this.props.onEntitesChange({
-      selectedEntities: ("test1", "test2") 
-    });
+  toggleCheckboxChange() {
+    const { handleCheckboxChange, label } = this.props;
+
+    this.setState(({ isChecked }) => (
+      {
+        isChecked: !isChecked
+      }
+    ));
+
+    handleCheckboxChange(label);
   }
 
   render() {
+    const { label } = this.props;
+    const { isChecked } = this.state;
+
     return (
       <div>
         <Checkbox 
-          label={this.props.entity}
-          onChange={this.handleOnChange.bind(this)}
+          label={label}
+          onChange={this.toggleCheckboxChange.bind(this)}
         />
       </div>
     );
   }
 }
 
-// Entity.propTypes = {
-//   label: PropTypes.string.isRequired,
-//   isChecked: PropTypes.bool
-// };
+Entity.propTypes = {
+  label: PropTypes.string.isRequired,
+  handleCheckboxChange: PropTypes.func.isRequired
+};
 
 class Entities extends React.Component {
   constructor(...props) {
     super(...props);
-    const { selectedEntities } = this.props;
 
     this.state = {
-      selectedEntities: this.props.selectedEntities || []
+       selectedEntities: this.props.selectedEntities
     };
   }
   
-  fetchEntities(value) {
-    console.log('fetchEntities called: ')
-    for (var entry of this.props.entities.entries()) {
-      var key = entry[0];
-      var value = entry[1];
-      console.log('entity: ' + value.key); 
-      console.log(util.inspect(value, false, null));
+  // componentWillMount() {
+  //   selectedCheckboxes = new Set();
+  // };
+
+  toggleCheckbox(label) {
+    const {selectedEntities } = this.props;
+
+    if (selectedEntities.has(label)) {
+      selectedEntities.delete(label);
+    } else {
+      selectedEntities.add(label);
     }
-    console.log('selectedEntities: ' + this.state.selectedEntities);
+    console.log('selectedEntities: ');
+    for (let item of selectedEntities)
+      console.log(util.inspect(item, false, null));
+
+    this.props.onEntitiesChange({
+      selectedEntities: selectedEntities
+    });
+
   }
 
-  // createCheckbox = label => (
-  //   <Entity
-  //     label={label}
-  //     handleCheckboxChange={this.toggleCheckbox}
-  //     key={label}
-  //   />
-  // )
-
-  // createCheckboxes = () => (
-  //   this.props.entities.map(this.createCheckbox)
-  // )
-
   render() {
-    const { selectedEntities } = this.state;
+    const { selectedEntities } = this.props;
     return (
       <div>
         <Header as='h2' textAlign='center'>Top Entities</Header>
@@ -99,26 +99,25 @@ class Entities extends React.Component {
           <div className="matches--list">
             {this.props.entities.map(item =>
               <Entity
-                onEntitesChange={this.fetchEntities.bind(this)}
-                entity={getEntityString(item)}
-                selectedEntities={selectedEntities}
+                label={getEntityString(item)}
+                handleCheckboxChange={this.toggleCheckbox.bind(this)}
+                key={getEntityString(item)}
               />)
             }
-          </div>
+        </div>
         </Container>
       </div>
     );
   }
 }
 
-Entities.propTypes = {
-  onEntitesChange: PropTypes.func.isRequired,
-  entities: PropTypes.arrayOf(PropTypes.object).isRequired,
-  selectedEntities: PropTypes.array
-};
-
 const getEntityString = item => {
   return item.key + ' (' + item.matching_results + ')';
+};
+
+Entities.propTypes = {
+  onEntitiesChange: PropTypes.func.isRequired,
+  selectedEntities: PropTypes.object
 };
 
 module.exports = Entities;

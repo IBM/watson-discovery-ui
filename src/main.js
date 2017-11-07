@@ -23,6 +23,7 @@ import SearchField from './SearchField';
 import Entities from './Entities';
 import queryBuilder from '../server/query-builder';
 import { Grid, Dimmer, Loader } from 'semantic-ui-react';
+const util = require('util');
 
 class Main extends React.Component {
 
@@ -37,13 +38,42 @@ class Main extends React.Component {
       entities: entities && parseEntities(entities),
       loading: false,
       searchQuery: searchQuery || '',
-      selectedEntities: selectedEntities || ''
+      selectedEntities: new Set()
     };
   }
 
-  fetchData(query) {
-    const { searchQuery } = query;
+  entitiesChanged(entities) {
+    const { selectedEntities } = entities;
+    console.log("QUERY - selectedEntities: ");
+    for (let item of selectedEntities)
+      console.log(util.inspect(item, false, null));
+    this.setState(({selectedEntities}) => (
+      {
+        selectedEntities: selectedEntities
+      }
+    ));
 
+    const { searchQuery } = this.state;
+    console.log("searchQuery [FROM ENTITIES]: " + searchQuery);
+    if (searchQuery) 
+      this.fetchData(searchQuery);
+  }
+
+  searchQueryChanged(query) {
+    const { searchQuery } = query;
+    console.log("searchQuery [FROM SEARCH]: " + searchQuery);
+    this.fetchData(searchQuery);
+  }
+
+  fetchData(query) {
+    const searchQuery = query;
+    const { selectedEntities } = this.state;
+
+    console.log("QUERY2 - selectedEntities: ");
+    for (let item of selectedEntities)
+      console.log(util.inspect(item, false, null));
+    console.log("QUERY2 - searchQuery: " + searchQuery);
+    
     this.setState({
       loading: true,
       searchQuery
@@ -85,22 +115,27 @@ class Main extends React.Component {
   }
 
   getEntities() {
-    const { entities } = this.state;
+    const { entities, selectedEntities } = this.state;
     if (!entities) {
       return null;
     }
-    return <Entities entities={entities.results} />;
+    return (
+      <Entities 
+        entities={entities.results}
+        selectedEntities={selectedEntities}
+      />
+    );
   }
   
   render() {
-    const { loading, data, error, searchQuery } = this.state;
+    const { loading, data, error, searchQuery, entities, selectedEntities } = this.state;
 
     return (
       <Grid celled className='search-grid'>
         <Grid.Row>
           <Grid.Column width={16} textAlign='center'>
             <SearchField
-              onSearchQueryChange={this.fetchData.bind(this)}
+              onSearchQueryChange={this.searchQueryChanged.bind(this)}
               searchQuery={searchQuery}
             />
           </Grid.Column>
@@ -108,7 +143,11 @@ class Main extends React.Component {
         <Grid.Row>
         <Grid.Column width={4} textAlign='center'>
             <div className="row">
-              {this.getEntities()}
+              <Entities 
+                onEntitiesChange={this.entitiesChanged.bind(this)}
+                entities={entities.results}
+                selectedEntities={selectedEntities}
+              />
             </div>
           </Grid.Column>
           <Grid.Column width={12} textAlign='center'>
@@ -147,6 +186,7 @@ class Main extends React.Component {
 Main.propTypes = {
   data: PropTypes.object,
   searchQuery: PropTypes.string,
+  selectedEntities: PropTypes.object,
   error: PropTypes.object
 };
 

@@ -28,7 +28,7 @@ class Main extends React.Component {
 
   constructor(...props) {
     super(...props);
-    const { entities, data, searchQuery, error } = this.props;
+    const { entities, data, searchQuery, selectedEntities, error } = this.props;
 
     // change in state fires re-render of components
     this.state = {
@@ -36,7 +36,8 @@ class Main extends React.Component {
       data: data && parseData(data),
       entities: entities && parseEntities(entities),
       loading: false,
-      searchQuery: searchQuery || ''
+      searchQuery: searchQuery || '',
+      selectedEntities: selectedEntities || ''
     };
   }
 

@@ -95,7 +95,6 @@ function createServer(results) {
   server.get('/:searchQuery', function(req, res){
     console.log("In /:search: query XXX = " + req.params.searchQuery);
     var searchQuery = req.params.searchQuery.replace(/\+/g, ' ');
-    //if (searchQuery === 'favicon.ico') searchQuery = '';
     const qs = queryString.stringify({ query: searchQuery });
     const fullUrl = req.protocol + '://' + req.get('host');
 

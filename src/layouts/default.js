@@ -42,6 +42,7 @@ class DefaultLayout extends React.Component {
           <meta name="og:description" content={this.props.description || 'Search using Watson Discovery Service'} />
           <link rel="stylesheet" type="text/css" href="/css/application.css"/>
           <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"/>
+          <link rel="icon" href="data:,"/>
         </head>
         <body>
           <main>{this.props.children}</main>

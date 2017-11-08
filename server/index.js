@@ -34,13 +34,7 @@ const WatsonNewsServer = new Promise((resolve, reject) => {
       queryBuilder.setCollectionId(collectionId);
     })
     .then(response => {
-      const params = Object.assign({
-        environment_id: "e52e21d1-0295-4c62-991c-1f0686b65fc9",
-        collection_id: "05f0711c-db65-4344-994b-ec2c9353dd5a",
-        sort: '-_score',
-        return: 'enriched_text.entities.text',
-        aggregation: 'term(enriched_text.entities.text, count:12)'
-      });
+      const params = queryBuilder.search({ natural_language_query: '' });
       return new Promise((resolve, reject) => {
         discovery.query(params)
         .then(response =>  {
@@ -63,7 +57,7 @@ const WatsonNewsServer = new Promise((resolve, reject) => {
     });
 });
 
-function createServer(entities) {
+function createServer(results) {
   const server = require('./express');
 
   server.get('/api/search', (req, res) => {
@@ -99,7 +93,9 @@ function createServer(entities) {
   });
 
   server.get('/:searchQuery', function(req, res){
-    const searchQuery = req.params.searchQuery.replace(/\+/g, ' ');
+    console.log("In /:search: query XXX = " + req.params.searchQuery);
+    var searchQuery = req.params.searchQuery.replace(/\+/g, ' ');
+    //if (searchQuery === 'favicon.ico') searchQuery = '';
     const qs = queryString.stringify({ query: searchQuery });
     const fullUrl = req.protocol + '://' + req.get('host');
 
@@ -114,7 +110,7 @@ function createServer(entities) {
         }
       })
       .then(json => {
-        res.render('index', { entities: entities, data: json, searchQuery, error: null });
+        res.render('index', { entities: json, data: json, searchQuery, error: null });
       })
       .catch(response => {
         res.status(response.status).render('index', {
@@ -129,7 +125,7 @@ function createServer(entities) {
 
     console.log("In /*");
     
-    res.render('index', { entities: entities });
+    res.render('index', { data: results, entities: results });
   });
 
   return server;

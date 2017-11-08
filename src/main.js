@@ -56,8 +56,7 @@ class Main extends React.Component {
 
     const { searchQuery } = this.state;
     console.log("searchQuery [FROM ENTITIES]: " + searchQuery);
-    if (searchQuery) 
-      this.fetchData(searchQuery);
+    this.fetchData(searchQuery);
   }
 
   searchQueryChanged(query) {
@@ -97,7 +96,7 @@ class Main extends React.Component {
       }
     })
     .then(json => {
-      this.setState({ data: parseData(json), loading: false, error: null });
+      this.setState({ data: parseData(json), entities: parseEntities(json), loading: false, error: null });
       scrollToMain();
     })
     .catch(response => {
@@ -154,6 +153,7 @@ class Main extends React.Component {
     }
     return (
       <Entities 
+        onEntitiesChange={this.entitiesChanged.bind(this)}
         entities={entities.results}
         selectedEntities={selectedEntities}
       />
@@ -176,11 +176,7 @@ class Main extends React.Component {
         <Grid.Row>
         <Grid.Column width={4} textAlign='center'>
             <div className="row">
-              <Entities 
-                onEntitiesChange={this.entitiesChanged.bind(this)}
-                entities={entities.results}
-                selectedEntities={selectedEntities}
-              />
+              {this.getEntities()}
             </div>
           </Grid.Column>
           <Grid.Column width={12} textAlign='center'>
@@ -236,7 +232,7 @@ const parseData = data => ({
 
 const parseEntities = entities => ({
   rawResponse: Object.assign({}, entities),
-  results: entities.aggregations[0].results
+  results: entities.aggregations[0].results[0].aggregations[0].results
 });
 
 function scrollToMain() {

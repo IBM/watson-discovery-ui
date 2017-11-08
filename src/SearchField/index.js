@@ -59,7 +59,7 @@ export default class SearchField extends React.Component {
           defaultValue={this.state.searchQuery}
         />
         <div onClick={this.handleSearchPress.bind(this)} className="query--icon-container">
-          <Icon type="search" size="regular" fill="#ffffff" />
+          <Icon type="search" size="small" fill="#ffffff" />
         </div>
       </div>
     );

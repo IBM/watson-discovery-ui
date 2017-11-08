@@ -24,6 +24,7 @@ import Entities from './Entities';
 import queryBuilder from '../server/query-builder';
 import { Grid, Dimmer, Loader } from 'semantic-ui-react';
 const util = require('util');
+const encoding = require('encoding');
 
 class Main extends React.Component {
 
@@ -83,7 +84,11 @@ class Main extends React.Component {
     history.pushState({}, {}, `/${searchQuery.replace(/ /g, '+')}`);
 
     const qs = queryString.stringify({ query: searchQuery });
-    fetch(`/api/search?${qs}`)
+    console.log("QUERY: " + qs);
+    const fs = this.buildFilterString(selectedEntities);
+    console.log("FILTER: " + fs);
+    
+    fetch(`/api/search?${qs}${fs}`)
     .then(response => {
       if (response.ok) {
         return response.json();
@@ -104,6 +109,34 @@ class Main extends React.Component {
       // eslint-disable-next-line no-console
       console.error(response);
     });
+  }
+
+  /**
+   * Convert set of selected entities into string
+   * @param {*} entities 
+   */
+  buildFilterString(entities) {
+    if (entities.size < 1) {
+      return '';
+
+    }
+    var entitiesString;
+    var firstOne = true;
+    entities.forEach(function(value) {
+      // remove the '(count)' from each entity entry
+      var idx = value.indexOf(' (');
+      value = value.substr(0, idx);
+      if (firstOne) {
+        firstOne = false;
+        entitiesString = 'enriched_text.entities.text::';
+      } else {
+        entitiesString = entitiesString + ',enriched_text.entities.text::';
+      }
+      entitiesString = entitiesString + '"' + value + '"';
+    });
+    //entitiesString = encodeURIComponent(entitiesString);
+    console.log('EntitiesString: ' + entitiesString);
+    return entitiesString;
   }
 
   getMatches() {

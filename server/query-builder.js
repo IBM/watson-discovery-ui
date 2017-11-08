@@ -27,10 +27,10 @@ module.exports = {
     const params = Object.assign({
       environment_id: this.environment_id,
       collection_id: this.collection_id,
-      count: 10,
+      count: 100,
       sort: '-_score',
       return: 'title,text,url,host,html,crawl_date,score,id,enriched_text.entities.text,enriched_text.sentiment.document.label',
-      aggregation: 'term(enriched_text.sentiment.document.label)'
+      aggregation: 'term(enriched_text.sentiment.document.label).term(enriched_text.entities.text, count:12)'
     }, queryOpts);
 
     return params;

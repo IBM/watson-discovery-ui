@@ -20,6 +20,7 @@ const queryBuilder = require('./query-builder');
 const discovery = require('./watson-discovery-service');
 const utils = require('../src/utils');
 const { parseData, topicStory } = utils;
+const util = require('util');
 
 /*eslint no-unused-vars: ["error", {"argsIgnorePattern": "response"}]*/
 const WatsonNewsServer = new Promise((resolve, reject) => {
@@ -38,8 +39,7 @@ const WatsonNewsServer = new Promise((resolve, reject) => {
         collection_id: "05f0711c-db65-4344-994b-ec2c9353dd5a",
         sort: '-_score',
         return: 'enriched_text.entities.text',
-        aggregation: 'term(enriched_text.entities.text, count:7)'
-        // aggregation: 'term(enriched_text.sentiment.document.label).term(enriched_text.categories.label,count:3)'
+        aggregation: 'term(enriched_text.entities.text, count:12)'
       });
       return new Promise((resolve, reject) => {
         discovery.query(params)
@@ -68,15 +68,26 @@ function createServer(entities) {
 
   server.get('/api/search', (req, res) => {
     const { query } = req.query;
-
+    
+    var parms;
     console.log("In /api/search: query = " + query);
-    if (entities) {
-      console.log("A entities is set");
+    
+    // parse out search query from filters
+    var idx = query.indexOf('enriched_text.entities.text');
+    if (idx < 0) {
+      // only have search string
+      console.log('no entities found - query: ' + query);
+      parms = queryBuilder.search({ natural_language_query: query });
     } else {
-      console.log("A entities is null");
+      var queryPart = query.substr(0, idx);
+      var entities = query.substr(idx);
+      parms = queryBuilder.search({ natural_language_query: queryPart,
+                                    filter: entities });
     }
-  
-    discovery.query(queryBuilder.search({ natural_language_query: query }))
+    console.log("parms: ");
+    console.log(util.inspect(parms, false, null));
+
+    discovery.query(parms)
       .then(response => res.json(response))
       .catch(error => {
         if (error.message === 'Number of free queries per month exceeded') {
@@ -93,11 +104,6 @@ function createServer(entities) {
     const fullUrl = req.protocol + '://' + req.get('host');
 
     console.log("In /:search: query = " + qs);
-    if (entities) {
-      console.log("B entities is set");
-    } else {
-      console.log("B entities is null");
-    }
 
     fetch(fullUrl + `/api/search?${qs}`)
       .then(response => {
@@ -122,11 +128,6 @@ function createServer(entities) {
     const props = category ? { category } : {};
 
     console.log("In /*");
-    if (entities) {
-      console.log("C entities is set");
-    } else {
-      console.log("C entities is null");
-    }
     
     res.render('index', { entities: entities });
   });

@@ -40,8 +40,9 @@ export default class SearchField extends React.Component {
 
   handleKeyPress(event) {
     const searchValue = event.target.value;
-    if (event.key === 'Enter' && searchValue.match(/[^\s]+/)) {
-      this.props.onSearchQueryChange({
+    // if (event.key === 'Enter' && searchValue.match(/[^\s]+/)) {
+    if (event.key === 'Enter') {
+        this.props.onSearchQueryChange({
         searchQuery: searchValue
       });
     }

@@ -35,6 +35,8 @@ const WatsonNewsServer = new Promise((resolve, reject) => {
     })
     .then(response => {
       const params = queryBuilder.search({ natural_language_query: '' });
+      console.log("params: ");
+      console.log(util.inspect(params, false, null));
       return new Promise((resolve, reject) => {
         discovery.query(params)
         .then(response =>  {
@@ -63,7 +65,7 @@ function createServer(results) {
   server.get('/api/search', (req, res) => {
     const { query } = req.query;
     
-    var parms;
+    var params;
     console.log("In /api/search: query = " + query);
     
     // parse out search query from filters
@@ -71,17 +73,17 @@ function createServer(results) {
     if (idx < 0) {
       // only have search string
       console.log('no entities found - query: ' + query);
-      parms = queryBuilder.search({ natural_language_query: query });
+      params = queryBuilder.search({ natural_language_query: query });
     } else {
       var queryPart = query.substr(0, idx);
       var entities = query.substr(idx);
-      parms = queryBuilder.search({ natural_language_query: queryPart,
-                                    filter: entities });
+      params = queryBuilder.search({ natural_language_query: queryPart,
+                                     filter: entities });
     }
-    console.log("parms: ");
-    console.log(util.inspect(parms, false, null));
+    console.log("params: ");
+    console.log(util.inspect(params, false, null));
 
-    discovery.query(parms)
+    discovery.query(params)
       .then(response => res.json(response))
       .catch(error => {
         if (error.message === 'Number of free queries per month exceeded') {

@@ -639,3 +639,6 @@ input[type=radio]:checked + label.buttons-group--button {
   background: rgba(0, 255, 26, 0.16);
 }
 
+.ui.checkbox label {
+  font-size: x-small !important;
+}

@@ -17,36 +17,50 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Container, Checkbox, Header } from 'semantic-ui-react';
-const util = require('util');
 
+/**
+ * Entity - A checkbox component used to specify entities
+ * found in the disco query.
+ */
 class Entity extends React.Component {
   constructor(...props) {
     super(...props);
+
+    const { isChecked } = this.props;
     this.state = {
-      isChecked: false
+      isChecked: isChecked || false
     };
   }
 
+  /**
+   * toggleCheckboxChange - Keep track of "isChecked" state, 
+   * and inform parent when state has changed.
+   */
   toggleCheckboxChange() {
     const { handleCheckboxChange, label } = this.props;
-
     this.setState(({ isChecked }) => (
       {
         isChecked: !isChecked
       }
     ));
 
+    const { isChecked } = this.state;
+    // inform parent of our state change
     handleCheckboxChange(label);
   }
 
+  /**
+   * render - Render component in UI.
+   */
   render() {
     const { label } = this.props;
     const { isChecked } = this.state;
-
+    
     return (
       <div>
         <Checkbox 
           label={label}
+          checked={isChecked}
           onChange={this.toggleCheckboxChange.bind(this)}
         />
       </div>
@@ -54,11 +68,16 @@ class Entity extends React.Component {
   }
 }
 
+// type check to ensure we are called correctly
 Entity.propTypes = {
   label: PropTypes.string.isRequired,
+  isChecked: PropTypes.bool,
   handleCheckboxChange: PropTypes.func.isRequired
 };
 
+/**
+ * Entities - A container component for Entity objects.
+ */
 class Entities extends React.Component {
   constructor(...props) {
     super(...props);
@@ -68,10 +87,11 @@ class Entities extends React.Component {
     };
   }
   
-  // componentWillMount() {
-  //   selectedCheckboxes = new Set();
-  // };
-
+  /**
+   * toggleCheckbox - Keep track of which entities are
+   * currently selected. Update 'props' so that this data
+   * is saved with the parent. 
+   */
   toggleCheckbox(label) {
     const {selectedEntities } = this.props;
 
@@ -80,16 +100,15 @@ class Entities extends React.Component {
     } else {
       selectedEntities.add(label);
     }
-    console.log('selectedEntities: ');
-    for (let item of selectedEntities)
-      console.log(util.inspect(item, false, null));
 
     this.props.onEntitiesChange({
       selectedEntities: selectedEntities
     });
-
   }
 
+  /**
+   * render - Render component and it's children in UI.
+   */
   render() {
     const { selectedEntities } = this.props;
     return (
@@ -102,22 +121,56 @@ class Entities extends React.Component {
                 label={getEntityString(item)}
                 handleCheckboxChange={this.toggleCheckbox.bind(this)}
                 key={getEntityString(item)}
+                isChecked={getCheckedState(item, selectedEntities)}
               />)
             }
-        </div>
+          </div>
         </Container>
       </div>
     );
   }
 }
 
-const getEntityString = item => {
+  /**
+   * getEntityString - Entity label string will consist of the
+   * entity name along with the number of matches in the current
+   * discovery data results.
+   */
+  const getEntityString = item => {
   return item.key + ' (' + item.matching_results + ')';
 };
 
+  /**
+   * getCheckedState - Before we render any entities, make
+   * sure it has it's current state (checked or not). We can
+   * determine this by comparing the entity name to the list 
+   * of current selected entities. If match is found, set the
+   * initial state of the checkbox to selected. 
+   *
+   * NOTE: entity string may have changed because we include
+   * number of matches in the string. Allow for this by only
+   * comparing the entity name portion of the string.
+   */
+const getCheckedState = (item, selectedEntities) => {
+  const itemStr = item.key;
+  var isChecked = false;
+
+  selectedEntities.forEach(function(value) {
+    var idx = value.lastIndexOf(' (');
+    value = value.substr(0, idx);
+    if (value === item.key) {
+      isChecked = true;
+      return;
+    }
+  });
+  return isChecked;
+};
+
+// type check to ensure we are called correctly
 Entities.propTypes = {
   onEntitiesChange: PropTypes.func.isRequired,
   selectedEntities: PropTypes.object
 };
 
+// export so we are visible to parent
 module.exports = Entities;

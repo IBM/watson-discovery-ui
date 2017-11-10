@@ -15,6 +15,7 @@
  */
 
 const moment = require('moment');
+const util = require('util');
 
 module.exports = {
   setEnvironmentId(environmentId) {
@@ -30,9 +31,11 @@ module.exports = {
       count: 100,
       sort: '-_score',
       return: 'title,text,url,host,html,crawl_date,score,id,enriched_text.entities.text,enriched_text.sentiment.document.label',
-      aggregation: 'term(enriched_text.sentiment.document.label).term(enriched_text.entities.text, count:12)'
+      aggregation: 'term(enriched_text.sentiment.document.label).term(enriched_text.entities.text, count:12).term(enriched_text.categories.label, count:10)'
     }, queryOpts);
 
-    return params;
+  console.log("params: ");
+  console.log(util.inspect(params, false, null));
+  return params;
   }
 };

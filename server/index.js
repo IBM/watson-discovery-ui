@@ -35,12 +35,9 @@ const WatsonNewsServer = new Promise((resolve, reject) => {
     })
     .then(response => {
       const params = queryBuilder.search({ natural_language_query: '' });
-      console.log("params: ");
-      console.log(util.inspect(params, false, null));
       return new Promise((resolve, reject) => {
         discovery.query(params)
         .then(response =>  {
-          // entities are in the response
           resolve(response);
         })
         .catch(error => {
@@ -80,8 +77,6 @@ function createServer(results) {
       params = queryBuilder.search({ natural_language_query: queryPart,
                                      filter: entities });
     }
-    console.log("params: ");
-    console.log(util.inspect(params, false, null));
 
     discovery.query(params)
       .then(response => res.json(response))
@@ -95,7 +90,6 @@ function createServer(results) {
   });
 
   server.get('/:searchQuery', function(req, res){
-    console.log("In /:search: query XXX = " + req.params.searchQuery);
     var searchQuery = req.params.searchQuery.replace(/\+/g, ' ');
     const qs = queryString.stringify({ query: searchQuery });
     const fullUrl = req.protocol + '://' + req.get('host');
@@ -111,7 +105,11 @@ function createServer(results) {
         }
       })
       .then(json => {
-        res.render('index', { entities: json, data: json, searchQuery, error: null });
+        res.render('index', { entities: json,
+                              categories: json, 
+                              data: json, 
+                              searchQuery, 
+                              error: null });
       })
       .catch(response => {
         res.status(response.status).render('index', {
@@ -126,7 +124,10 @@ function createServer(results) {
 
     console.log("In /*");
     
-    res.render('index', { data: results, entities: results });
+    res.render('index', { data: results, 
+                          entities: results,
+                          categories: results 
+                        });
   });
 
   return server;

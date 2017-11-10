@@ -19,10 +19,10 @@ import PropTypes from 'prop-types';
 import { Container, Checkbox, Header } from 'semantic-ui-react';
 
 /**
- * Entity - A checkbox component used to specify an entity
+ * Category - A checkbox component used to specify a category
  * returned by the disco query.
  */
-class Entity extends React.Component {
+class Category extends React.Component {
   constructor(...props) {
     super(...props);
 
@@ -69,40 +69,40 @@ class Entity extends React.Component {
 }
 
 // type check to ensure we are called correctly
-Entity.propTypes = {
+Category.propTypes = {
   label: PropTypes.string.isRequired,
   isChecked: PropTypes.bool,
   handleCheckboxChange: PropTypes.func.isRequired
 };
 
 /**
- * Entities - A container component for Entity objects.
+ * Categories - A container component for Category objects.
  */
-class Entities extends React.Component {
+class Categories extends React.Component {
   constructor(...props) {
     super(...props);
 
     this.state = {
-       selectedEntities: this.props.selectedEntities
+       selectedCategories: this.props.selectedCategories
     };
   }
   
   /**
-   * toggleCheckbox - Keep track of which entities are
+   * toggleCheckbox - Keep track of which categories are
    * currently selected. Update 'props' so that this data
    * is saved with the parent. 
    */
   toggleCheckbox(label) {
-    const {selectedEntities } = this.props;
+    const {selectedCategories } = this.props;
 
-    if (selectedEntities.has(label)) {
-      selectedEntities.delete(label);
+    if (selectedCategories.has(label)) {
+      selectedCategories.delete(label);
     } else {
-      selectedEntities.add(label);
+      selectedCategories.add(label);
     }
 
-    this.props.onEntitiesChange({
-      selectedEntities: selectedEntities
+    this.props.onCategoriesChange({
+      selectedCategories: selectedCategories
     });
   }
 
@@ -110,18 +110,18 @@ class Entities extends React.Component {
    * render - Render component and it's children in UI.
    */
   render() {
-    const { selectedEntities } = this.props;
+    const { selectedCategories } = this.props;
     return (
       <div>
-        <Header as='h2' textAlign='center'>Top Entities</Header>
+        <Header as='h2' textAlign='center'>Top Categories</Header>
         <Container textAlign='left'>
           <div className="matches--list">
-            {this.props.entities.map(item =>
-              <Entity
+            {this.props.categories.map(item =>
+              <Category
                 label={getLabelString(item)}
                 handleCheckboxChange={this.toggleCheckbox.bind(this)}
                 key={getLabelString(item)}
-                isChecked={getCheckedState(item, selectedEntities)}
+                isChecked={getCheckedState(item, selectedCategories)}
               />)
             }
           </div>
@@ -141,21 +141,21 @@ class Entities extends React.Component {
 };
 
   /**
-   * getCheckedState - Before we render any entities, make
+   * getCheckedState - Before we render any categories, make
    * sure it has it's current state (checked or not). We can
-   * determine this by comparing the entity name to the list 
-   * of current selected entities. If match is found, set the
+   * determine this by comparing the category name to the list 
+   * of current selected categories. If match is found, set the
    * initial state of the checkbox to selected. 
    *
-   * NOTE: entity string may have changed because we include
+   * NOTE: category string may have changed because we include
    * number of matches in the string. Allow for this by only
-   * comparing the entity name portion of the string.
+   * comparing the category name portion of the string.
    */
-const getCheckedState = (item, selectedEntities) => {
+const getCheckedState = (item, selectedCategories) => {
   const itemStr = item.key;
   var isChecked = false;
 
-  selectedEntities.forEach(function(value) {
+  selectedCategories.forEach(function(value) {
     var idx = value.lastIndexOf(' (');
     value = value.substr(0, idx);
     if (value === item.key) {
@@ -167,10 +167,10 @@ const getCheckedState = (item, selectedEntities) => {
 };
 
 // type check to ensure we are called correctly
-Entities.propTypes = {
-  onEntitiesChange: PropTypes.func.isRequired,
-  selectedEntities: PropTypes.object
+Categories.propTypes = {
+  onCategoriesChange: PropTypes.func.isRequired,
+  selectedCategories: PropTypes.object
 };
 
 // export so we are visible to parent
-module.exports = Entities;
+module.exports = Categories;

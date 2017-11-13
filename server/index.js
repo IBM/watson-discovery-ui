@@ -19,7 +19,7 @@ const queryString = require('query-string');
 const queryBuilder = require('./query-builder');
 const discovery = require('./watson-discovery-service');
 const utils = require('../src/utils');
-const { parseData, topicStory } = utils;
+const { parseData } = utils;
 const util = require('util');
 
 /*eslint no-unused-vars: ["error", {"argsIgnorePattern": "response"}]*/

@@ -23,7 +23,7 @@ import SearchField from './SearchField';
 import Entities from './Entities';
 import Categories from './Categories';
 import queryBuilder from '../server/query-builder';
-import { Grid, Dimmer, Loader } from 'semantic-ui-react';
+import { Grid, Dimmer, Divider, Loader } from 'semantic-ui-react';
 const util = require('util');
 const encoding = require('encoding');
 
@@ -202,7 +202,7 @@ class Main extends React.Component {
     }
     return (
       <Entities 
-        onEntitiesChange={this.entitiesChanged.bind(this)}
+        onFilterItemsChange={this.entitiesChanged.bind(this)}
         entities={entities.results}
         selectedEntities={selectedEntities}
       />
@@ -216,7 +216,7 @@ class Main extends React.Component {
     }
     return (
       <Categories 
-        onCategoriesChange={this.categoriesChanged.bind(this)}
+        onFilterItemsChange={this.categoriesChanged.bind(this)}
         categories={categories.results}
         selectedCategories={selectedCategories}
       />
@@ -239,10 +239,11 @@ class Main extends React.Component {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-        <Grid.Column width={4} textAlign='center'>
+          <Grid.Column width={4} textAlign='center'>
             <div className="row">
               {this.getEntities()}
             </div>
+            <Divider section/>
             <div className="row">
               {this.getCategories()}
             </div>

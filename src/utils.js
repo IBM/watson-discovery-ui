@@ -19,8 +19,6 @@ const parseData = data => ({
   rawData: data
 });
 
-const topicStory = item => item.aggregations[0].hits.hits[0];
-
 const objectWithoutProperties = (object, properties) => {
   'use strict';
 
@@ -36,6 +34,5 @@ const objectWithoutProperties = (object, properties) => {
 
 module.exports = {
   parseData,
-  topicStory,
   objectWithoutProperties
 };

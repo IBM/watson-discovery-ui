@@ -359,19 +359,19 @@ const parseData = data => ({
   results: data.results
 });
 
-const parseEntities = entities => ({
-  rawResponse: Object.assign({}, entities),
-  results: entities.aggregations[0].results[0].aggregations[0].results
+const parseEntities = json => ({
+  rawResponse: Object.assign({}, json),
+  results: json.aggregations[0].results
 });
 
-const parseCategories = categories => ({
-  rawResponse: Object.assign({}, categories),
-  results: categories.aggregations[0].results[0].aggregations[0].results[0].aggregations[0].results
+const parseCategories = json => ({
+  rawResponse: Object.assign({}, json),
+  results: json.aggregations[1].results
 });
 
-const parseConcepts = concepts => ({
-  rawResponse: Object.assign({}, concepts),
-  results: concepts.aggregations[0].results[0].aggregations[0].results[0].aggregations[0].results[0].aggregations[0].results
+const parseConcepts = json => ({
+  rawResponse: Object.assign({}, json),
+  results: json.aggregations[2].results
 });
 
 function scrollToMain() {

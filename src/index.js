@@ -39,7 +39,9 @@ class Application extends React.Component {
 Application.propTypes = {
   data: PropTypes.object,
   searchQuery: PropTypes.string,
-  selectedEntities: PropTypes.array
+  selectedEntities: PropTypes.array,
+  selectedCategories: PropTypes.array,
+  selectedConcepts: PropTypes.array
 };
 
 module.exports = Application;

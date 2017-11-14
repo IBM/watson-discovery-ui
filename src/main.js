@@ -22,6 +22,7 @@ import Matches from './Matches';
 import SearchField from './SearchField';
 import Entities from './Entities';
 import Categories from './Categories';
+import Concepts from './Concepts';
 import queryBuilder from '../server/query-builder';
 import { Grid, Dimmer, Divider, Loader } from 'semantic-ui-react';
 const util = require('util');
@@ -31,8 +32,12 @@ class Main extends React.Component {
 
   constructor(...props) {
     super(...props);
-    const { entities, categories, data, searchQuery, 
-            selectedEntities, selectedCategories, error } = this.props;
+    const { entities, selectedEntities,
+            categories, selectedCategories,
+            concepts, selectedConcepts,
+            data, 
+            searchQuery, 
+            error } = this.props;
 
     // change in state fires re-render of components
     this.state = {
@@ -40,10 +45,12 @@ class Main extends React.Component {
       data: data && parseData(data),
       entities: entities && parseEntities(entities),
       categories: categories && parseCategories(categories),
+      concepts: concepts && parseConcepts(concepts),
       loading: false,
       searchQuery: searchQuery || '',
       selectedEntities: new Set(),
-      selectedCategories: new Set()
+      selectedCategories: new Set(),
+      selectedConcepts: new Set()
     };
   }
 
@@ -77,6 +84,19 @@ class Main extends React.Component {
     this.fetchData(searchQuery, false);
   }
 
+  conceptsChanged(concepts) {
+    const { selectedConcepts } = concepts;
+    
+    this.setState(({selectedConcepts}) => (
+      {
+        selectedConcepts: selectedConcepts
+      }
+    ));
+
+    const { searchQuery } = this.state;
+    this.fetchData(searchQuery, false);
+  }
+
   searchQueryChanged(query) {
     const { searchQuery } = query;
     console.log("searchQuery [FROM SEARCH]: " + searchQuery);
@@ -87,11 +107,12 @@ class Main extends React.Component {
 
   fetchData(query, clearFilters) {
     const searchQuery = query;
-    var { selectedEntities, selectedCategories } = this.state;
+    var { selectedEntities, selectedCategories, selectedConcepts } = this.state;
 
     if (clearFilters) {
       selectedEntities.clear();
       selectedCategories.clear();
+      selectedConcepts.clear();
     }
 
     // console.log("QUERY2 - selectedEntities: ");
@@ -108,7 +129,7 @@ class Main extends React.Component {
     history.pushState({}, {}, `/${searchQuery.replace(/ /g, '+')}`);
 
     const qs = queryString.stringify({ query: searchQuery });
-    const fs = this.buildFilterString(selectedEntities, selectedCategories);
+    const fs = this.buildFilterString(selectedEntities, selectedCategories, selectedConcepts);
     
     fetch(`/api/search?${qs}${fs}`)
     .then(response => {
@@ -124,6 +145,7 @@ class Main extends React.Component {
           data: parseData(json), 
           entities: parseEntities(json), 
           categories: parseCategories(json), 
+          concepts: parseConcepts(json), 
           loading: false, 
           error: null 
         }
@@ -145,7 +167,7 @@ class Main extends React.Component {
    * Convert set of selected entities into string
    * @param {*} entities 
    */
-  buildFilterString(entities, categories) {
+  buildFilterString(entities, categories, concepts) {
     var filterString = '';
     var firstOne = true;
     
@@ -182,6 +204,23 @@ class Main extends React.Component {
         categoryString = categoryString + '"' + value + '"';
       });
       filterString = filterString + categoryString;
+    }
+
+    if (concepts.size > 0) {
+      var conceptString = '';
+      concepts.forEach(function(value) {
+        // remove the '(count)' from each category entry
+        var idx = value.lastIndexOf(' (');
+        value = value.substr(0, idx);
+        if (firstOne) {
+          firstOne = false;
+          conceptString = 'enriched_text.concepts.text::';
+        } else {
+          conceptString = conceptString + ',enriched_text.concepts.text::';
+        }
+        conceptString = conceptString + '"' + value + '"';
+      });
+      filterString = filterString + conceptString;
     }
 
     return filterString;
@@ -223,10 +262,25 @@ class Main extends React.Component {
     );
   }
 
+  getConcepts() {
+    const { concepts, selectedConcepts } = this.state;
+    if (!concepts) {
+      return null;
+    }
+    return (
+      <Concepts 
+        onFilterItemsChange={this.conceptsChanged.bind(this)}
+        concepts={concepts.results}
+        selectedConcepts={selectedConcepts}
+      />
+    );
+  }
+
   render() {
     const { loading, data, error, searchQuery, 
             entities, selectedEntities,
-            categories, selectedCategories } = this.state;
+            categories, selectedCategories,
+            concepts, selectedConcepts } = this.state;
 
     return (
       <Grid celled className='search-grid'>
@@ -246,6 +300,10 @@ class Main extends React.Component {
             <Divider section/>
             <div className="row">
               {this.getCategories()}
+            </div>
+            <Divider section/>
+            <div className="row">
+              {this.getConcepts()}
             </div>
           </Grid.Column>
           <Grid.Column width={12} textAlign='center'>
@@ -286,6 +344,7 @@ Main.propTypes = {
   searchQuery: PropTypes.string,
   selectedEntities: PropTypes.object,
   selectedCateories: PropTypes.object,
+  selectedConcepts: PropTypes.object,
   error: PropTypes.object
 };
 
@@ -308,6 +367,11 @@ const parseEntities = entities => ({
 const parseCategories = categories => ({
   rawResponse: Object.assign({}, categories),
   results: categories.aggregations[0].results[0].aggregations[0].results[0].aggregations[0].results
+});
+
+const parseConcepts = concepts => ({
+  rawResponse: Object.assign({}, concepts),
+  results: concepts.aggregations[0].results[0].aggregations[0].results[0].aggregations[0].results[0].aggregations[0].results
 });
 
 function scrollToMain() {

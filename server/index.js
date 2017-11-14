@@ -65,19 +65,19 @@ function createServer(results) {
     var params;
     console.log("In /api/search: query = " + query);
     
-    // parse out search query from filters
-    var idx = query.indexOf('enriched_text.entities.text');
+    // parse out search query from any filters
+    var idx = query.indexOf('enriched_text');
     if (idx < 0) {
       // only have search string
       console.log('no entities found - query: ' + query);
       params = queryBuilder.search({ natural_language_query: query });
     } else {
       var queryPart = query.substr(0, idx);
-      var entities = query.substr(idx);
+      var filters = query.substr(idx);
       params = queryBuilder.search({ natural_language_query: queryPart,
-                                     filter: entities });
+                                     filter: filters });
     }
-
+    
     discovery.query(params)
       .then(response => res.json(response))
       .catch(error => {
@@ -106,7 +106,8 @@ function createServer(results) {
       })
       .then(json => {
         res.render('index', { entities: json,
-                              categories: json, 
+                              categories: json,
+                              concepts: json,
                               data: json, 
                               searchQuery, 
                               error: null });
@@ -126,7 +127,8 @@ function createServer(results) {
     
     res.render('index', { data: results, 
                           entities: results,
-                          categories: results 
+                          categories: results,
+                          concepts: results
                         });
   });
 

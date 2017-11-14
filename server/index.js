@@ -47,6 +47,7 @@ const WatsonNewsServer = new Promise((resolve, reject) => {
       });
     })
     .then(response => {
+      // console.log("GOT DATA!!!! " + util.inspect(response, false, null));
       resolve(createServer(response));
     })
     .catch(error => {

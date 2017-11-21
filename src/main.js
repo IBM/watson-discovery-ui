@@ -24,7 +24,8 @@ import Entities from './Entities';
 import Categories from './Categories';
 import Concepts from './Concepts';
 import queryBuilder from '../server/query-builder';
-import { Grid, Dimmer, Divider, Loader } from 'semantic-ui-react';
+import { TagCloud } from "react-tagcloud";
+import { Grid, Dimmer, Divider, Loader, Dropdown } from 'semantic-ui-react';
 const util = require('util');
 const encoding = require('encoding');
 
@@ -50,7 +51,8 @@ class Main extends React.Component {
       searchQuery: searchQuery || '',
       selectedEntities: new Set(),
       selectedCategories: new Set(),
-      selectedConcepts: new Set()
+      selectedConcepts: new Set(),
+      tagCloudSelection: 'EN'
     };
   }
 
@@ -247,6 +249,30 @@ class Main extends React.Component {
       />
     );
   }
+
+  getTagCloudItems() {
+    const { tagCloudSelection, entities, categories, concepts } = this.state;
+    var oldArray = [];
+    if (tagCloudSelection === 'CA') {
+      oldArray = JSON.parse(JSON.stringify(categories.results));
+    } else if (tagCloudSelection == 'CO') {
+      oldArray = JSON.parse(JSON.stringify(concepts.results));
+    } else {
+      oldArray = JSON.parse(JSON.stringify(entities.results));
+    }
+
+    var idx;
+    var newArray = [];
+    for (idx = 0; idx < oldArray.length; idx++) {
+      var obj = oldArray[idx];
+      obj.value = obj.key;
+      obj.count = idx;
+      delete(obj.key);
+      delete(obj.matching_results);
+      newArray.push(obj); 
+    }
+    return newArray;
+  }
   
   getCategories() {
     const { categories, selectedCategories } = this.state;
@@ -276,12 +302,26 @@ class Main extends React.Component {
     );
   }
 
+  cloudSelectorChange(event, selection) {
+    const { tagCloudSelection } = this.state;
+    this.setState(({tagCloudSelection}) => (
+      {
+        tagCloudSelection: selection.value
+      }
+    ));
+  }
+
   render() {
     const { loading, data, error, searchQuery, 
             entities, selectedEntities,
             categories, selectedCategories,
             concepts, selectedConcepts } = this.state;
 
+    const filterOptions = [ 
+      { key: 'EN', value: 'EN', text: 'Entities'}, 
+      { key: 'CA', value: 'CA', text: 'Categories'},
+      { key: 'CO', value: 'CO', text: 'Concepts'} ];
+            
     return (
       <Grid celled className='search-grid'>
         <Grid.Row>
@@ -306,7 +346,7 @@ class Main extends React.Component {
               {this.getConcepts()}
             </div>
           </Grid.Column>
-          <Grid.Column width={12} textAlign='center'>
+          <Grid.Column width={8} textAlign='center'>
             {loading ? (
               <div className="results">
                 <div className="loader--container">
@@ -332,6 +372,22 @@ class Main extends React.Component {
                 </div>
               </div>
             ) : null}
+          </Grid.Column>
+          <Grid.Column width={4} textAlign='center'>
+            <div className="cloud_selector">
+              <Dropdown 
+                onChange={this.cloudSelectorChange.bind(this)}
+                defaultValue={'EN'} 
+                search 
+                selection 
+                options={filterOptions} />
+            </div>
+            <div className="tag_cloud">
+              <TagCloud tags={ this.getTagCloudItems() }
+                minSize={12}
+                maxSize={35}
+              />
+            </div>
           </Grid.Column>
         </Grid.Row>
       </Grid>

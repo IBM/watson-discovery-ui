@@ -30,6 +30,7 @@
     "query-string": "^4.3.4",
     "react": "^15.5.10",
     "react-dom": "^15.5.4",
+    "react-tagcloud": "^1.2.0",
     "semantic-ui": "^2.2.13",
     "semantic-ui-css": "^2.2.12",
     "semantic-ui-react": "^0.75.0",

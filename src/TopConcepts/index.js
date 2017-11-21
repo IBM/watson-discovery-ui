@@ -15,34 +15,34 @@
  */
 
 import PropTypes from 'prop-types';
-import FilterContainer from '../FilterBase/FilterContainer';
+import TopFilterContainer from '../TopFilterBase/TopFilterContainer';
 
 /**
- * Categories - A container component for Category objects.
+ * TopConcepts - A container component for Concept objects.
  */
-class Categories extends FilterContainer {
+class TopConcepts extends TopFilterContainer {
   constructor(...props) {
     super(...props);
 
     this.state = {
-      selectedCategories: this.props.selectedCategories
+       selectedConcepts: this.props.selectedConcepts
     };
   }
 
   getSelectedCollection() {
-    const { selectedCategories } = this.props;
-    return selectedCategories;
+    const { selectedConcepts } = this.props;
+    return selectedConcepts;
   }
 
   getCollection() {
-    const { categories } = this.props;
-    return categories;
+    const { concepts } = this.props;
+    return concepts;
   }
 
   getContainerTitle() {
-    return "Top Categories";
+    return "Top Concepts";
   }  
 };
 
 // export so we are visible to parent
-module.exports = Categories;
+module.exports = TopConcepts;

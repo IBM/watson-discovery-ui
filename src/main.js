@@ -20,9 +20,9 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import Matches from './Matches';
 import SearchField from './SearchField';
-import Entities from './Entities';
-import Categories from './Categories';
-import Concepts from './Concepts';
+import TopEntities from './TopEntities';
+import TopCategories from './TopCategories';
+import TopConcepts from './TopConcepts';
 import queryBuilder from '../server/query-builder';
 import { TagCloud } from "react-tagcloud";
 import { Grid, Dimmer, Divider, Loader, Dropdown } from 'semantic-ui-react';
@@ -242,7 +242,7 @@ class Main extends React.Component {
       return null;
     }
     return (
-      <Entities 
+      <TopEntities 
         onFilterItemsChange={this.entitiesChanged.bind(this)}
         entities={entities.results}
         selectedEntities={selectedEntities}
@@ -280,7 +280,7 @@ class Main extends React.Component {
       return null;
     }
     return (
-      <Categories 
+      <TopCategories 
         onFilterItemsChange={this.categoriesChanged.bind(this)}
         categories={categories.results}
         selectedCategories={selectedCategories}
@@ -294,7 +294,7 @@ class Main extends React.Component {
       return null;
     }
     return (
-      <Concepts 
+      <TopConcepts 
         onFilterItemsChange={this.conceptsChanged.bind(this)}
         concepts={concepts.results}
         selectedConcepts={selectedConcepts}

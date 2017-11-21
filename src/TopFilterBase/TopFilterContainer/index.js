@@ -16,24 +16,24 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import FilterItem from '../FilterItem';
+import TopFilterItem from '../TopFilterItem';
 import { Container, Header } from 'semantic-ui-react';
 
 /**
- * Item - A checkbox component used to specify a filter item
+ * TopItem - A checkbox component used to specify a filter item
  * returned by the disco query.
  */
-class Item extends FilterItem {
+class TopItem extends TopFilterItem {
   constructor(...props) {
     super(...props);
   }
 };
 
 /**
- * FilterContainer - A container component used as a base for
- * containing FilterItems.
+ * TopFilterContainer - A container component used as a base for
+ * containing TopFilterItems.
  */
-class FilterContainer extends React.Component {
+class TopFilterContainer extends React.Component {
   constructor(...props) {
     super(...props);
   }
@@ -123,7 +123,7 @@ class FilterContainer extends React.Component {
     // throw new Error('You must implement FilterContainer.getRenderObjectForItem!');
     const selectedItems = this.getSelectedCollection();
     return (
-      <Item
+      <TopItem
         label={this.getItemLabel(item)}
         handleCheckboxChange={this.toggleCheckbox.bind(this)}
         key={this.getItemLabel(item)}
@@ -154,10 +154,10 @@ class FilterContainer extends React.Component {
 };
 
 // type check to ensure we are called correctly
-FilterContainer.propTypes = {
+TopFilterContainer.propTypes = {
   onFilterItemsChange: PropTypes.func.isRequired,
   selectedEntities: PropTypes.object
 }
 
 // export so we are visible to parent
-module.exports = FilterContainer;
+module.exports = TopFilterContainer;

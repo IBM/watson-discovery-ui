@@ -43,8 +43,8 @@ export default class SearchField extends React.Component {
     // if (event.key === 'Enter' && searchValue.match(/[^\s]+/)) {
     if (event.key === 'Enter') {
         this.props.onSearchQueryChange({
-        searchQuery: searchValue
-      });
+          searchQuery: searchValue
+        });
     }
   }
 

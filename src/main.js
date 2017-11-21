@@ -23,9 +23,9 @@ import SearchField from './SearchField';
 import TopEntities from './TopEntities';
 import TopCategories from './TopCategories';
 import TopConcepts from './TopConcepts';
+import TagCloudRegion from './TagCloudRegion';
 import queryBuilder from '../server/query-builder';
-import { TagCloud } from "react-tagcloud";
-import { Grid, Dimmer, Divider, Loader, Dropdown } from 'semantic-ui-react';
+import { Grid, Dimmer, Divider, Loader } from 'semantic-ui-react';
 const util = require('util');
 const encoding = require('encoding');
 
@@ -37,7 +37,8 @@ class Main extends React.Component {
             categories, selectedCategories,
             concepts, selectedConcepts,
             data, 
-            searchQuery, 
+            searchQuery,
+            tagCloudSelection, 
             error } = this.props;
 
     // change in state fires re-render of components
@@ -52,7 +53,7 @@ class Main extends React.Component {
       selectedEntities: new Set(),
       selectedCategories: new Set(),
       selectedConcepts: new Set(),
-      tagCloudSelection: 'EN'
+      tagCloudSelection: tagCloudSelection || 'EN'
     };
   }
 
@@ -65,7 +66,7 @@ class Main extends React.Component {
       }
     ));
 
-    const { searchQuery } = this.state;
+    const { searchQuery,  } = this.state;
     this.fetchData(searchQuery, false);
   }
 
@@ -249,30 +250,6 @@ class Main extends React.Component {
       />
     );
   }
-
-  getTagCloudItems() {
-    const { tagCloudSelection, entities, categories, concepts } = this.state;
-    var oldArray = [];
-    if (tagCloudSelection === 'CA') {
-      oldArray = JSON.parse(JSON.stringify(categories.results));
-    } else if (tagCloudSelection == 'CO') {
-      oldArray = JSON.parse(JSON.stringify(concepts.results));
-    } else {
-      oldArray = JSON.parse(JSON.stringify(entities.results));
-    }
-
-    var idx;
-    var newArray = [];
-    for (idx = 0; idx < oldArray.length; idx++) {
-      var obj = oldArray[idx];
-      obj.value = obj.key;
-      obj.count = idx;
-      delete(obj.key);
-      delete(obj.matching_results);
-      newArray.push(obj); 
-    }
-    return newArray;
-  }
   
   getCategories() {
     const { categories, selectedCategories } = this.state;
@@ -302,26 +279,13 @@ class Main extends React.Component {
     );
   }
 
-  cloudSelectorChange(event, selection) {
-    const { tagCloudSelection } = this.state;
-    this.setState(({tagCloudSelection}) => (
-      {
-        tagCloudSelection: selection.value
-      }
-    ));
-  }
-
   render() {
     const { loading, data, error, searchQuery, 
             entities, selectedEntities,
             categories, selectedCategories,
-            concepts, selectedConcepts } = this.state;
+            concepts, selectedConcepts,
+            tagCloudSelection } = this.state;
 
-    const filterOptions = [ 
-      { key: 'EN', value: 'EN', text: 'Entities'}, 
-      { key: 'CA', value: 'CA', text: 'Categories'},
-      { key: 'CO', value: 'CO', text: 'Concepts'} ];
-            
     return (
       <Grid celled className='search-grid'>
         <Grid.Row>
@@ -374,20 +338,12 @@ class Main extends React.Component {
             ) : null}
           </Grid.Column>
           <Grid.Column width={4} textAlign='center'>
-            <div className="cloud_selector">
-              <Dropdown 
-                onChange={this.cloudSelectorChange.bind(this)}
-                defaultValue={'EN'} 
-                search 
-                selection 
-                options={filterOptions} />
-            </div>
-            <div className="tag_cloud">
-              <TagCloud tags={ this.getTagCloudItems() }
-                minSize={12}
-                maxSize={35}
-              />
-            </div>
+            <TagCloudRegion
+              entities={entities}
+              categories={categories}
+              concepts={concepts}
+              tagCloudSelection={tagCloudSelection}
+            />
           </Grid.Column>
         </Grid.Row>
       </Grid>

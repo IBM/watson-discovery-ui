@@ -26,6 +26,7 @@ import TopConcepts from './TopConcepts';
 import TagCloudRegion from './TagCloudRegion';
 import queryBuilder from '../server/query-builder';
 import { Grid, Dimmer, Divider, Loader } from 'semantic-ui-react';
+const utils = require('./utils');
 const util = require('util');
 const encoding = require('encoding');
 
@@ -58,7 +59,7 @@ class Main extends React.Component {
       selectedEntities: new Set(),
       selectedCategories: new Set(),
       selectedConcepts: new Set(),
-      tagCloudType: tagCloudType || 'EN'
+      tagCloudType: tagCloudType || utils.ENTITIY_FILTER
     };
   }
 
@@ -66,51 +67,6 @@ class Main extends React.Component {
     const { searchQuery  } = this.state;
     this.fetchData(searchQuery, false);
   }
-
-  // entitiesChanged(entities) {
-  //   // const { selectedEntities } = entities;
-  //   // console.log("EntitiesChanged - entities: " + selectedItems);
-  //   // console.log(util.inspect(entities, false, null));
-    
-  //   // this.setState(({selectedEntities}) => (
-  //   //   {
-  //   //     selectedEntities: selectedEntities
-  //   //   }
-  //   // ));
-
-  //   const { searchQuery  } = this.state;
-  //   this.fetchData(searchQuery, false);
-  // }
-
-  // categoriesChanged(categories) {
-  //   const { selectedCategories } = categories;
-  //   console.log("categoriesChanges - categories: " + selectedCategories);
-  //   // for (let item of selectedCategories)
-  //   console.log(util.inspect(selectedCategories, false, null));
-    
-  //   this.setState(({selectedCategories}) => (
-  //     {
-  //       selectedCategories: selectedCategories
-  //     }
-  //   ));
-
-  //   const { searchQuery } = this.state;
-  //   // console.log("searchQuery [FROM ENTITIES]: " + searchQuery);
-  //   this.fetchData(searchQuery, false);
-  // }
-
-  // conceptsChanged(concepts) {
-  //   const { selectedConcepts } = concepts;
-    
-  //   this.setState(({selectedConcepts}) => (
-  //     {
-  //       selectedConcepts: selectedConcepts
-  //     }
-  //   ));
-
-  //   const { searchQuery } = this.state;
-  //   this.fetchData(searchQuery, false);
-  // }
 
   /* handle search string changes from search box */
   searchQueryChanged(query) {
@@ -121,6 +77,19 @@ class Main extends React.Component {
     this.fetchData(searchQuery, true);
   }
 
+  buildFullTagName(tag, collection) {
+    // find the tag in collection
+    for (var i=0; i<collection.length; i++) {
+      console.log('compare tag: ' + tag + ' with: ' + collection[i].key);
+      if (collection[i].key === tag) {
+        // return the fill tag so we can match the entries
+        // listed in the filters (which also show num of matches)
+        return collection[i].key + ' (' + collection[i].matching_results + ')';
+      }
+    }
+    return tag;
+  }
+
   /* handle tag selection in the tag cloud */
   tagItemSelected(tag) {
     var { selectedTagValue, cloudType } = tag;
@@ -129,36 +98,39 @@ class Main extends React.Component {
 
     // manually add this item to the list of selected items
     // based on filter type
-    const { selectedEntities, 
-            selectedCategories, 
-            selectedConcepts,
+    const { entities, selectedEntities, 
+            categories, selectedCategories, 
+            concepts, selectedConcepts,
             searchQuery  } = this.state;
 
-    if (cloudType === 'CA') {
-      if (selectedCategories.has(selectedTagValue)) {
-        selectedCategories.delete(selectedTagValue);
+    if (cloudType === utils.CATEGORY_FILTER) {
+      var fullName = this.buildFullTagName(selectedTagValue, categories.results);
+      if (selectedCategories.has(fullName)) {
+        selectedCategories.delete(fullName);
       } else {
-        selectedCategories.add(selectedTagValue);
+        selectedCategories.add(fullName);
       }
       
       this.setState({
         selectedCategories: selectedCategories
       })
-    } else if (cloudType == 'CO') {
-      if (selectedConcepts.has(selectedTagValue)) {
-        selectedConcepts.delete(selectedTagValue);
+    } else if (cloudType == utils.CONCEPT_FILTER) {
+      var fullName = this.buildFullTagName(selectedTagValue, concepts.results);
+      if (selectedConcepts.has(fullName)) {
+        selectedConcepts.delete(fullName);
       } else {
-        selectedConcepts.add(selectedTagValue);
+        selectedConcepts.add(fullName);
       }
 
       this.setState({
         selectedConcepts: selectedConcepts
       })
-    } else {
-      if (selectedEntities.has(selectedTagValue)) {
-        selectedEntities.delete(selectedTagValue);
+    } else if (cloudType == utils.ENTITIY_FILTER) {
+      var fullName = this.buildFullTagName(selectedTagValue, entities.results);
+      if (selectedEntities.has(fullName)) {
+        selectedEntities.delete(fullName);
       } else {
-        selectedEntities.add(selectedTagValue);
+        selectedEntities.add(fullName);
       }
       
       this.setState({
@@ -240,8 +212,11 @@ class Main extends React.Component {
       var entitiesString = '';
       entities.forEach(function(value) {
         // remove the '(count)' from each entity entry
+        // if it exists - tag cloud does not list '(count)'s
         var idx = value.lastIndexOf(' (');
-        value = value.substr(0, idx);
+        if (idx >= 0) {
+          value = value.substr(0, idx);
+        }
         if (firstOne) {
           firstOne = false;
           entitiesString = 'enriched_text.entities.text::';

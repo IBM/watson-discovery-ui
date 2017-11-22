@@ -32,13 +32,22 @@ const objectWithoutProperties = (object, properties) => {
   return obj;
 };
 
+const ENTITIY_FILTER  = 'EN';
+const CATEGORY_FILTER = 'CA';
+const CONCEPT_FILTER  = 'CO';
+const KEYWORD_FILTER  = 'KW';
+
 const filterTypes = [ 
-  { key: 'EN', value: 'EN', text: 'Entities'}, 
-  { key: 'CA', value: 'CA', text: 'Categories'},
-  { key: 'CO', value: 'CO', text: 'Concepts'} ];
+  { key: ENTITIY_FILTER,  value: ENTITIY_FILTER, text: 'Entities'}, 
+  { key: CATEGORY_FILTER, value: CATEGORY_FILTER, text: 'Categories'},
+  { key: CONCEPT_FILTER,  value: CONCEPT_FILTER, text: 'Concepts'} ];
 
 module.exports = {
   parseData,
   objectWithoutProperties,
+  ENTITIY_FILTER,
+  CATEGORY_FILTER,
+  CONCEPT_FILTER,
+  KEYWORD_FILTER,
   filterTypes
 };

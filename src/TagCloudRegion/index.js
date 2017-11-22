@@ -18,7 +18,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TagCloud } from "react-tagcloud";
 import { Menu, Dropdown, Header, Divider } from 'semantic-ui-react';
-const filterTypes = require('../utils').filterTypes;
+const utils = require('../utils');
 
 export default class TagCloudRegion extends React.Component {
   constructor(...props) {
@@ -36,11 +36,11 @@ export default class TagCloudRegion extends React.Component {
     const { tagCloudType, entities, categories, concepts } = this.state;
 
     var oldArray = [];
-    if (tagCloudType === 'CA') {
+    if (tagCloudType === utils.CATEGORY_FILTER) {
       oldArray = JSON.parse(JSON.stringify(categories.results));
-    } else if (tagCloudType == 'CO') {
+    } else if (tagCloudType == utils.CONCEPT_FILTER) {
       oldArray = JSON.parse(JSON.stringify(concepts.results));
-    } else {
+    } else if (tagCloudType == utils.ENTITIY_FILTER) {
       oldArray = JSON.parse(JSON.stringify(entities.results));
     }
 
@@ -48,7 +48,7 @@ export default class TagCloudRegion extends React.Component {
     var newArray = [];
     for (idx = 0; idx < oldArray.length; idx++) {
       var obj = oldArray[idx];
-      obj.value = obj.key + ' (' + obj.matching_results + ')';
+      obj.value = obj.key; // + ' (' + obj.matching_results + ')';
       obj.count = idx;
       delete(obj.key);
       delete(obj.matching_results);
@@ -83,11 +83,6 @@ export default class TagCloudRegion extends React.Component {
   }
 
   render() {
-    const filterOptions = [ 
-      { key: 'EN', value: 'EN', text: 'Entities'}, 
-      { key: 'CA', value: 'CA', text: 'Categories'},
-      { key: 'CO', value: 'CO', text: 'Concepts'} ];
-    
     return (
       <div>
         <Header as='h2' textAlign='center'>Tag Cloud</Header>
@@ -95,9 +90,9 @@ export default class TagCloudRegion extends React.Component {
           <Dropdown 
             simple
             item
-            onChange={this.cloudTypeChange.bind(this)}
-            defaultValue={'EN'}
-            options={filterTypes}
+            onChange={ this.cloudTypeChange.bind(this) }
+            defaultValue={ utils.ENTITIY_FILTER }
+            options={ utils.filterTypes }
           />
         </Menu>
         <Divider hidden/>

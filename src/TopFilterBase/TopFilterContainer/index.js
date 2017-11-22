@@ -17,7 +17,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TopFilterItem from '../TopFilterItem';
-import { Container, Header } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 const util = require('util');
 
 /**
@@ -140,7 +140,6 @@ class TopFilterContainer extends React.Component {
     const selectedItems = this.getSelectedCollection();
     return (
       <div>
-        <Header as='h2' textAlign='center'>{this.getContainerTitle()}</Header>
         <Container textAlign='left'>
           <div className="matches--list">
             {this.getCollection().map(item =>

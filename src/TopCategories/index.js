@@ -16,6 +16,7 @@
 
 import PropTypes from 'prop-types';
 import TopFilterContainer from '../TopFilterBase/TopFilterContainer';
+const util = require('util');
 
 /**
  * TopCategories - A container component for Category objects.
@@ -25,23 +26,29 @@ class TopCategories extends TopFilterContainer {
     super(...props);
 
     this.state = {
+      categories: this.props.categories,
       selectedCategories: this.props.selectedCategories
     };
   }
 
   getSelectedCollection() {
-    const { selectedCategories } = this.props;
+    const { selectedCategories } = this.state;
     return selectedCategories;
   }
 
   getCollection() {
-    const { categories } = this.props;
+    const { categories } = this.state;
     return categories;
   }
 
   getContainerTitle() {
     return "Top Categories";
-  }  
+  } 
+  
+  componentWillReceiveProps(nextProps) {
+    this.setState({ categories: nextProps.categories });
+    this.setState({ selectedCategories: nextProps.selectedCategories });
+  }
 };
 
 // export so we are visible to parent

@@ -38,7 +38,7 @@ Match.propTypes = {
 
 const Matches = props => (
   <div>
-    <Header as='h2' textAlign='center'>Matches</Header>
+    <Header as='h2' textAlign='center'>Search Results</Header>
     <Container textAlign='center'>
       <div className="matches--list">
         {props.matches.map(item =>

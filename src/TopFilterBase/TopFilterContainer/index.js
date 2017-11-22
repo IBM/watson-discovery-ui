@@ -18,6 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TopFilterItem from '../TopFilterItem';
 import { Container, Header } from 'semantic-ui-react';
+const util = require('util');
 
 /**
  * TopItem - A checkbox component used to specify a filter item
@@ -97,10 +98,10 @@ class TopFilterContainer extends React.Component {
 
     selectedItems.forEach(function(value) {
       var idx = value.lastIndexOf(' (');
-      value = value.substr(0, idx);
-      if (value === item.key) {
+      var newValue = value.substr(0, idx);
+      // console.log("compare arrayVal: " + newValue + " vs CB item: " + itemStr);
+      if (newValue === itemStr) {
         isChecked = true;
-        return;
       }
     });
     return isChecked;
@@ -133,8 +134,7 @@ class TopFilterContainer extends React.Component {
   }
 
   /**
-   * render - Render the filter container and it filter item
-   * children in UI.
+   * render - Render the filter container and its filter item children.
    */
   render() {
     const selectedItems = this.getSelectedCollection();

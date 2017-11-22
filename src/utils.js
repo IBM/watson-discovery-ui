@@ -32,7 +32,13 @@ const objectWithoutProperties = (object, properties) => {
   return obj;
 };
 
+const filterTypes = [ 
+  { key: 'EN', value: 'EN', text: 'Entities'}, 
+  { key: 'CA', value: 'CA', text: 'Categories'},
+  { key: 'CO', value: 'CO', text: 'Concepts'} ];
+
 module.exports = {
   parseData,
-  objectWithoutProperties
+  objectWithoutProperties,
+  filterTypes
 };

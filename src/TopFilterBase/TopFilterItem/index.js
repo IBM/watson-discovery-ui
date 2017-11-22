@@ -26,10 +26,10 @@ class FilterItem extends React.Component {
   constructor(...props) {
     super(...props);
 
-    const { isChecked } = this.props;
-    this.state = {
-      isChecked: isChecked || false
-    };
+    // const { isChecked } = this.props;
+    // this.state = {
+    //   isChecked: isChecked || false
+    // };
   }
 
   /**
@@ -38,13 +38,13 @@ class FilterItem extends React.Component {
    */
   toggleCheckboxChange() {
     const { handleCheckboxChange, label } = this.props;
-    this.setState(({ isChecked }) => (
-      {
-        isChecked: !isChecked
-      }
-    ));
+    // this.setState(({ isChecked }) => (
+    //   {
+    //     isChecked: !isChecked
+    //   }
+    // ));
 
-    const { isChecked } = this.state;
+    // const { isChecked } = this.state;
     // inform parent of our state change
     handleCheckboxChange(label);
   }
@@ -54,8 +54,8 @@ class FilterItem extends React.Component {
    */
   render() {
     const { label } = this.props;
-    const { isChecked } = this.state;
-    
+    const { isChecked } = this.props;
+
     return (
       <div>
         <Checkbox 

@@ -631,6 +631,11 @@ input[type=radio]:checked + label.buttons-group--button {
   cursor: pointer;
 }
 
+.word-cloud span {
+  text-decoration: underline;
+  padding: 6px;
+}
+
 /* semantic-ui overrides */
 
 .ui.centered.fluid.card {

@@ -83,6 +83,11 @@ export default class TagCloudRegion extends React.Component {
   }
 
   render() {
+    const options = {
+      luminosity: 'light',
+      hue: 'blue'
+    };
+
     return (
       <div>
         <Header as='h2' textAlign='center'>Tag Cloud</Header>
@@ -101,6 +106,7 @@ export default class TagCloudRegion extends React.Component {
             tags={ this.getTagCloudItems() }
             minSize={12}
             maxSize={35}
+            colorOptions={options}
             className="word-cloud"
             onClick={this.tagSelected.bind(this)}
           />

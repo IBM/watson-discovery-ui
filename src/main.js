@@ -25,7 +25,7 @@ import TopCategories from './TopCategories';
 import TopConcepts from './TopConcepts';
 import TagCloudRegion from './TagCloudRegion';
 import queryBuilder from '../server/query-builder';
-import { Grid, Dimmer, Divider, Loader } from 'semantic-ui-react';
+import { Grid, Dimmer, Divider, Loader, Accordion, Icon, Header } from 'semantic-ui-react';
 const utils = require('./utils');
 const util = require('util');
 const encoding = require('encoding');
@@ -59,8 +59,17 @@ class Main extends React.Component {
       selectedEntities: new Set(),
       selectedCategories: new Set(),
       selectedConcepts: new Set(),
-      tagCloudType: tagCloudType || utils.ENTITIY_FILTER
+      tagCloudType: tagCloudType || utils.ENTITIY_FILTER,
+      activeIndex: 0
     };
+  }
+
+  // Callback functions for rendered objects
+  handleAccordionClick(e, titleProps) {
+    const { index } = titleProps;
+    const { activeIndex } = this.state;
+    const newIndex = activeIndex === index ? -1 : index;
+    this.setState({ activeIndex: newIndex });
   }
 
   filtersChanged() {
@@ -266,6 +275,7 @@ class Main extends React.Component {
     return filterString;
   }
 
+  // Functions to return render components
   getMatches() {
     const { data } = this.state;
     if (!data) {
@@ -323,6 +333,7 @@ class Main extends React.Component {
             concepts, selectedConcepts,
             tagCloudType } = this.state;
 
+    const { activeIndex } = this.state;
     return (
       <Grid celled className='search-grid'>
         <Grid.Row color={'blue'}>
@@ -335,17 +346,37 @@ class Main extends React.Component {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column width={4} textAlign='center'>
-            <div className="row">
-              {this.getEntities()}
-            </div>
-            <Divider section/>
-            <div className="row">
-              {this.getCategories()}
-            </div>
-            <Divider section/>
-            <div className="row">
-              {this.getConcepts()}
-            </div>
+            <Header as='h2' textAlign='center'>Filters</Header>
+            <Accordion styled>
+              <Accordion.Title 
+                active={activeIndex == 0} 
+                index={0} 
+                onClick={this.handleAccordionClick.bind(this)}>
+                <Icon name='dropdown' />
+                Entities
+              </Accordion.Title>
+              <Accordion.Content active={activeIndex == 0}>
+                {this.getEntities()}
+              </Accordion.Content>
+            </Accordion>
+            <Accordion styled>
+              <Accordion.Title active={activeIndex == 1} index={1} onClick={this.handleClick.bind(this)}>
+                <Icon name='dropdown' />
+                Categories
+              </Accordion.Title>
+              <Accordion.Content active={activeIndex == 1}>
+                {this.getCategories()}
+              </Accordion.Content>
+            </Accordion>
+            <Accordion styled>
+              <Accordion.Title active={activeIndex == 2} index={2} onClick={this.handleClick.bind(this)}>
+                <Icon name='dropdown' />
+                Concepts
+              </Accordion.Title>
+              <Accordion.Content active={activeIndex == 2}>
+                {this.getConcepts()}
+              </Accordion.Content>
+            </Accordion>
           </Grid.Column>
           <Grid.Column width={8} textAlign='center'>
             {loading ? (

@@ -17,7 +17,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TagCloud } from "react-tagcloud";
-import { Dropdown } from 'semantic-ui-react';
+import { Menu, Dropdown, Header, Divider } from 'semantic-ui-react';
+const filterTypes = require('../utils').filterTypes;
 
 export default class TagCloudRegion extends React.Component {
   constructor(...props) {
@@ -27,17 +28,17 @@ export default class TagCloudRegion extends React.Component {
       entities: this.props.entities,
       categories: this.props.categories,
       concepts: this.props.concepts,
-      tagCloudSelection: this.props.tagCloudSelection
+      tagCloudType: this.props.tagCloudType
     };
   }
 
   getTagCloudItems() {
-    const { tagCloudSelection, entities, categories, concepts } = this.state;
+    const { tagCloudType, entities, categories, concepts } = this.state;
 
     var oldArray = [];
-    if (tagCloudSelection === 'CA') {
+    if (tagCloudType === 'CA') {
       oldArray = JSON.parse(JSON.stringify(categories.results));
-    } else if (tagCloudSelection == 'CO') {
+    } else if (tagCloudType == 'CO') {
       oldArray = JSON.parse(JSON.stringify(concepts.results));
     } else {
       oldArray = JSON.parse(JSON.stringify(entities.results));
@@ -47,7 +48,7 @@ export default class TagCloudRegion extends React.Component {
     var newArray = [];
     for (idx = 0; idx < oldArray.length; idx++) {
       var obj = oldArray[idx];
-      obj.value = obj.key;
+      obj.value = obj.key + ' (' + obj.matching_results + ')';
       obj.count = idx;
       delete(obj.key);
       delete(obj.matching_results);
@@ -56,14 +57,22 @@ export default class TagCloudRegion extends React.Component {
     return newArray;
   }
 
-  cloudSelectorChange(event, selection) {
-    const { tagCloudSelection } = this.state;
-    this.setState(({tagCloudSelection}) => (
+  cloudTypeChange(event, selection) {
+    const { tagCloudType } = this.state;
+    this.setState(({tagCloudType}) => (
       {
-        tagCloudSelection: selection.value
+        tagCloudType: selection.value
       }
     ));
   }
+
+  tagSelected(tag) {
+    const { tagCloudType } = this.state;
+    this.props.onTagItemSelected({
+      selectedTagValue: tag.value,
+      cloudType: tagCloudType
+    });
+}
 
   // Important - this is needed to ensure changes to main properties
   // are propagated down to our component.
@@ -81,15 +90,24 @@ export default class TagCloudRegion extends React.Component {
     
     return (
       <div>
-        <Dropdown 
-          onChange={this.cloudSelectorChange.bind(this)}
-          defaultValue={'EN'}
-          options={filterOptions}
-        />
+        <Header as='h2' textAlign='center'>Tag Cloud</Header>
+        <Menu compact>
+          <Dropdown 
+            simple
+            item
+            onChange={this.cloudTypeChange.bind(this)}
+            defaultValue={'EN'}
+            options={filterTypes}
+          />
+        </Menu>
+        <Divider hidden/>
         <div>
-          <TagCloud tags={ this.getTagCloudItems() }
+          <TagCloud 
+            tags={ this.getTagCloudItems() }
             minSize={12}
             maxSize={35}
+            className="word-cloud"
+            onClick={this.tagSelected.bind(this)}
           />
         </div>
       </div>
@@ -101,5 +119,6 @@ TagCloudRegion.propTypes = {
   entities: PropTypes.object,
   categories: PropTypes.object,
   concepts: PropTypes.object,
-  tagCloudSelection: PropTypes.string
+  tagCloudSelection: PropTypes.string,
+  onTagItemSelected: PropTypes.func.isRequired,
 };

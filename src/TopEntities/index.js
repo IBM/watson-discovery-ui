@@ -25,23 +25,30 @@ class TopEntities extends TopFilterContainer {
     super(...props);
 
     this.state = {
-       selectedEntities: this.props.selectedEntities
+      entities: this.props.entities,
+      selectedEntities: this.props.selectedEntities
     };
   }
 
   getSelectedCollection() {
-    const { selectedEntities } = this.props;
+    const { selectedEntities } = this.state;
     return selectedEntities;
   }
 
   getCollection() {
-    const { entities } = this.props;
+    const { entities } = this.state;
     return entities;
   }
 
   getContainerTitle() {
     return "Top Entities";
-  }  
+  }
+  
+  componentWillReceiveProps(nextProps) {
+    this.setState({ entities: nextProps.entities });
+    this.setState({ selectedEntities: nextProps.selectedEntities });
+  }
+
 };
 
 // export so we are visible to parent

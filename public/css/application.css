@@ -626,17 +626,15 @@ input[type=radio]:checked + label.buttons-group--button {
   padding: 3rem;
 }
 
+/* custom effects */
+.word-cloud .tag-cloud-tag {
+  cursor: pointer;
+}
+
 /* semantic-ui overrides */
-.ui.input.searchinput input {
-  background: rgba(227, 239, 228, 0.91);
-}
 
-.ui.input.searchinput input:focus {
-  background: rgba(227, 239, 228, 0.91);
-}
-
-.ui.celled.search-grid.grid>.row {
-  background: rgba(0, 255, 26, 0.16);
+.ui.centered.fluid.card {
+  background: #d9e5ef;
 }
 
 .ui.checkbox label {

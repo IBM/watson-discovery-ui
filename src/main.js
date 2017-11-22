@@ -33,13 +33,18 @@ class Main extends React.Component {
 
   constructor(...props) {
     super(...props);
-    const { entities, selectedEntities,
-            categories, selectedCategories,
-            concepts, selectedConcepts,
-            data, 
-            searchQuery,
-            tagCloudSelection, 
-            error } = this.props;
+    const { 
+      entities, 
+      selectedEntities,
+      categories, 
+      selectedCategories,
+      concepts, 
+      selectedConcepts,
+      data, 
+      searchQuery,
+      tagCloudType, 
+      error 
+    } = this.props;
 
     // change in state fires re-render of components
     this.state = {
@@ -53,59 +58,116 @@ class Main extends React.Component {
       selectedEntities: new Set(),
       selectedCategories: new Set(),
       selectedConcepts: new Set(),
-      tagCloudSelection: tagCloudSelection || 'EN'
+      tagCloudType: tagCloudType || 'EN'
     };
   }
 
-  entitiesChanged(entities) {
-    const { selectedEntities } = entities;
-    
-    this.setState(({selectedEntities}) => (
-      {
-        selectedEntities: selectedEntities
-      }
-    ));
-
-    const { searchQuery,  } = this.state;
+  filtersChanged() {
+    const { searchQuery  } = this.state;
     this.fetchData(searchQuery, false);
   }
 
-  categoriesChanged(categories) {
-    const { selectedCategories } = categories;
-    // console.log("QUERY - selectedEntities: ");
-    // for (let item of selectedEntities)
-    //   console.log(util.inspect(item, false, null));
+  // entitiesChanged(entities) {
+  //   // const { selectedEntities } = entities;
+  //   // console.log("EntitiesChanged - entities: " + selectedItems);
+  //   // console.log(util.inspect(entities, false, null));
     
-    this.setState(({selectedCategories}) => (
-      {
-        selectedCategories: selectedCategories
-      }
-    ));
+  //   // this.setState(({selectedEntities}) => (
+  //   //   {
+  //   //     selectedEntities: selectedEntities
+  //   //   }
+  //   // ));
 
-    const { searchQuery } = this.state;
-    // console.log("searchQuery [FROM ENTITIES]: " + searchQuery);
-    this.fetchData(searchQuery, false);
-  }
+  //   const { searchQuery  } = this.state;
+  //   this.fetchData(searchQuery, false);
+  // }
 
-  conceptsChanged(concepts) {
-    const { selectedConcepts } = concepts;
+  // categoriesChanged(categories) {
+  //   const { selectedCategories } = categories;
+  //   console.log("categoriesChanges - categories: " + selectedCategories);
+  //   // for (let item of selectedCategories)
+  //   console.log(util.inspect(selectedCategories, false, null));
     
-    this.setState(({selectedConcepts}) => (
-      {
-        selectedConcepts: selectedConcepts
-      }
-    ));
+  //   this.setState(({selectedCategories}) => (
+  //     {
+  //       selectedCategories: selectedCategories
+  //     }
+  //   ));
 
-    const { searchQuery } = this.state;
-    this.fetchData(searchQuery, false);
-  }
+  //   const { searchQuery } = this.state;
+  //   // console.log("searchQuery [FROM ENTITIES]: " + searchQuery);
+  //   this.fetchData(searchQuery, false);
+  // }
 
+  // conceptsChanged(concepts) {
+  //   const { selectedConcepts } = concepts;
+    
+  //   this.setState(({selectedConcepts}) => (
+  //     {
+  //       selectedConcepts: selectedConcepts
+  //     }
+  //   ));
+
+  //   const { searchQuery } = this.state;
+  //   this.fetchData(searchQuery, false);
+  // }
+
+  /* handle search string changes from search box */
   searchQueryChanged(query) {
     const { searchQuery } = query;
     console.log("searchQuery [FROM SEARCH]: " + searchQuery);
    
     // true = clear all filters for new search
     this.fetchData(searchQuery, true);
+  }
+
+  /* handle tag selection in the tag cloud */
+  tagItemSelected(tag) {
+    var { selectedTagValue, cloudType } = tag;
+    selectedTagValue = selectedTagValue;
+    console.log("tagValue [FROM TAG CLOUD]: " + selectedTagValue);
+
+    // manually add this item to the list of selected items
+    // based on filter type
+    const { selectedEntities, 
+            selectedCategories, 
+            selectedConcepts,
+            searchQuery  } = this.state;
+
+    if (cloudType === 'CA') {
+      if (selectedCategories.has(selectedTagValue)) {
+        selectedCategories.delete(selectedTagValue);
+      } else {
+        selectedCategories.add(selectedTagValue);
+      }
+      
+      this.setState({
+        selectedCategories: selectedCategories
+      })
+    } else if (cloudType == 'CO') {
+      if (selectedConcepts.has(selectedTagValue)) {
+        selectedConcepts.delete(selectedTagValue);
+      } else {
+        selectedConcepts.add(selectedTagValue);
+      }
+
+      this.setState({
+        selectedConcepts: selectedConcepts
+      })
+    } else {
+      if (selectedEntities.has(selectedTagValue)) {
+        selectedEntities.delete(selectedTagValue);
+      } else {
+        selectedEntities.add(selectedTagValue);
+      }
+      
+      this.setState({
+        selectedEntities: selectedEntities
+      })
+    }
+
+    // execute new search w/ filters
+    this.fetchData(searchQuery, false);
   }
 
   fetchData(query, clearFilters) {
@@ -118,8 +180,8 @@ class Main extends React.Component {
       selectedConcepts.clear();
     }
 
-    // console.log("QUERY2 - selectedEntities: ");
-    // for (let item of selectedEntities)
+    // console.log("QUERY2 - selectedCategories: ");
+    // for (let item of selectedCategories)
     //   console.log(util.inspect(item, false, null));
     // console.log("QUERY2 - searchQuery: " + searchQuery);
     
@@ -244,7 +306,7 @@ class Main extends React.Component {
     }
     return (
       <TopEntities 
-        onFilterItemsChange={this.entitiesChanged.bind(this)}
+        onFilterItemsChange={this.filtersChanged.bind(this)}
         entities={entities.results}
         selectedEntities={selectedEntities}
       />
@@ -258,7 +320,7 @@ class Main extends React.Component {
     }
     return (
       <TopCategories 
-        onFilterItemsChange={this.categoriesChanged.bind(this)}
+        onFilterItemsChange={this.filtersChanged.bind(this)}
         categories={categories.results}
         selectedCategories={selectedCategories}
       />
@@ -272,7 +334,7 @@ class Main extends React.Component {
     }
     return (
       <TopConcepts 
-        onFilterItemsChange={this.conceptsChanged.bind(this)}
+        onFilterItemsChange={this.filtersChanged.bind(this)}
         concepts={concepts.results}
         selectedConcepts={selectedConcepts}
       />
@@ -284,11 +346,11 @@ class Main extends React.Component {
             entities, selectedEntities,
             categories, selectedCategories,
             concepts, selectedConcepts,
-            tagCloudSelection } = this.state;
+            tagCloudType } = this.state;
 
     return (
       <Grid celled className='search-grid'>
-        <Grid.Row>
+        <Grid.Row color={'blue'}>
           <Grid.Column width={16} textAlign='center'>
             <SearchField
               onSearchQueryChange={this.searchQueryChanged.bind(this)}
@@ -342,7 +404,8 @@ class Main extends React.Component {
               entities={entities}
               categories={categories}
               concepts={concepts}
-              tagCloudSelection={tagCloudSelection}
+              tagCloudType={tagCloudType}
+              onTagItemSelected={this.tagItemSelected.bind(this)}
             />
           </Grid.Column>
         </Grid.Row>

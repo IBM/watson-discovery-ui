@@ -24,6 +24,7 @@ import TopEntities from './TopEntities';
 import TopCategories from './TopCategories';
 import TopConcepts from './TopConcepts';
 import TagCloudRegion from './TagCloudRegion';
+import SentimentChart from './SentimentChart';
 import queryBuilder from '../server/query-builder';
 import { Grid, Dimmer, Divider, Loader, Accordion, Icon, Header } from 'semantic-ui-react';
 const utils = require('./utils');
@@ -333,9 +334,11 @@ class Main extends React.Component {
             concepts, selectedConcepts,
             tagCloudType } = this.state;
 
+    // used for filter accordions
     const { activeIndex } = this.state;
+    
     return (
-      <Grid celled className='search-grid'>
+      <Grid container celled className='search-grid'>
         <Grid.Row color={'blue'}>
           <Grid.Column width={16} textAlign='center'>
             <SearchField
@@ -345,7 +348,7 @@ class Main extends React.Component {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-          <Grid.Column width={4} textAlign='center'>
+          <Grid.Column width={3} textAlign='center'>
             <Header as='h2' textAlign='center'>Filters</Header>
             <Accordion styled>
               <Accordion.Title 
@@ -360,7 +363,10 @@ class Main extends React.Component {
               </Accordion.Content>
             </Accordion>
             <Accordion styled>
-              <Accordion.Title active={activeIndex == 1} index={1} onClick={this.handleClick.bind(this)}>
+              <Accordion.Title 
+                active={activeIndex == 1} 
+                index={1} 
+                onClick={this.handleAccordionClick.bind(this)}>
                 <Icon name='dropdown' />
                 Categories
               </Accordion.Title>
@@ -369,7 +375,10 @@ class Main extends React.Component {
               </Accordion.Content>
             </Accordion>
             <Accordion styled>
-              <Accordion.Title active={activeIndex == 2} index={2} onClick={this.handleClick.bind(this)}>
+              <Accordion.Title 
+                active={activeIndex == 2} 
+                index={2} 
+                onClick={this.handleAccordionClick.bind(this)}>
                 <Icon name='dropdown' />
                 Concepts
               </Accordion.Title>
@@ -378,7 +387,7 @@ class Main extends React.Component {
               </Accordion.Content>
             </Accordion>
           </Grid.Column>
-          <Grid.Column width={8} textAlign='center'>
+          <Grid.Column width={9} textAlign='center'>
             {loading ? (
               <div className="results">
                 <div className="loader--container">
@@ -412,6 +421,15 @@ class Main extends React.Component {
               concepts={concepts}
               tagCloudType={tagCloudType}
               onTagItemSelected={this.tagItemSelected.bind(this)}
+            />
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column width={16} textAlign='center'>
+            <SentimentChart
+              entities={entities}
+              categories={categories}
+              concepts={concepts}
             />
           </Grid.Column>
         </Grid.Row>

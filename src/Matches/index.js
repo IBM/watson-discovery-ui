@@ -17,16 +17,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Icon, Card, Container, List, Header, Image } from 'semantic-ui-react';
+import { Icon, Container, List, Header, Image } from 'semantic-ui-react';
+const util = require('util');
 
 const Match = props => (
-  <Card centered={true} fluid={true}>
-    <Image src={props.html} size='small' centered={true}/>
-    <Card.Content header={props.title} />
-    <Card.Content description={props.text}/>
-    <Card.Content meta={props.score}/>
-  </Card>
+  <List.Item>
+    <List.Content floated='right'>
+      {props.score}
+    </List.Content>
+    <Image avatar src={props.html} />
+    <List.Content>
+      <List.Header>{props.title}</List.Header>
+      Description test goes here
+      </List.Content>
+  </List.Item>
 );
+
 
 Match.propTypes = {
   title: PropTypes.string.isRequired,
@@ -38,19 +44,21 @@ Match.propTypes = {
 
 const Matches = props => (
   <div>
-    <Header as='h2' textAlign='center'>Search Results</Header>
-    <Container textAlign='center'>
+    <Header as='h2' textAlign='left'>Search Results</Header>
+    <Container textAlign='left'>
       <div className="matches--list">
-        {props.matches.map(item =>
-          <Match
-            key={item.id}
-            title={item.text ? getTitle(item) : 'No Title'}
-            text={item.text ? item.text : "No Description"}
-            html={getImageUrl(item)}
-            score={item.score}
-            sentiment={getSentiment(item)}
-           />)
-        }
+        <List divided verticalAlign='middle'>
+          {props.matches.map(item =>
+            <Match
+              key={item.id}
+              title={item.text ? getTitle(item) : 'No Title'}
+              text={item.text ? item.text : "No Description"}
+              html={getImageUrl(item)}
+              score={item.score}
+              sentiment={getSentiment(item)}
+            />)
+          }
+        </List>
       </div>
     </Container>
   </div>
@@ -78,6 +86,9 @@ const getImageUrl = item => {
 };
 
 const getSentiment = item => {
+  // console.log('item.enriched_text.sentiment: ' + item.enriched_text.sentiment);
+  // console.log('item.enriched_text.sentiment.document: ' + util.inspect(item.enriched_text.sentiment.document, false, null));
+  // console.log('item.enriched_text.sentiment.document.label: ' + util.inspect(item.enriched_text.sentiment.document.label, false, null));
   switch (item.enriched_text.sentiment && item.enriched_text.sentiment.document && item.enriched_text.sentiment.document.label) {
   // case 'negative': return <Icon type="thumbs-down" size="small" />;
   // case 'positive': return <Icon type="thumbs-up" size="small" />;

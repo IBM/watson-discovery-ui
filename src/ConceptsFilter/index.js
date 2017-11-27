@@ -15,12 +15,12 @@
  */
 
 import PropTypes from 'prop-types';
-import TopFilterContainer from '../TopFilterBase/TopFilterContainer';
+import FilterContainer from '../FilterBase/FilterContainer';
 
 /**
- * TopConcepts - A container component for Concept objects.
+ * ConceptsFilter - A container component for Concept objects.
  */
-class TopConcepts extends TopFilterContainer {
+class ConceptsFilter extends FilterContainer {
   constructor(...props) {
     super(...props);
 
@@ -45,4 +45,4 @@ class TopConcepts extends TopFilterContainer {
 };
 
 // export so we are visible to parent
-module.exports = TopConcepts;
+module.exports = ConceptsFilter;

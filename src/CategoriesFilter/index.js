@@ -15,13 +15,13 @@
  */
 
 import PropTypes from 'prop-types';
-import TopFilterContainer from '../TopFilterBase/TopFilterContainer';
+import FilterContainer from '../FilterBase/FilterContainer';
 const util = require('util');
 
 /**
- * TopCategories - A container component for Category objects.
+ * CategoriesFilter - A container component for Category objects.
  */
-class TopCategories extends TopFilterContainer {
+class CategoriesFilter extends FilterContainer {
   constructor(...props) {
     super(...props);
 
@@ -52,4 +52,4 @@ class TopCategories extends TopFilterContainer {
 };
 
 // export so we are visible to parent
-module.exports = TopCategories;
+module.exports = CategoriesFilter;

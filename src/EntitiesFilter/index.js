@@ -15,12 +15,12 @@
  */
 
 import PropTypes from 'prop-types';
-import TopFilterContainer from '../TopFilterBase/TopFilterContainer';
+import FilterContainer from '../FilterBase/FilterContainer';
 
 /**
- * TopEntities - A container component for Entity objects.
+ * EntitiesFilter - A container component for Entity objects.
  */
-class TopEntities extends TopFilterContainer {
+class EntitiesFilter extends FilterContainer {
   constructor(...props) {
     super(...props);
 
@@ -52,4 +52,4 @@ class TopEntities extends TopFilterContainer {
 };
 
 // export so we are visible to parent
-module.exports = TopEntities;
+module.exports = EntitiesFilter;

@@ -20,9 +20,9 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import Matches from './Matches';
 import SearchField from './SearchField';
-import TopEntities from './TopEntities';
-import TopCategories from './TopCategories';
-import TopConcepts from './TopConcepts';
+import EntitiesFilter from './EntitiesFilter';
+import CategoriesFilter from './CategoriesFilter';
+import ConceptsFilter from './ConceptsFilter';
 import TagCloudRegion from './TagCloudRegion';
 import SentimentChart from './SentimentChart';
 import queryBuilder from '../server/query-builder';
@@ -291,7 +291,7 @@ class Main extends React.Component {
       return null;
     }
     return (
-      <TopEntities 
+      <EntitiesFilter 
         onFilterItemsChange={this.filtersChanged.bind(this)}
         entities={entities.results}
         selectedEntities={selectedEntities}
@@ -305,7 +305,7 @@ class Main extends React.Component {
       return null;
     }
     return (
-      <TopCategories 
+      <CategoriesFilter 
         onFilterItemsChange={this.filtersChanged.bind(this)}
         categories={categories.results}
         selectedCategories={selectedCategories}
@@ -319,7 +319,7 @@ class Main extends React.Component {
       return null;
     }
     return (
-      <TopConcepts 
+      <ConceptsFilter 
         onFilterItemsChange={this.filtersChanged.bind(this)}
         concepts={concepts.results}
         selectedConcepts={selectedConcepts}
@@ -338,7 +338,7 @@ class Main extends React.Component {
     const { activeIndex } = this.state;
     
     return (
-      <Grid container celled className='search-grid'>
+      <Grid celled className='search-grid'>
         <Grid.Row color={'blue'}>
           <Grid.Column width={16} textAlign='center'>
             <SearchField
@@ -348,8 +348,8 @@ class Main extends React.Component {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-          <Grid.Column width={3} textAlign='center'>
-            <Header as='h2' textAlign='center'>Filters</Header>
+          <Grid.Column width={3}>
+            <Header as='h2' textAlign='left'>Filter</Header>
             <Accordion styled>
               <Accordion.Title 
                 active={activeIndex == 0} 
@@ -387,7 +387,7 @@ class Main extends React.Component {
               </Accordion.Content>
             </Accordion>
           </Grid.Column>
-          <Grid.Column width={9} textAlign='center'>
+          <Grid.Column width={9}>
             {loading ? (
               <div className="results">
                 <div className="loader--container">
@@ -414,7 +414,7 @@ class Main extends React.Component {
               </div>
             ) : null}
           </Grid.Column>
-          <Grid.Column width={4} textAlign='center'>
+          <Grid.Column width={4}>
             <TagCloudRegion
               entities={entities}
               categories={categories}
@@ -425,7 +425,10 @@ class Main extends React.Component {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-          <Grid.Column width={16} textAlign='center'>
+          <Grid.Column width={8}>
+            <Header as='h2' textAlign='left'>Trend</Header>
+          </Grid.Column>
+          <Grid.Column width={8}>
             <SentimentChart
               entities={entities}
               categories={categories}
@@ -451,26 +454,24 @@ const getTitleForItem = item => item.title ? item.title : 'Untitled';
 
 const parseData = data => ({
   rawResponse: Object.assign({}, data),
-  sentiment: data
-    .aggregations[0]
-    .results.reduce((accumulator, result) =>
-      Object.assign(accumulator, { [result.key]: result.matching_results }), {}),
+  // sentiment: data.aggregations[0].results.reduce((accumulator, result) =>
+  //   Object.assign(accumulator, { [result.key]: result.matching_results }), {}),
   results: data.results
 });
 
-const parseEntities = json => ({
-  rawResponse: Object.assign({}, json),
-  results: json.aggregations[0].results
+const parseEntities = data => ({
+  rawResponse: Object.assign({}, data),
+  results: data.aggregations[0].results
 });
 
-const parseCategories = json => ({
-  rawResponse: Object.assign({}, json),
-  results: json.aggregations[1].results
+const parseCategories = data => ({
+  rawResponse: Object.assign({}, data),
+  results: data.aggregations[1].results
 });
 
-const parseConcepts = json => ({
-  rawResponse: Object.assign({}, json),
-  results: json.aggregations[2].results
+const parseConcepts = data => ({
+  rawResponse: Object.assign({}, data),
+  results: data.aggregations[2].results
 });
 
 function scrollToMain() {

@@ -90,8 +90,8 @@ export default class TagCloudRegion extends React.Component {
 
     return (
       <div>
-        <Header as='h2' textAlign='center'>Tag Cloud</Header>
-        <Menu compact>
+        <Header as='h2' textAlign='left'>Tag Cloud</Header>
+        <Menu compact floated='right'>
           <Dropdown 
             simple
             item

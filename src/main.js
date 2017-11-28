@@ -387,7 +387,7 @@ class Main extends React.Component {
               </Accordion.Content>
             </Accordion>
           </Grid.Column>
-          <Grid.Column width={9}>
+          <Grid.Column width={8}>
             {loading ? (
               <div className="results">
                 <div className="loader--container">
@@ -414,7 +414,7 @@ class Main extends React.Component {
               </div>
             ) : null}
           </Grid.Column>
-          <Grid.Column width={4}>
+          <Grid.Column width={5}>
             <TagCloudRegion
               entities={entities}
               categories={categories}

@@ -72,7 +72,7 @@ export default class TagCloudRegion extends React.Component {
       selectedTagValue: tag.value,
       cloudType: tagCloudType
     });
-}
+  }
 
   // Important - this is needed to ensure changes to main properties
   // are propagated down to our component.

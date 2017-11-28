@@ -28,7 +28,7 @@ const Match = props => (
     <Image avatar src={props.html} />
     <List.Content>
       <List.Header>{props.title}</List.Header>
-      Description test goes here
+      Description text goes here
       </List.Content>
   </List.Item>
 );

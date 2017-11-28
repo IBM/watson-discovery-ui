@@ -17,7 +17,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Header, Menu, Dropdown } from 'semantic-ui-react';
-import { PieChart, Pie, Legend, Tooltip } from 'recharts';
+import { Doughnut } from 'react-chartjs-2';
 const utils = require('../utils');
 const util = require('util');
 
@@ -36,10 +36,7 @@ export default class SentimentChart extends React.Component {
       positiveNum: 0,
       neutralNum: 0,
       negativeNum: 0,
-      matches: 0,
-      positivePct: 0,
-      neutralPct: 0,
-      negativePct: 0
+      matches: 0
     };
   }
 
@@ -51,56 +48,6 @@ export default class SentimentChart extends React.Component {
         chartType: selection.value
       }
     ));
-  }
-
-  getPercent(portion) {
-    if (portion === 0) {
-      console.log('val: 0    val2: 0');
-      return 0;
-    }
-
-    var val = (portion / this.totals.matches) * 100;
-    var val2 = Math.round(val);
-    console.log('val: ' + val + '   val2: ' + val2);
-    return val2;
-  }
-
-  adjustPercentages() {
-    this.totals.positivePct = this.getPercent(this.totals.positiveNum);
-    this.totals.neutralPct = this.getPercent(this.totals.neutralNum);
-    this.totals.negativePct = this.getPercent(this.totals.negativeNum);
-
-    var total = this.totals.positivePct +
-                this.totals.neutralPct +
-                this.totals.negativePct;
-    console.log('total: ' + total);
-
-    // make sure they equal 100
-    if (total === 100) {
-      return;
-    } else {
-      if ((this.totals.positivePct >= this.totals.neutralPct) &&
-          (this.totals.positivePct >= this.totals.negativePct)) {
-        if (total > 100) {
-          this.totals.positivePct = this.totals.positivePct - (total - 100);
-        } else {
-          this.totals.positivePct = this.totals.positivePct + (100 - total);
-        }
-      } else if ((this.totals.neutralPct >= this.totals.positivePct) &&
-                 (this.totals.neutralPct >= this.totals.negativePct)) {
-        if (total > 100) {
-          this.totals.neutralPct = this.totals.neutralPct - (total - 100);
-        } else {
-          this.totals.neutralPct = this.totals.neutralPct + (100 - total);
-        }
-      } else {
-        if (total > 100) {
-          this.totals.negativePct = this.totals.negativePct - (total - 100);
-        } else {
-          this.totals.negativePct = this.totals.negativePct + (100 - total);
-        }
-      }
-    }
   }
 
   getTotals(collection) {
@@ -146,39 +93,64 @@ export default class SentimentChart extends React.Component {
     console.log('    totalNeutral: ' + this.totals.neutralNum);
     console.log('    totalNegative: ' + this.totals.negativeNum);
 
-    this.adjustPercentages();
-    console.log('    adjusted positivePct: ' + this.totals.positivePct);
-    console.log('    adjusted neutralPct: ' + this.totals.neutralPct);
-    console.log('    adjusted negativePct: ' + this.totals.negativePct);
-    
-    var ret = [
-      { name: 'Positive', value: this.totals.positivePct, fill: '#2e613f' },
-      { name: 'Neutral', value: this.totals.neutralPct, fill: '#a9a9a9' },
-      { name: 'Negative', value: this.totals.negativePct, fill: '#c92742' }
-    ];
+    var ret = {
+      labels: [
+        'Positive',
+        'Neutral',
+        'Negative'
+      ],
+      datasets: [{
+        data: [
+          this.totals.positiveNum,
+          this.totals.neutralNum,
+          this.totals.negativeNum
+        ],
+        backgroundColor: [
+          '#358D35',
+          '#C2C2C2',
+          '#C6354D'
+        ],
+        hoverBackgroundColor: [
+          '#358D35',
+          '#C2C2C2',
+          '#C6354D']
+      }]
+    };
     return ret;
   }
   
-  render() {
-    const margin = {
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0
-    };
+  // Important - this is needed to ensure changes to main properties
+  // are propagated down to our component.
+  componentWillReceiveProps(nextProps) {
+    this.setState({ entities: nextProps.entities });
+    this.setState({ categories: nextProps.categories });
+    this.setState({ concepts: nextProps.concepts });
+  }
 
-    const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
-      console.log('percent: ' + percent + ' index:' + index);
-      var str = ((percent * 100) + '%');
-      if (index == 0) {
-        str = str + ' Positive';
-      } else if (index == 1) {
-        str = str + ' Neutral';
-      } else {
-        str = str + ' Negative';        
+  render() {
+    const options = {
+      legend: {
+        position: 'left'
+      },
+      animation: {
+        animateScale: true,
+        animateRotate: true
+      },
+      tooltips: {
+        callbacks: {
+          label: function(tooltipItem, data) {
+            // convert raw number to percentage of total
+            var dataset = data.datasets[tooltipItem.datasetIndex];
+            var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+              return previousValue + currentValue;
+            });
+            var currentValue = dataset.data[tooltipItem.index];
+            var precentage = Math.floor(((currentValue/total) * 100)+0.5);
+            return precentage + "%";
+          }
+        }
       }
-      return str;
-    };
+    }
 
     return (
       <div>
@@ -192,17 +164,12 @@ export default class SentimentChart extends React.Component {
             options={ utils.filterTypes }
           />
         </Menu>
-        <PieChart width={400} height={250} margin={margin}>
-          <Pie 
-            data={this.getChartData()}
-            dataKey='value'
-            nameKey='name'
-            innerRadius={60} 
-            outerRadius={80}
-            label={renderCustomizedLabel}
-          />
-          <Tooltip/>
-        </PieChart>
+        <Doughnut 
+          data={ this.getChartData() }
+          options={ options }
+          width={ 350 }
+          height={ 200 }
+        />       
       </div>
     );
   }

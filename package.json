@@ -32,6 +32,8 @@
     "react": "^15.6.2",
     "react-chartjs-2": "^2.6.4",
     "react-dom": "^15.6.2",
+    "react-scrollbar": "^0.5.1",
+    "react-scrollbar-js": "^1.0.1",
     "react-tagcloud": "^1.2.0",
     "semantic-ui": "^2.2.13",
     "semantic-ui-css": "^2.2.12",

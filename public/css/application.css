@@ -645,3 +645,23 @@ input[type=radio]:checked + label.buttons-group--button {
 .ui.checkbox label {
   font-size: x-small !important;
 }
+
+/* div.ui.celled.grid.search-grid.ui element.style {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+ui celled grid search-grid style {
+  margin-top: 0px;
+  margin-bottom: 0px;
+} */
+
+/* .results-row {
+  height: 450px;
+}
+
+.filterCol {
+  overflow: auto;
+  height: 450px;
+  width: 250px;
+} */

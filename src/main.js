@@ -348,45 +348,45 @@ class Main extends React.Component {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-          <Grid.Column width={3}>
-            <Header as='h2' textAlign='left'>Filter</Header>
-            <Accordion styled>
-              <Accordion.Title 
-                active={activeIndex == 0} 
-                index={0} 
-                onClick={this.handleAccordionClick.bind(this)}>
-                <Icon name='dropdown' />
-                Entities
-              </Accordion.Title>
-              <Accordion.Content active={activeIndex == 0}>
-                {this.getEntities()}
-              </Accordion.Content>
-            </Accordion>
-            <Accordion styled>
-              <Accordion.Title 
-                active={activeIndex == 1} 
-                index={1} 
-                onClick={this.handleAccordionClick.bind(this)}>
-                <Icon name='dropdown' />
-                Categories
-              </Accordion.Title>
-              <Accordion.Content active={activeIndex == 1}>
-                {this.getCategories()}
-              </Accordion.Content>
-            </Accordion>
-            <Accordion styled>
-              <Accordion.Title 
-                active={activeIndex == 2} 
-                index={2} 
-                onClick={this.handleAccordionClick.bind(this)}>
-                <Icon name='dropdown' />
-                Concepts
-              </Accordion.Title>
-              <Accordion.Content active={activeIndex == 2}>
-                {this.getConcepts()}
-              </Accordion.Content>
-            </Accordion>
-          </Grid.Column>
+            <Grid.Column width={3}>
+              <Header as='h2' textAlign='left'>Filter</Header>
+              <Accordion styled>
+                <Accordion.Title 
+                  active={activeIndex == 0} 
+                  index={0} 
+                  onClick={this.handleAccordionClick.bind(this)}>
+                  <Icon name='dropdown' />
+                  Entities
+                </Accordion.Title>
+                <Accordion.Content active={activeIndex == 0}>
+                  {this.getEntities()}
+                </Accordion.Content>
+              </Accordion>
+              <Accordion styled>
+                <Accordion.Title 
+                  active={activeIndex == 1} 
+                  index={1} 
+                  onClick={this.handleAccordionClick.bind(this)}>
+                  <Icon name='dropdown' />
+                  Categories
+                </Accordion.Title>
+                <Accordion.Content active={activeIndex == 1}>
+                  {this.getCategories()}
+                </Accordion.Content>
+              </Accordion>
+              <Accordion styled>
+                <Accordion.Title 
+                  active={activeIndex == 2} 
+                  index={2} 
+                  onClick={this.handleAccordionClick.bind(this)}>
+                  <Icon name='dropdown' />
+                  Concepts
+                </Accordion.Title>
+                <Accordion.Content active={activeIndex == 2}>
+                  {this.getConcepts()}
+                </Accordion.Content>
+              </Accordion>
+            </Grid.Column>
           <Grid.Column width={8}>
             {loading ? (
               <div className="results">
@@ -461,17 +461,17 @@ const parseData = data => ({
 
 const parseEntities = data => ({
   rawResponse: Object.assign({}, data),
-  results: data.aggregations[0].results
+  results: data.aggregations[utils.ENTITY_DATA_INDEX].results
 });
 
 const parseCategories = data => ({
   rawResponse: Object.assign({}, data),
-  results: data.aggregations[1].results
+  results: data.aggregations[utils.CATEGORY_DATA_INDEX].results
 });
 
 const parseConcepts = data => ({
   rawResponse: Object.assign({}, data),
-  results: data.aggregations[2].results
+  results: data.aggregations[utils.CONCEPT_DATA_INDEX].results
 });
 
 function scrollToMain() {

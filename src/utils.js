@@ -14,10 +14,10 @@
  * the License.
  */
 
-const parseData = data => ({
-  topics: data.aggregations[0].results,
-  rawData: data
-});
+// const parseData = data => ({
+//   topics: data.aggregations[0].results,
+//   rawData: data
+// });
 
 const objectWithoutProperties = (object, properties) => {
   'use strict';
@@ -32,6 +32,13 @@ const objectWithoutProperties = (object, properties) => {
   return obj;
 };
 
+// the index of the item in the aggrgation data returned 
+// from the discovery query
+const ENTITY_DATA_INDEX = 0;
+const CATEGORY_DATA_INDEX = 1;
+const CONCEPT_DATA_INDEX = 2;
+const KEYWORD_DATA_INDEX = 3;
+
 const ENTITIY_FILTER  = 'EN';
 const CATEGORY_FILTER = 'CA';
 const CONCEPT_FILTER  = 'CO';
@@ -43,8 +50,12 @@ const filterTypes = [
   { key: CONCEPT_FILTER,  value: CONCEPT_FILTER, text: 'Concepts'} ];
 
 module.exports = {
-  parseData,
+  // parseData,
   objectWithoutProperties,
+  ENTITY_DATA_INDEX,
+  CATEGORY_DATA_INDEX,
+  CONCEPT_DATA_INDEX,
+  KEYWORD_DATA_INDEX,
   ENTITIY_FILTER,
   CATEGORY_FILTER,
   CONCEPT_FILTER,

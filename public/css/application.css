@@ -665,3 +665,7 @@ ui celled grid search-grid style {
   height: 450px;
   width: 250px;
 } */
+
+div.ui.compact.floated.menu style {
+  margin-left: 20px;
+}

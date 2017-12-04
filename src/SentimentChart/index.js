@@ -16,7 +16,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Header, Menu, Dropdown } from 'semantic-ui-react';
+import { Grid, Header, Menu, Dropdown, Divider } from 'semantic-ui-react';
 import { Doughnut } from 'react-chartjs-2';
 const utils = require('../utils');
 const util = require('util');
@@ -188,7 +188,7 @@ export default class SentimentChart extends React.Component {
     return (
       <div>
         <Header as='h2' textAlign='left'>Sentiment</Header>
-        <Menu compact>
+        <Menu compact floated={true}>
           <Dropdown 
             item
             onChange={ this.filterTypeChange.bind(this) }
@@ -196,7 +196,7 @@ export default class SentimentChart extends React.Component {
             options={ utils.filterTypes }
           />
         </Menu>
-        <Menu floated='right'>
+        <Menu compact floated={true}>
           <Dropdown 
             item
             scrolling
@@ -205,12 +205,15 @@ export default class SentimentChart extends React.Component {
             options={ this.getTermOptions() }
           />
         </Menu>
-        <Doughnut 
-          data={ this.getChartData() }
-          options={ options }
-          width={ 350 }
-          height={ 200 }
-        />       
+        <Divider clearing hidden/>
+        <div>
+          <Doughnut 
+            data={ this.getChartData() }
+            options={ options }
+            width={ 350 }
+            height={ 200 }
+          />       
+        </div>
       </div>
     );
   }

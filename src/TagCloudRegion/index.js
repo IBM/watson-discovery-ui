@@ -100,7 +100,7 @@ export default class TagCloudRegion extends React.Component {
             options={ utils.filterTypes }
           />
         </Menu>
-        <Divider hidden/>
+        <Divider clearing hidden/>
         <div>
           <TagCloud 
             tags={ this.getTagCloudItems() }

@@ -25,11 +25,13 @@ const Match = props => (
     <List.Content floated='right'>
       {props.score}
     </List.Content>
-    <Image avatar src={props.html} />
     <List.Content>
       <List.Header>{props.title}</List.Header>
-      Description text goes here
-      </List.Content>
+      {props.text}
+    </List.Content>
+    <List.Content>
+      Sentiment: {props.sentiment}
+    </List.Content>
   </List.Item>
 );
 
@@ -37,7 +39,6 @@ const Match = props => (
 Match.propTypes = {
   title: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
-  html: PropTypes.string.isRequired,
   sentiment: PropTypes.node,
   score: PropTypes.number.isRequired
 };
@@ -51,9 +52,8 @@ const Matches = props => (
           {props.matches.map(item =>
             <Match
               key={item.id}
-              title={item.text ? getTitle(item) : 'No Title'}
+              title={item.title ? item.title : 'No Title'}
               text={item.text ? item.text : "No Description"}
-              html={getImageUrl(item)}
               score={item.score}
               sentiment={getSentiment(item)}
             />)
@@ -90,11 +90,9 @@ const getSentiment = item => {
   // console.log('item.enriched_text.sentiment.document: ' + util.inspect(item.enriched_text.sentiment.document, false, null));
   // console.log('item.enriched_text.sentiment.document.label: ' + util.inspect(item.enriched_text.sentiment.document.label, false, null));
   switch (item.enriched_text.sentiment && item.enriched_text.sentiment.document && item.enriched_text.sentiment.document.label) {
-  // case 'negative': return <Icon type="thumbs-down" size="small" />;
-  // case 'positive': return <Icon type="thumbs-up" size="small" />;
-  case 'negative': return <Icon name='dislike outline' size='small' inverted />;
-  case 'positive': return <Icon name='like outline' inverted />;
-  default: return '';
+  case 'negative': return <Icon name='thumbs down' size='large' color='red'/>;
+  case 'positive': return <Icon name='thumbs up' size='large' color='green'/>;
+  default: return <Icon name='like outline' size='large' color='yellow'/>;
   }
 };
 

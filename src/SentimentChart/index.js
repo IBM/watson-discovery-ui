@@ -54,9 +54,9 @@ export default class SentimentChart extends React.Component {
 
   getTotals(collection, termValue) {
     this.totals.matches = 0;
-    this.totals.positiveNum = -2;  // TEMP: cheat to get some other numbers on chart
-    this.totals.neutralNum = 1;
-    this.totals.negativeNum = 1;
+    this.totals.positiveNum = 0;
+    this.totals.neutralNum = 0;
+    this.totals.negativeNum = 0;
 
     for (var item of collection.results) {
       if (termValue === '' || termValue === 'Term' || termValue === item.key) {

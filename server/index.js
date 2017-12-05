@@ -111,6 +111,7 @@ function createServer(results) {
                               concepts: json,
                               data: json, 
                               searchQuery, 
+                              numMatches: json.matching_results,
                               error: null });
       })
       .catch(response => {
@@ -125,11 +126,11 @@ function createServer(results) {
     const props = category ? { category } : {};
 
     console.log("In /*");
-    
     res.render('index', { data: results, 
                           entities: results,
                           categories: results,
-                          concepts: results
+                          concepts: results,
+                          numMatches: results.matching_results
                         });
   });
 

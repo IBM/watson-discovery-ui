@@ -45,7 +45,6 @@ Match.propTypes = {
 
 const Matches = props => (
   <div>
-    <Header as='h2' textAlign='left'>Search Results</Header>
     <Container textAlign='left'>
       <div className="matches--list">
         <List divided verticalAlign='middle'>

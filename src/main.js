@@ -19,6 +19,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import Matches from './Matches';
+import PaginationMenu from './PaginationMenu';
 import SearchField from './SearchField';
 import EntitiesFilter from './EntitiesFilter';
 import CategoriesFilter from './CategoriesFilter';
@@ -44,7 +45,9 @@ class Main extends React.Component {
       selectedConcepts,
       data, 
       searchQuery,
-      tagCloudType, 
+      tagCloudType,
+      currentPage,
+      numMatches,
       error 
     } = this.props;
 
@@ -61,16 +64,18 @@ class Main extends React.Component {
       selectedCategories: new Set(),
       selectedConcepts: new Set(),
       tagCloudType: tagCloudType || utils.ENTITIY_FILTER,
-      activeIndex: 0
+      currentPage: '1',
+      numMatches: numMatches || 0,
+      activeFilterIndex: 0
     };
   }
 
   // Callback functions for rendered objects
   handleAccordionClick(e, titleProps) {
     const { index } = titleProps;
-    const { activeIndex } = this.state;
-    const newIndex = activeIndex === index ? -1 : index;
-    this.setState({ activeIndex: newIndex });
+    const { activeFilterIndex } = this.state;
+    const newIndex = activeFilterIndex === index ? -1 : index;
+    this.setState({ activeFilterIndex: newIndex });
   }
 
   filtersChanged() {
@@ -193,7 +198,8 @@ class Main extends React.Component {
           entities: parseEntities(json), 
           categories: parseCategories(json), 
           concepts: parseConcepts(json), 
-          loading: false, 
+          loading: false,
+          numMatches: json.results.length,
           error: null 
         }
       );
@@ -282,7 +288,12 @@ class Main extends React.Component {
     if (!data) {
       return null;
     }
-    return <Matches matches={data.results} />;
+
+    return <Matches matches={data.results.slice(0,10)} />;
+  }
+
+  getPaginationMenu() {
+    return <PaginationMenu/>;
   }
 
   getEntities() {
@@ -332,10 +343,10 @@ class Main extends React.Component {
             entities, selectedEntities,
             categories, selectedCategories,
             concepts, selectedConcepts,
-            tagCloudType } = this.state;
+            tagCloudType, numMatches } = this.state;
 
     // used for filter accordions
-    const { activeIndex } = this.state;
+    const { activeFilterIndex } = this.state;
     
     return (
       <Grid celled className='search-grid'>
@@ -352,67 +363,78 @@ class Main extends React.Component {
               <Header as='h2' textAlign='left'>Filter</Header>
               <Accordion styled>
                 <Accordion.Title 
-                  active={activeIndex == 0} 
+                  active={activeFilterIndex == 0} 
                   index={0} 
                   onClick={this.handleAccordionClick.bind(this)}>
                   <Icon name='dropdown' />
                   Entities
                 </Accordion.Title>
-                <Accordion.Content active={activeIndex == 0}>
+                <Accordion.Content active={activeFilterIndex == 0}>
                   {this.getEntities()}
                 </Accordion.Content>
               </Accordion>
               <Accordion styled>
                 <Accordion.Title 
-                  active={activeIndex == 1} 
+                  active={activeFilterIndex == 1} 
                   index={1} 
                   onClick={this.handleAccordionClick.bind(this)}>
                   <Icon name='dropdown' />
                   Categories
                 </Accordion.Title>
-                <Accordion.Content active={activeIndex == 1}>
+                <Accordion.Content active={activeFilterIndex == 1}>
                   {this.getCategories()}
                 </Accordion.Content>
               </Accordion>
               <Accordion styled>
                 <Accordion.Title 
-                  active={activeIndex == 2} 
+                  active={activeFilterIndex == 2} 
                   index={2} 
                   onClick={this.handleAccordionClick.bind(this)}>
                   <Icon name='dropdown' />
                   Concepts
                 </Accordion.Title>
-                <Accordion.Content active={activeIndex == 2}>
+                <Accordion.Content active={activeFilterIndex == 2}>
                   {this.getConcepts()}
                 </Accordion.Content>
               </Accordion>
             </Grid.Column>
           <Grid.Column width={8}>
-            {loading ? (
-              <div className="results">
-                <div className="loader--container">
-                  <Dimmer active>
-                    <Loader>Loading</Loader>
-                  </Dimmer>
-                </div>
-              </div>
-            ) : data ? (
-              <div className="results">
-                <div className="_container _container_large">
-                  <div className="row">
-                    {this.getMatches()}
+            <Grid.Row>
+              {loading ? (
+                <div className="results">
+                  <div className="loader--container">
+                    <Dimmer active>
+                      <Loader>Loading</Loader>
+                    </Dimmer>
                   </div>
                 </div>
-              </div>
-            ) : error ? (
-              <div className="results">
-                <div className="_container _container_large">
-                  <div className="row">
-                    {JSON.stringify(error)}
+              ) : data ? (
+                <div className="results">
+                  <div className="_container _container_large">
+                    <div className="row">
+                      <Header 
+                        as='h2'
+                        textAlign='left'>
+                        {'Search Results (' + numMatches + ')'}
+                      </Header>
+                      {this.getMatches()}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ) : null}
+              ) : error ? (
+                <div className="results">
+                  <div className="_container _container_large">
+                    <div className="row">
+                      {JSON.stringify(error)}
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+            </Grid.Row>
+            <Divider clearing hidden/>
+            <Grid.Row>
+              {this.getPaginationMenu()}
+            </Grid.Row>
           </Grid.Column>
           <Grid.Column width={5}>
             <TagCloudRegion

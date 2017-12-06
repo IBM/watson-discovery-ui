@@ -19,6 +19,9 @@ import PropTypes from 'prop-types';
 import { TagCloud } from "react-tagcloud";
 import { Menu, Dropdown, Header, Divider } from 'semantic-ui-react';
 const utils = require('../utils');
+const util = require('util');
+
+var doUpdate = true;    // determines if we render update or not
 
 export default class TagCloudRegion extends React.Component {
   constructor(...props) {
@@ -74,12 +77,58 @@ export default class TagCloudRegion extends React.Component {
     });
   }
 
+  setsAreEqual(arr1, arr2) {
+    // console.log('Set1length: ' + arr1.length);
+    if (arr1.length != arr2.length) {
+      return false;
+    }
+
+    for (var i=0; i<arr1.length; i++) {
+      // console.log('Set1[' + i + ']: ');
+      // console.log(util.inspect(arr1[i], false, null));
+      // console.log('Set2[' + i + ']: ');
+      // console.log(util.inspect(arr2[i], false, null));
+      if ((arr1.key != arr2.key) ||
+          (arr1.matching_results != arr2.matching_results)) {
+        return false;
+      }
+    } 
+    return true;
+  }
+
   // Important - this is needed to ensure changes to main properties
   // are propagated down to our component.
   componentWillReceiveProps(nextProps) {
-    this.setState({ entities: nextProps.entities });
-    this.setState({ categories: nextProps.categories });
-    this.setState({ concepts: nextProps.concepts });
+    const { entities, categories, concepts } = this.state;
+    doUpdate = false;
+    // to avoid unnecessary updates, check if data has changed
+    if (! this.setsAreEqual(categories.results, nextProps.categories.results)) {
+      this.setState({ categories: nextProps.categories });
+      doUpdate = true;
+    }
+
+    if (! this.setsAreEqual(concepts.results, nextProps.concepts.results)) {
+      this.setState({ concepts: nextProps.concepts });
+      doUpdate = true;
+    }
+
+    if (! this.setsAreEqual(entities.results, nextProps.entities.results)) {
+      this.setState({ entities: nextProps.entities });
+      doUpdate = true;
+    }
+  }
+
+  // only do update if something has changed
+  // NOTE: we need to do this for this specific component because it
+  // draws itself randomly each time, which we want to avoid when
+  // nothing has changed.
+  shouldComponentUpdate(nextProps, nextState) {
+    if (doUpdate) {
+      return true;
+    } else {
+      doUpdate = true;
+      return false;
+    }
   }
 
   render() {

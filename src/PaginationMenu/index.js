@@ -36,6 +36,19 @@ export default class PaginationMenu extends React.Component {
 
   // inform parent that page has changed
   handleItemClick(event, { name }) {
+    const { currentPage } = this.state;
+
+    // adjust page num if user selected next/prev buttons
+    if (name === 'prev') {
+      var pageNum = parseInt(currentPage);
+      pageNum = pageNum - 1;
+      name = pageNum.toString();
+    } else if (name === 'next') {
+      pageNum = parseInt(currentPage);
+      pageNum = pageNum + 1;
+      name = pageNum.toString();
+    }
+
     console.log('page number = ' + name);
     this.setState({ currentPage: name });
     
@@ -50,6 +63,11 @@ export default class PaginationMenu extends React.Component {
     var pageItems = [];
     var curPageInt = parseInt(currentPage);
     
+    // handle case where we don't need any menu items (only one page of data)
+    if (numPages == 1) {
+      return pageItems;
+    }
+
     // handle case where we don't need to scroll menu items
     if (numPages <= MAX_MENU_ITEMS) {
       for (var i=1; i<=numPages; i++) {
@@ -58,6 +76,14 @@ export default class PaginationMenu extends React.Component {
       return pageItems;
     } 
     
+    // now we have multiple pages and we need menu bar to scroll based
+    // on what page is currently selected.
+    // Examples:
+    // Page 1 of 40 selected:  1 | 2 | 3 | 4 | 5 | 6 | ... | 40 | next
+    // Page 2 of 40 selected:  prev | 1 | 2 | 3 | 4 | 5 | ... | 40 | next
+    // Page 6 of 40 selected:  prev | 1 | ... | 5 | 6 | 7 | ... | 40 | next
+    // Page 39 of 40 selected: prev | 1 | ... | 36 | 37 | 38 | 39 | 40 | next
+    // Page 40 of 40 selected: prev | 1 | ... | 35 | 36 | 37 | 38 | 39 | 40
     if (curPageInt == 1) {
       // we are on first page - so no 'prev' menu item needed
       for (var i=1; i<=MAX_MENU_ITEMS-3; i++) {
@@ -153,7 +179,16 @@ export default class PaginationMenu extends React.Component {
     }
   }
 
+  // Important - this is needed to ensure changes to main properties
+  // are propagated down to our component.
+  componentWillReceiveProps(nextProps) {
+    this.setState({ numMatches: nextProps.numMatches });
+  }
+
   render() {
+    const { currentPage, numMatches } = this.state;
+    console.log("IN PAGINATION RENDER:");
+    console.log("numMatches: " + numMatches + "  currentPage: " + currentPage);
     return (
       <div>
         <Menu pagination>

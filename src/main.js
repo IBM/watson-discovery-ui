@@ -303,13 +303,19 @@ class Main extends React.Component {
   }
 
   getPaginationMenu() {
-    const { numMatches } = this.state;
-    return (
-      <PaginationMenu
-        numMatches={numMatches}
-        onPageChange={this.pageChanged.bind(this)}
-      />
-    );
+    const { data, numMatches } = this.state;
+    var numPages = Math.ceil(numMatches / utils.ITEMS_PER_PAGE);
+    
+    if (numMatches > 1) {
+      return (
+        <PaginationMenu
+          numMatches={numMatches}
+          onPageChange={this.pageChanged.bind(this)}
+        />
+      );
+    } else {
+      return null;
+    }
   }
 
   getEntities() {

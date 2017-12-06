@@ -179,6 +179,7 @@ class Main extends React.Component {
     
     this.setState({
       loading: true,
+      currentPage: '1',
       searchQuery
     });
 
@@ -293,7 +294,8 @@ class Main extends React.Component {
     if (!data) {
       return null;
     }
-    var page = Number(currentPage);
+
+    var page = parseInt(currentPage);
     var startIdx = (page - 1) * utils.ITEMS_PER_PAGE;
     return (
       <Matches 

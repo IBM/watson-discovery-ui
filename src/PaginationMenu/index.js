@@ -182,7 +182,14 @@ export default class PaginationMenu extends React.Component {
   // Important - this is needed to ensure changes to main properties
   // are propagated down to our component.
   componentWillReceiveProps(nextProps) {
-    this.setState({ numMatches: nextProps.numMatches });
+    const { numMatches } = this.state;
+    console.log('numMatches changed from: ' + numMatches + ' to: ' + nextProps.numMatches);
+    if (numMatches != nextProps.numMatches) {
+      this.setState({
+        numMatches: nextProps.numMatches,
+        currentPage: '1'
+      });
+    }
   }
 
   render() {

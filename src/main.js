@@ -64,7 +64,7 @@ class Main extends React.Component {
       selectedCategories: new Set(),
       selectedConcepts: new Set(),
       tagCloudType: tagCloudType || utils.ENTITIY_FILTER,
-      currentPage: '1',
+      currentPage: currentPage || '1',
       numMatches: numMatches || 0,
       activeFilterIndex: 0
     };
@@ -81,6 +81,11 @@ class Main extends React.Component {
   filtersChanged() {
     const { searchQuery  } = this.state;
     this.fetchData(searchQuery, false);
+  }
+
+  /* handle page changs from pagination menu items */
+  pageChanged(data) {
+    this.setState({ currentPage: data.currentPage });
   }
 
   /* handle search string changes from search box */
@@ -284,16 +289,27 @@ class Main extends React.Component {
 
   // Functions to return render components
   getMatches() {
-    const { data } = this.state;
+    const { data, currentPage } = this.state;
     if (!data) {
       return null;
     }
-
-    return <Matches matches={data.results.slice(0,10)} />;
+    var page = Number(currentPage);
+    var startIdx = (page - 1) * utils.ITEMS_PER_PAGE;
+    return (
+      <Matches 
+        matches={data.results.slice(startIdx,startIdx+utils.ITEMS_PER_PAGE)}
+      />
+    );
   }
 
   getPaginationMenu() {
-    return <PaginationMenu/>;
+    const { numMatches } = this.state;
+    return (
+      <PaginationMenu
+        numMatches={numMatches}
+        onPageChange={this.pageChanged.bind(this)}
+      />
+    );
   }
 
   getEntities() {

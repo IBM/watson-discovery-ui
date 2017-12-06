@@ -32,7 +32,10 @@ const objectWithoutProperties = (object, properties) => {
   return obj;
 };
 
-// the index of the item in the aggrgation data returned 
+// how many items will we show per page
+const ITEMS_PER_PAGE = 5;
+
+// the index of the fillter item in the aggrgation data returned 
 // from the discovery query
 const ENTITY_DATA_INDEX = 0;
 const CATEGORY_DATA_INDEX = 1;
@@ -52,6 +55,7 @@ const filterTypes = [
 module.exports = {
   // parseData,
   objectWithoutProperties,
+  ITEMS_PER_PAGE,
   ENTITY_DATA_INDEX,
   CATEGORY_DATA_INDEX,
   CONCEPT_DATA_INDEX,

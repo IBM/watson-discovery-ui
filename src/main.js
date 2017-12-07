@@ -26,11 +26,8 @@ import CategoriesFilter from './CategoriesFilter';
 import ConceptsFilter from './ConceptsFilter';
 import TagCloudRegion from './TagCloudRegion';
 import SentimentChart from './SentimentChart';
-import queryBuilder from '../server/query-builder';
 import { Grid, Dimmer, Divider, Loader, Accordion, Icon, Header } from 'semantic-ui-react';
 const utils = require('./utils');
-const util = require('util');
-const encoding = require('encoding');
 
 class Main extends React.Component {
 
@@ -60,9 +57,9 @@ class Main extends React.Component {
       concepts: concepts && parseConcepts(concepts),
       loading: false,
       searchQuery: searchQuery || '',
-      selectedEntities: new Set(),
-      selectedCategories: new Set(),
-      selectedConcepts: new Set(),
+      selectedEntities: selectedEntities || new Set(),
+      selectedCategories: selectedCategories || new Set(),
+      selectedConcepts: selectedConcepts || new Set(),
       tagCloudType: tagCloudType || utils.ENTITIY_FILTER,
       currentPage: currentPage || '1',
       numMatches: numMatches || 0,
@@ -91,7 +88,7 @@ class Main extends React.Component {
   /* handle search string changes from search box */
   searchQueryChanged(query) {
     const { searchQuery } = query;
-    console.log("searchQuery [FROM SEARCH]: " + searchQuery);
+    console.log('searchQuery [FROM SEARCH]: ' + searchQuery);
    
     // true = clear all filters for new search
     this.fetchData(searchQuery, true);
@@ -113,8 +110,7 @@ class Main extends React.Component {
   /* handle tag selection in the tag cloud */
   tagItemSelected(tag) {
     var { selectedTagValue, cloudType } = tag;
-    selectedTagValue = selectedTagValue;
-    console.log("tagValue [FROM TAG CLOUD]: " + selectedTagValue);
+    console.log('tagValue [FROM TAG CLOUD]: ' + selectedTagValue);
 
     // manually add this item to the list of selected items
     // based on filter type
@@ -133,9 +129,9 @@ class Main extends React.Component {
       
       this.setState({
         selectedCategories: selectedCategories
-      })
+      });
     } else if (cloudType == utils.CONCEPT_FILTER) {
-      var fullName = this.buildFullTagName(selectedTagValue, concepts.results);
+      fullName = this.buildFullTagName(selectedTagValue, concepts.results);
       if (selectedConcepts.has(fullName)) {
         selectedConcepts.delete(fullName);
       } else {
@@ -144,9 +140,9 @@ class Main extends React.Component {
 
       this.setState({
         selectedConcepts: selectedConcepts
-      })
+      });
     } else if (cloudType == utils.ENTITIY_FILTER) {
-      var fullName = this.buildFullTagName(selectedTagValue, entities.results);
+      fullName = this.buildFullTagName(selectedTagValue, entities.results);
       if (selectedEntities.has(fullName)) {
         selectedEntities.delete(fullName);
       } else {
@@ -155,7 +151,7 @@ class Main extends React.Component {
       
       this.setState({
         selectedEntities: selectedEntities
-      })
+      });
     }
 
     // execute new search w/ filters
@@ -305,8 +301,7 @@ class Main extends React.Component {
   }
 
   getPaginationMenu() {
-    const { data, numMatches } = this.state;
-    var numPages = Math.ceil(numMatches / utils.ITEMS_PER_PAGE);
+    const { numMatches } = this.state;
     
     if (numMatches > 1) {
       return (
@@ -363,10 +358,8 @@ class Main extends React.Component {
   }
 
   render() {
-    const { loading, data, error, searchQuery, 
-            entities, selectedEntities,
-            categories, selectedCategories,
-            concepts, selectedConcepts,
+    const { loading, data, error, searchQuery,
+            entities, categories, concepts,
             tagCloudType, numMatches } = this.state;
 
     // used for filter accordions
@@ -489,14 +482,18 @@ class Main extends React.Component {
 
 Main.propTypes = {
   data: PropTypes.object,
+  entities: PropTypes.object,
+  categories: PropTypes.object,
+  concepts: PropTypes.object,
   searchQuery: PropTypes.string,
   selectedEntities: PropTypes.object,
-  selectedCateories: PropTypes.object,
+  selectedCategories: PropTypes.object,
   selectedConcepts: PropTypes.object,
+  numMatches: PropTypes.number,
+  tagCloudType: PropTypes.string,
+  currentPage: PropTypes.string,
   error: PropTypes.object
 };
-
-const getTitleForItem = item => item.title ? item.title : 'Untitled';
 
 const parseData = data => ({
   rawResponse: Object.assign({}, data),

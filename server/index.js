@@ -18,9 +18,6 @@ require('isomorphic-fetch');
 const queryString = require('query-string');
 const queryBuilder = require('./query-builder');
 const discovery = require('./watson-discovery-service');
-const utils = require('../src/utils');
-const { parseData } = utils;
-const util = require('util');
 
 /*eslint no-unused-vars: ["error", {"argsIgnorePattern": "response"}]*/
 const WatsonNewsServer = new Promise((resolve, reject) => {
@@ -64,7 +61,7 @@ function createServer(results) {
     const { query } = req.query;
     
     var params;
-    console.log("In /api/search: query = " + query);
+    console.log('In /api/search: query = ' + query);
     
     // parse out search query from any filters
     var idx = query.indexOf('enriched_text');
@@ -75,8 +72,8 @@ function createServer(results) {
     } else {
       var queryPart = query.substr(0, idx);
       var filters = query.substr(idx);
-      params = queryBuilder.search({ natural_language_query: queryPart,
-                                     filter: filters });
+      params = queryBuilder.search({ natural_language_query: queryPart, 
+        filter: filters });
     }
     
     discovery.query(params)
@@ -95,7 +92,7 @@ function createServer(results) {
     const qs = queryString.stringify({ query: searchQuery });
     const fullUrl = req.protocol + '://' + req.get('host');
 
-    console.log("In /:search: query = " + qs);
+    console.log('In /:search: query = ' + qs);
 
     fetch(fullUrl + `/api/search?${qs}`)
       .then(response => {
@@ -106,13 +103,14 @@ function createServer(results) {
         }
       })
       .then(json => {
-        res.render('index', { entities: json,
-                              categories: json,
-                              concepts: json,
-                              data: json, 
-                              searchQuery, 
-                              numMatches: json.matching_results,
-                              error: null });
+        res.render('index', { entities: json, 
+          categories: json, 
+          concepts: json, 
+          data: json, 
+          searchQuery, 
+          numMatches: json.matching_results,
+          error: null
+        });
       })
       .catch(response => {
         res.status(response.status).render('index', {
@@ -121,17 +119,14 @@ function createServer(results) {
       });
   });
 
- server.get('/*', function(req, res) {
-    const category = req.params[0];
-    const props = category ? { category } : {};
-
-    console.log("In /*");
+  server.get('/*', function(req, res) {
+    console.log('In /*');
     res.render('index', { data: results, 
-                          entities: results,
-                          categories: results,
-                          concepts: results,
-                          numMatches: results.matching_results
-                        });
+      entities: results,
+      categories: results,
+      concepts: results,
+      numMatches: results.matching_results
+    });
   });
 
   return server;

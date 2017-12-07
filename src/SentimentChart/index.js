@@ -14,12 +14,11 @@
  * the License.
  */
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Header, Menu, Dropdown, Divider } from 'semantic-ui-react';
+import { Header, Menu, Dropdown, Divider } from 'semantic-ui-react';
 import { Doughnut } from 'react-chartjs-2';
 const utils = require('../utils');
-const util = require('util');
 
 export default class SentimentChart extends React.Component {
   constructor(...props) {
@@ -43,13 +42,10 @@ export default class SentimentChart extends React.Component {
 
   filterTypeChange(event, selection) {
     console.log('selection.value: ' + selection.value);
-    const { chartType } = this.state;
-    this.setState(({ chartType }) => (
-      {
-        chartType: selection.value,
-        termValue: 'Term'
-      }
-    ));
+    this.setState({
+      chartType: selection.value,
+      termValue: 'Term'
+    });
   }
 
   getTotals(collection, termValue) {
@@ -77,9 +73,8 @@ export default class SentimentChart extends React.Component {
   getChartData() {
     const { chartType, termValue, entities, categories, concepts } = this.state;
     
-    console.log("chartType: " + chartType);
+    console.log('chartType: ' + chartType);
     if (chartType === utils.ENTITIY_FILTER) {
-      console.log("entities:");
       this.getTotals(entities, termValue);
     } else if (chartType === utils.CATEGORY_FILTER) {
       this.getTotals(categories, termValue);
@@ -119,12 +114,9 @@ export default class SentimentChart extends React.Component {
   }
 
   termTypeChange(event, selection) {
-    const { termValue } = this.state;
-    this.setState(({termValue}) => (
-      {
-        termValue: selection.value
-      }
-    ));
+    this.setState({
+      termValue: selection.value
+    });
   }
 
   getTermOptions() {
@@ -174,16 +166,16 @@ export default class SentimentChart extends React.Component {
           label: function(tooltipItem, data) {
             // convert raw number to percentage of total
             var dataset = data.datasets[tooltipItem.datasetIndex];
-            var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+            var total = dataset.data.reduce(function(previousValue, currentValue) {
               return previousValue + currentValue;
             });
             var currentValue = dataset.data[tooltipItem.index];
             var precentage = Math.floor(((currentValue/total) * 100)+0.5);
-            return precentage + "%";
+            return precentage + '%';
           }
         }
       }
-    }
+    };
 
     return (
       <div>
@@ -220,4 +212,9 @@ export default class SentimentChart extends React.Component {
 }
 
 SentimentChart.propTypes = {
+  entities: PropTypes.object,
+  categories: PropTypes.object,
+  concepts: PropTypes.object,
+  chartType: PropTypes.string,
+  termValue: PropTypes.string
 };

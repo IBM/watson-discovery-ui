@@ -29,7 +29,7 @@ class DefaultLayout extends React.Component {
   }
 
   render() {
-    const { hideHeader } = this.props;
+    // const { hideHeader } = this.props;
 
     return (
       <html>

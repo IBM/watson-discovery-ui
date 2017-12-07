@@ -14,7 +14,6 @@
  * the License.
  */
 
-const moment = require('moment');
 const util = require('util');
 
 module.exports = {
@@ -37,8 +36,8 @@ module.exports = {
                    'term(enriched_text.concepts.text,count:10).term(enriched_text.sentiment.document.label)]'
     }, queryOpts);
 
-  console.log("params: ");
-  console.log(util.inspect(params, false, null));
-  return params;
+    console.log('Discovery Search Query Params: ');
+    console.log(util.inspect(params, false, null));
+    return params;
   }
 };

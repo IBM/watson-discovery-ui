@@ -16,7 +16,6 @@
 
 import PropTypes from 'prop-types';
 import FilterContainer from '../FilterBase/FilterContainer';
-const util = require('util');
 
 /**
  * CategoriesFilter - A container component for Category objects.
@@ -42,13 +41,18 @@ class CategoriesFilter extends FilterContainer {
   }
 
   getContainerTitle() {
-    return "Top Categories";
+    return 'Top Categories';
   } 
   
   componentWillReceiveProps(nextProps) {
     this.setState({ categories: nextProps.categories });
     this.setState({ selectedCategories: nextProps.selectedCategories });
   }
+}
+
+CategoriesFilter.propTypes = {
+  categories: PropTypes.array,
+  selectedCategories: PropTypes.object,
 };
 
 // export so we are visible to parent

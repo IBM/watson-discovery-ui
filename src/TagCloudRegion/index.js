@@ -14,12 +14,11 @@
  * the License.
  */
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { TagCloud } from "react-tagcloud";
+import { TagCloud } from 'react-tagcloud';
 import { Menu, Dropdown, Header, Divider } from 'semantic-ui-react';
 const utils = require('../utils');
-const util = require('util');
 
 var doUpdate = true;    // determines if we render update or not
 
@@ -61,12 +60,9 @@ export default class TagCloudRegion extends React.Component {
   }
 
   cloudTypeChange(event, selection) {
-    const { tagCloudType } = this.state;
-    this.setState(({tagCloudType}) => (
-      {
-        tagCloudType: selection.value
-      }
-    ));
+    this.setState({
+      tagCloudType: selection.value
+    });
   }
 
   tagSelected(tag) {
@@ -122,6 +118,7 @@ export default class TagCloudRegion extends React.Component {
   // NOTE: we need to do this for this specific component because it
   // draws itself randomly each time, which we want to avoid when
   // nothing has changed.
+  /*eslint no-unused-vars: ["error", { "args": "none" }]*/
   shouldComponentUpdate(nextProps, nextState) {
     if (doUpdate) {
       return true;
@@ -170,5 +167,6 @@ TagCloudRegion.propTypes = {
   categories: PropTypes.object,
   concepts: PropTypes.object,
   tagCloudSelection: PropTypes.string,
+  tagCloudType: PropTypes.string,
   onTagItemSelected: PropTypes.func.isRequired,
 };

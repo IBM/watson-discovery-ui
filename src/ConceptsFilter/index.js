@@ -25,23 +25,29 @@ class ConceptsFilter extends FilterContainer {
     super(...props);
 
     this.state = {
-       selectedConcepts: this.props.selectedConcepts
+      concepts: this.props.concepts,
+      selectedConcepts: this.props.selectedConcepts
     };
   }
 
   getSelectedCollection() {
-    const { selectedConcepts } = this.props;
+    const { selectedConcepts } = this.state;
     return selectedConcepts;
   }
 
   getCollection() {
-    const { concepts } = this.props;
+    const { concepts } = this.state;
     return concepts;
   }
 
   getContainerTitle() {
-    return "Top Concepts";
+    return 'Top Concepts';
   }  
+}
+
+ConceptsFilter.propTypes = {
+  concepts: PropTypes.array,
+  selectedConcepts: PropTypes.object,
 };
 
 // export so we are visible to parent

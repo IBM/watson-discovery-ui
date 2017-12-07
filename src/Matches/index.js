@@ -16,9 +16,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import { Icon, Container, List, Header, Image } from 'semantic-ui-react';
-const util = require('util');
+import { Icon, Container, List } from 'semantic-ui-react';
 
 const Match = props => (
   <List.Item>
@@ -52,7 +50,7 @@ const Matches = props => (
             <Match
               key={item.id}
               title={item.title ? item.title : 'No Title'}
-              text={item.text ? item.text : "No Description"}
+              text={item.text ? item.text : 'No Description'}
               score={item.score}
               sentiment={getSentiment(item)}
             />)
@@ -65,23 +63,6 @@ const Matches = props => (
 
 Matches.propTypes = {
   matches: PropTypes.arrayOf(PropTypes.object).isRequired
-};
-
-const getTitle = item => {
-  var str = item.text;
-  var title = str.split(':')[1];
-  title = title.replace(' Category', '');
-  return title;
-};
-
-const getImageUrl = item => {
-  var htmlStr = item.html;
-  var imgTag = '<a class="jqzoom" href="';
-  var startIdx = htmlStr.indexOf(imgTag);
-  startIdx = startIdx + imgTag.length;
-  var endIdx = htmlStr.indexOf('"', startIdx);
-  var img = htmlStr.substring(startIdx,endIdx);
-  return img;
 };
 
 const getSentiment = item => {

@@ -41,14 +41,18 @@ class EntitiesFilter extends FilterContainer {
   }
 
   getContainerTitle() {
-    return "Top Entities";
+    return 'Top Entities';
   }
   
   componentWillReceiveProps(nextProps) {
     this.setState({ entities: nextProps.entities });
     this.setState({ selectedEntities: nextProps.selectedEntities });
   }
+}
 
+EntitiesFilter.propTypes = {
+  entities: PropTypes.array,
+  selectedEntities: PropTypes.object,
 };
 
 // export so we are visible to parent

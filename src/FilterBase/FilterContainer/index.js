@@ -18,7 +18,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import FilterItem from '../FilterItem';
 import { Container } from 'semantic-ui-react';
-const util = require('util');
 
 /**
  * Item - A checkbox component used to specify a filter item
@@ -28,7 +27,7 @@ class Item extends FilterItem {
   constructor(...props) {
     super(...props);
   }
-};
+}
 
 /**
  * FilterContainer - A container component used as a base for
@@ -130,14 +129,13 @@ class FilterContainer extends React.Component {
         key={this.getItemLabel(item)}
         isChecked={this.getCheckedState(item, selectedItems)}
       />
-    )
+    );
   }
 
   /**
    * render - Render the filter container and its filter item children.
    */
   render() {
-    const selectedItems = this.getSelectedCollection();
     return (
       <div>
         <Container textAlign='left'>
@@ -150,13 +148,13 @@ class FilterContainer extends React.Component {
       </div>
     );
   }
-};
+}
 
 // type check to ensure we are called correctly
 FilterContainer.propTypes = {
   onFilterItemsChange: PropTypes.func.isRequired,
   selectedEntities: PropTypes.object
-}
+};
 
 // export so we are visible to parent
 module.exports = FilterContainer;

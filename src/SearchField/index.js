@@ -14,9 +14,9 @@
  * the License.
  */
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Container, Icon, Input, Segment } from 'semantic-ui-react';
+import { Icon, Input } from 'semantic-ui-react';
 
 export default class SearchField extends React.Component {
   constructor(...props) {
@@ -42,9 +42,9 @@ export default class SearchField extends React.Component {
     const searchValue = event.target.value;
     // if (event.key === 'Enter' && searchValue.match(/[^\s]+/)) {
     if (event.key === 'Enter') {
-        this.props.onSearchQueryChange({
-          searchQuery: searchValue
-        });
+      this.props.onSearchQueryChange({
+        searchQuery: searchValue
+      });
     }
   }
 

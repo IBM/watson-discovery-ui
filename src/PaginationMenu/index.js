@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Menu, Icon } from 'semantic-ui-react';
 const utils = require('../utils');
@@ -54,7 +54,7 @@ export default class PaginationMenu extends React.Component {
     
     this.props.onPageChange({
       currentPage: name
-    })
+    });
   }
 
   getMenuItemValues() {
@@ -86,7 +86,7 @@ export default class PaginationMenu extends React.Component {
     // Page 40 of 40 selected: prev | 1 | ... | 35 | 36 | 37 | 38 | 39 | 40
     if (curPageInt == 1) {
       // we are on first page - so no 'prev' menu item needed
-      for (var i=1; i<=MAX_MENU_ITEMS-3; i++) {
+      for (i=1; i<=MAX_MENU_ITEMS-3; i++) {
         pageItems.push(i.toString());        
       }
       pageItems.push('...');
@@ -97,14 +97,14 @@ export default class PaginationMenu extends React.Component {
       pageItems.push('prev');
       pageItems.push('1');
       pageItems.push('...');
-      for (var i=numPages-MAX_MENU_ITEMS+3; i<=numPages; i++) {
+      for (i=numPages-MAX_MENU_ITEMS+3; i<=numPages; i++) {
         pageItems.push(i.toString());        
       }
     } else if (curPageInt <= 3) {
       // we are close to first page - so no '...' menu item at front needed
       pageItems.push('prev');
       pageItems.push('1');
-      for (var i=2; i<=MAX_MENU_ITEMS-4; i++) {
+      for (i=2; i<=MAX_MENU_ITEMS-4; i++) {
         pageItems.push(i.toString());        
       }
       pageItems.push('...');
@@ -115,7 +115,7 @@ export default class PaginationMenu extends React.Component {
       pageItems.push('prev');
       pageItems.push('1');
       pageItems.push('...');
-      for (var i=numPages-MAX_MENU_ITEMS+4; i<=numPages; i++) {
+      for (i=numPages-MAX_MENU_ITEMS+4; i<=numPages; i++) {
         pageItems.push(i.toString());        
       }
       pageItems.push('next');
@@ -133,9 +133,9 @@ export default class PaginationMenu extends React.Component {
       pageItems.push('next');
     }    
 
-    console.log('currentPage: ' + currentPage + '  array[' + pageItems[0] + ',' +
-                pageItems[1] + ',' + pageItems[2] + ',' + pageItems[3] + ',' + pageItems[4] + ',' +
-                pageItems[5] + ',' + pageItems[6] + ',' + pageItems[7] + ',' + pageItems[8] + ']');
+    // console.log('currentPage: ' + currentPage + '  array[' + pageItems[0] + ',' +
+    //             pageItems[1] + ',' + pageItems[2] + ',' + pageItems[3] + ',' + pageItems[4] + ',' +
+    //             pageItems[5] + ',' + pageItems[6] + ',' + pageItems[7] + ',' + pageItems[8] + ']');
     return pageItems;
   }
 
@@ -183,7 +183,6 @@ export default class PaginationMenu extends React.Component {
   // are propagated down to our component.
   componentWillReceiveProps(nextProps) {
     const { numMatches } = this.state;
-    console.log('numMatches changed from: ' + numMatches + ' to: ' + nextProps.numMatches);
     if (numMatches != nextProps.numMatches) {
       this.setState({
         numMatches: nextProps.numMatches,
@@ -193,9 +192,6 @@ export default class PaginationMenu extends React.Component {
   }
 
   render() {
-    const { currentPage, numMatches } = this.state;
-    console.log("IN PAGINATION RENDER:");
-    console.log("numMatches: " + numMatches + "  currentPage: " + currentPage);
     return (
       <div>
         <Menu pagination>
@@ -210,5 +206,6 @@ export default class PaginationMenu extends React.Component {
 
 PaginationMenu.propTypes = {
   onPageChange: PropTypes.func.isRequired,
-  numMatches: PropTypes.number
+  numMatches: PropTypes.number,
+  currentPage: PropTypes.string
 };

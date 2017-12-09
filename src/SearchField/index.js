@@ -16,8 +16,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Input } from 'semantic-ui-react';
+import { Input } from 'semantic-ui-react';
 
+/**
+ * This object renders a search field at the bottom of the web page.
+ * This object must determine when the user has entered a new
+ * search value and then propogate it to the parent.
+ */
 export default class SearchField extends React.Component {
   constructor(...props) {
     super(...props);
@@ -26,21 +31,12 @@ export default class SearchField extends React.Component {
     };
   }
 
-  handleInputChange(event) {
-    this.setState({
-      searchQuery: event.target.value
-    });
-  }
-
-  handleSearchPress() {
-    this.props.onSearchQueryChange({
-      searchQuery: this.state.searchQuery
-    });
-  }
-
+  /**
+   * handleKeyPress - user has entered a new search value. 
+   * Pass on to the parent object.
+   */
   handleKeyPress(event) {
     const searchValue = event.target.value;
-    // if (event.key === 'Enter' && searchValue.match(/[^\s]+/)) {
     if (event.key === 'Enter') {
       this.props.onSearchQueryChange({
         searchQuery: searchValue
@@ -48,25 +44,25 @@ export default class SearchField extends React.Component {
     }
   }
 
+  /**
+   * render - return the input field to render.
+   */
   render() {
     return (
       <div>
         <Input
           className='searchinput'
-          icon={{ name: 'search', circular: true, link: true}}
-          placeholder={'Enter search string'}
+          icon='search'
+          placeholder='Enter search string...'
           onKeyPress={this.handleKeyPress.bind(this)}
-          onInput={this.handleInputChange.bind(this)}
           defaultValue={this.state.searchQuery}
         />
-        <div onClick={this.handleSearchPress.bind(this)} className="query--icon-container">
-          <Icon type="search" size="small" fill="#ffffff" />
-        </div>
       </div>
     );
   }
 }
 
+// type check to ensure we are called correctly
 SearchField.propTypes = {
   onSearchQueryChange: PropTypes.func.isRequired,
   searchQuery: PropTypes.string

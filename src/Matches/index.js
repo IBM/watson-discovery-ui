@@ -18,6 +18,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Container, List } from 'semantic-ui-react';
 
+/**
+ * This object renders the results of the search query on the web page. 
+ * Each result item, or 'match', will display a title, description, relevance
+ * score, and sentiment value.
+ */
+
 const Match = props => (
   <List.Item>
     <List.Content floated='right'>
@@ -33,7 +39,7 @@ const Match = props => (
   </List.Item>
 );
 
-
+// type check to ensure we are called correctly
 Match.propTypes = {
   title: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
@@ -61,10 +67,15 @@ const Matches = props => (
   </div>
 );
 
+// type check to ensure we are called correctly
 Matches.propTypes = {
   matches: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
+/**
+ * getSentiment - determine which icon to display to represent
+ * positive, negative, and neutral sentiment.
+ */
 const getSentiment = item => {
   // console.log('item.enriched_text.sentiment: ' + item.enriched_text.sentiment);
   // console.log('item.enriched_text.sentiment.document: ' + util.inspect(item.enriched_text.sentiment.document, false, null));
@@ -76,4 +87,5 @@ const getSentiment = item => {
   }
 };
 
+// export so we are visible to parent
 module.exports = Matches;

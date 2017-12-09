@@ -19,8 +19,13 @@ const queryString = require('query-string');
 const queryBuilder = require('./query-builder');
 const discovery = require('./watson-discovery-service');
 
+/**
+ * Back end server which handles initializing the Watson Discovery
+ * service, and processing fetch requests from the client.
+ */
+
 /*eslint no-unused-vars: ["error", {"argsIgnorePattern": "response"}]*/
-const WatsonNewsServer = new Promise((resolve, reject) => {
+const WatsonDiscoServer = new Promise((resolve, reject) => {
   // getInvironments as sanity check to ensure creds are valid
   discovery.getEnvironments({})
     .then(response => {
@@ -54,9 +59,14 @@ const WatsonNewsServer = new Promise((resolve, reject) => {
     });
 });
 
+/**
+ * createServer - create express server and handle requests
+ * from client.
+ */
 function createServer(results) {
   const server = require('./express');
 
+  // handles search request from search bar
   server.get('/api/search', (req, res) => {
     const { query } = req.query;
     
@@ -87,6 +97,7 @@ function createServer(results) {
       });
   });
 
+  // handles search string appened to url
   server.get('/:searchQuery', function(req, res){
     var searchQuery = req.params.searchQuery.replace(/\+/g, ' ');
     const qs = queryString.stringify({ query: searchQuery });
@@ -119,6 +130,7 @@ function createServer(results) {
       });
   });
 
+  // initial start-up request
   server.get('/*', function(req, res) {
     console.log('In /*');
     res.render('index', { data: results, 
@@ -132,4 +144,4 @@ function createServer(results) {
   return server;
 }
 
-module.exports = WatsonNewsServer;
+module.exports = WatsonDiscoServer;

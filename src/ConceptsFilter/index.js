@@ -19,6 +19,9 @@ import FilterContainer from '../FilterBase/FilterContainer';
 
 /**
  * ConceptsFilter - A container component for Concept objects.
+ * This object appears on the web page and allows the user to
+ * filter matches based on a 'concept' value. It's core functionality
+ * comes from its parents class - the FilterContainer.
  */
 class ConceptsFilter extends FilterContainer {
   constructor(...props) {
@@ -30,21 +33,39 @@ class ConceptsFilter extends FilterContainer {
     };
   }
 
+  /**
+   * getSelectedCollection - Override parent class to return collection 
+   * of selected concept items.
+   */
   getSelectedCollection() {
     const { selectedConcepts } = this.state;
     return selectedConcepts;
   }
 
+  /**
+   * getCollection - Override parent class to return collection 
+   * of all concept items.
+   */
   getCollection() {
     const { concepts } = this.state;
     return concepts;
   }
 
+  /**
+   * getContainerTitle - Override parent class to return title of 
+   * the filter container. 
+   */
   getContainerTitle() {
     return 'Top Concepts';
   }  
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ concepts: nextProps.concepts });
+    this.setState({ selectedConcepts: nextProps.selectedConcepts });
+  }
 }
 
+// type check to ensure we are called correctly
 ConceptsFilter.propTypes = {
   concepts: PropTypes.array,
   selectedConcepts: PropTypes.object,

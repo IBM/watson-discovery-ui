@@ -19,6 +19,9 @@ import FilterContainer from '../FilterBase/FilterContainer';
 
 /**
  * CategoriesFilter - A container component for Category objects.
+ * This object appears on the web page and allows the user to
+ * filter matches based on a 'category' value. It's core functionality
+ * comes from its parents class - the FilterContainer.
  */
 class CategoriesFilter extends FilterContainer {
   constructor(...props) {
@@ -30,16 +33,28 @@ class CategoriesFilter extends FilterContainer {
     };
   }
 
+  /**
+   * getSelectedCollection - Override parent class to return collection 
+   * of selected category items.
+   */
   getSelectedCollection() {
     const { selectedCategories } = this.state;
     return selectedCategories;
   }
 
+  /**
+   * getCollection - Override parent class to return collection 
+   * of all category items.
+   */
   getCollection() {
     const { categories } = this.state;
     return categories;
   }
 
+  /**
+   * getContainerTitle - Override parent class to return title of 
+   * the filter container. 
+   */
   getContainerTitle() {
     return 'Top Categories';
   } 
@@ -50,6 +65,7 @@ class CategoriesFilter extends FilterContainer {
   }
 }
 
+// type check to ensure we are called correctly
 CategoriesFilter.propTypes = {
   categories: PropTypes.array,
   selectedCategories: PropTypes.object,

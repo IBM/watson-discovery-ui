@@ -19,6 +19,9 @@ import FilterContainer from '../FilterBase/FilterContainer';
 
 /**
  * EntitiesFilter - A container component for Entity objects.
+ * This object appears on the web page and allows the user to
+ * filter matches based on an 'entity' value. It's core functionality
+ * comes from its parents class - the FilterContainer.
  */
 class EntitiesFilter extends FilterContainer {
   constructor(...props) {
@@ -30,16 +33,28 @@ class EntitiesFilter extends FilterContainer {
     };
   }
 
+  /**
+   * getSelectedCollection - Override parent class to return collection 
+   * of selected entity items.
+   */
   getSelectedCollection() {
     const { selectedEntities } = this.state;
     return selectedEntities;
   }
 
+  /**
+   * getCollection - Override parent class to return collection 
+   * of all entity items.
+   */
   getCollection() {
     const { entities } = this.state;
     return entities;
   }
 
+  /**
+   * getContainerTitle - Override parent class to return title of 
+   * the filter container. 
+   */
   getContainerTitle() {
     return 'Top Entities';
   }
@@ -50,6 +65,7 @@ class EntitiesFilter extends FilterContainer {
   }
 }
 
+// type check to ensure we are called correctly
 EntitiesFilter.propTypes = {
   entities: PropTypes.array,
   selectedEntities: PropTypes.object,

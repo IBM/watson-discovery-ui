@@ -59,6 +59,10 @@ class CategoriesFilter extends FilterContainer {
     return 'Top Categories';
   } 
   
+  // Important - this is needed to ensure changes to main properties
+  // are propagated down to our component. In this case, some other
+  // search or filter event has occured which has changed the list of 
+  // cateories, or which categories are selected.
   componentWillReceiveProps(nextProps) {
     this.setState({ categories: nextProps.categories });
     this.setState({ selectedCategories: nextProps.selectedCategories });

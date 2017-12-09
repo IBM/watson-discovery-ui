@@ -176,13 +176,13 @@ export default class SentimentChart extends React.Component {
   }
   
   // Important - this is needed to ensure changes to main properties
-  // are propagated down to our component.
+  // are propagated down to our component. In this case, some other
+  // search or filter event has occured which has changed the list of 
+  // items we are graphing.
   componentWillReceiveProps(nextProps) {
     this.setState({ entities: nextProps.entities });
     this.setState({ categories: nextProps.categories });
     this.setState({ concepts: nextProps.concepts });
-    this.setState({ chartType: nextProps.chartType });
-    this.setState({ termValue: nextProps.termValue });
   }
 
   /**

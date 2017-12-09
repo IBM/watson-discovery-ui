@@ -20,6 +20,12 @@ import { Menu, Icon } from 'semantic-ui-react';
 const utils = require('../utils');
 const MAX_MENU_ITEMS = 9;
 
+/**
+ * This object renders a pagination menu at the bottom of the results
+ * section on the web page. This object must determine what pages to
+ * show based on what current page is displayed, as well as respond
+ * to user clicks to change the page.
+ */
 export default class PaginationMenu extends React.Component {
   constructor(...props) {
     super(...props);
@@ -34,7 +40,11 @@ export default class PaginationMenu extends React.Component {
     };
   }
 
-  // inform parent that page has changed
+  /**
+   * handleItemClick - user has selected a new page of results 
+   * to display. Determine the correct page number and pass that 
+   * on to the parent object.
+   */
   handleItemClick(event, { name }) {
     const { currentPage } = this.state;
 
@@ -51,12 +61,16 @@ export default class PaginationMenu extends React.Component {
 
     console.log('page number = ' + name);
     this.setState({ currentPage: name });
-    
+
+    // inform parent
     this.props.onPageChange({
       currentPage: name
     });
   }
 
+  /**
+   * getMenuItemValues - determine what pages to show in the menu.
+   */
   getMenuItemValues() {
     const { currentPage, numMatches } = this.state;
     var numPages = Math.ceil(numMatches / utils.ITEMS_PER_PAGE);
@@ -139,6 +153,9 @@ export default class PaginationMenu extends React.Component {
     return pageItems;
   }
 
+  /**
+   * getMenuItem - return the menu item to render.
+   */
   getMenuItem(item) {
     const { currentPage } = this.state;
     if (item === 'prev') {
@@ -191,6 +208,9 @@ export default class PaginationMenu extends React.Component {
     }
   }
 
+  /**
+   * render - return the menu to render.
+   */
   render() {
     return (
       <div>
@@ -204,6 +224,7 @@ export default class PaginationMenu extends React.Component {
   }
 }
 
+// type check to ensure we are called correctly
 PaginationMenu.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   numMatches: PropTypes.number,

@@ -20,6 +20,17 @@ import { Header, Menu, Dropdown, Divider } from 'semantic-ui-react';
 import { Doughnut } from 'react-chartjs-2';
 const utils = require('../utils');
 
+/**
+ * This object renders a sentiment graph object that appears at the bottom
+ * of the web page. It is composed of multiple objects, the graph,
+ * and 2 drop-down menus where the user can select what filter (entities,
+ * categories, or concepts) and/or what filter value (referred to as 'term') 
+ * to represent. 
+ * NOTE: the filter value of 'Term' indicates all values.
+ * NOTE: what the user selects to represent in the graph has no effect
+ *       on any other objects on the page. It is just manipulating the
+ *       search data already retrieved.
+ */
 export default class SentimentChart extends React.Component {
   constructor(...props) {
     super(...props);
@@ -40,6 +51,10 @@ export default class SentimentChart extends React.Component {
     };
   }
 
+  /**
+   * filterTypeChange - user has selected a new filter type. This will
+   * change the filter type values available to select from.
+   */
   filterTypeChange(event, selection) {
     console.log('selection.value: ' + selection.value);
     this.setState({
@@ -48,6 +63,10 @@ export default class SentimentChart extends React.Component {
     });
   }
 
+  /**
+   * getTotals - add up all of the sentiment values for a specific 
+   * group of objects (entities, categories, and concepts).
+   */
   getTotals(collection, termValue) {
     this.totals.matches = 0;
     this.totals.positiveNum = 0;
@@ -70,6 +89,10 @@ export default class SentimentChart extends React.Component {
     }
   }
 
+  /**
+   * getChartData - based on what group filter user has selected, accumulate 
+   * all of the data needed to render the sentiment chart.
+   */
   getChartData() {
     const { chartType, termValue, entities, categories, concepts } = this.state;
     
@@ -88,17 +111,20 @@ export default class SentimentChart extends React.Component {
     console.log('    totalNegative: ' + this.totals.negativeNum);
 
     var ret = {
+      // legend
       labels: [
         'Positive',
         'Neutral',
         'Negative'
       ],
       datasets: [{
+        // raw numbers
         data: [
           this.totals.positiveNum,
           this.totals.neutralNum,
           this.totals.negativeNum
         ],
+        // colors for each piece of the graph
         backgroundColor: [
           '#358D35',
           '#C2C2C2',
@@ -113,17 +139,25 @@ export default class SentimentChart extends React.Component {
     return ret;
   }
 
+  /**
+   * termTypeChange - user has selected a new term filter value. This will
+   * modify the sentiment chart to just represent this term.
+   */
   termTypeChange(event, selection) {
     this.setState({
       termValue: selection.value
     });
   }
 
+  /**
+   * getTermOptions - get the term items available to be selected by the user.
+   */
   getTermOptions() {
     const { chartType, entities, categories, concepts } = this.state;
     var options = [{ key: -1, value: 'Term', text: 'Term' }];
     var collection;
 
+    // select based on the filter type
     if (chartType === utils.ENTITIY_FILTER) {
       collection = entities.results;
     } else if (chartType === utils.CATEGORY_FILTER) {
@@ -151,6 +185,9 @@ export default class SentimentChart extends React.Component {
     this.setState({ termValue: nextProps.termValue });
   }
 
+  /**
+   * render - return all the sentiment objects to render.
+   */
   render() {
     const options = {
       responsive: true,
@@ -211,6 +248,7 @@ export default class SentimentChart extends React.Component {
   }
 }
 
+// type check to ensure we are called correctly
 SentimentChart.propTypes = {
   entities: PropTypes.object,
   categories: PropTypes.object,

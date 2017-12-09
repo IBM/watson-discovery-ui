@@ -22,7 +22,7 @@ class DefaultLayout extends React.Component {
     return (
       <div>
         <div>
-          This is a web app to demonstrates how to query your own Watson Discovery Collection.
+          This is a web app to demonstrates how to query your own Watson Discovery Collection and display it in a variety of ways.
         </div>
       </div>
     );

@@ -22,6 +22,14 @@ const utils = require('../utils');
 
 var doUpdate = true;    // determines if we render update or not
 
+/**
+ * This object renders a tag cloud object that appears in the right column
+ * of the home page. It contains selectable terms that the user can use
+ * to filter the match list. It is essentially like the filter objects, but
+ * in a different format. It comes with a drop down menu where the user can
+ * select what filter (entities, categories, or concepts) values to display 
+ * in the cloud. 
+ */
 export default class TagCloudRegion extends React.Component {
   constructor(...props) {
     super(...props);
@@ -34,6 +42,10 @@ export default class TagCloudRegion extends React.Component {
     };
   }
 
+  /**
+   * getTagCloudItems - return all values associated with the selected
+   * filter type.
+   */
   getTagCloudItems() {
     const { tagCloudType, entities, categories, concepts } = this.state;
 
@@ -46,6 +58,9 @@ export default class TagCloudRegion extends React.Component {
       oldArray = JSON.parse(JSON.stringify(entities.results));
     }
 
+    // the values are taken from a collection that contains 'number
+    // of matches' for the item. We don't want to show those numbers
+    // so remove them from our new collection.
     var idx;
     var newArray = [];
     for (idx = 0; idx < oldArray.length; idx++) {
@@ -59,12 +74,20 @@ export default class TagCloudRegion extends React.Component {
     return newArray;
   }
 
+  /**
+   * cloudTypeChange - user has selected a new filter type. This will
+   * change the values show in the tag cloud.
+   */
   cloudTypeChange(event, selection) {
     this.setState({
       tagCloudType: selection.value
     });
   }
 
+  /**
+   * tagSelected - user has selected an item in the tag cloud. Propogate
+   * this info to the parent.
+   */
   tagSelected(tag) {
     const { tagCloudType } = this.state;
     this.props.onTagItemSelected({
@@ -73,6 +96,9 @@ export default class TagCloudRegion extends React.Component {
     });
   }
 
+  /**
+   * setsAreEqual - shallow test to see if two data sets are equal.
+   */
   setsAreEqual(arr1, arr2) {
     // console.log('Set1length: ' + arr1.length);
     if (arr1.length != arr2.length) {
@@ -114,7 +140,7 @@ export default class TagCloudRegion extends React.Component {
     }
   }
 
-  // only do update if something has changed
+  // Only do update if something has changed
   // NOTE: we need to do this for this specific component because it
   // draws itself randomly each time, which we want to avoid when
   // nothing has changed.
@@ -128,6 +154,9 @@ export default class TagCloudRegion extends React.Component {
     }
   }
 
+  /**
+   * render - return all the tag cloud objects to render.
+   */
   render() {
     const options = {
       luminosity: 'light',

@@ -29,8 +29,12 @@ import SentimentChart from './SentimentChart';
 import { Grid, Dimmer, Divider, Loader, Accordion, Icon, Header } from 'semantic-ui-react';
 const utils = require('./utils');
 
+/**
+ * Main React object that contains all objects on the web page.
+ * This object manages all interaction between child objects as
+ * well as making search requests to the discovery service.
+ */
 class Main extends React.Component {
-
   constructor(...props) {
     super(...props);
     const { 
@@ -67,7 +71,11 @@ class Main extends React.Component {
     };
   }
 
-  // Callback functions for rendered objects
+  /**
+   * handleAccordionClick - (callback function)
+   * User has selected one of the 
+   * filter boxes to expand and show values for.
+   */
   handleAccordionClick(e, titleProps) {
     const { index } = titleProps;
     const { activeFilterIndex } = this.state;
@@ -75,17 +83,30 @@ class Main extends React.Component {
     this.setState({ activeFilterIndex: newIndex });
   }
 
+  /**
+   * filtersChanged - (callback function)
+   * User has selected one of the values from within
+   * of the filter boxes. This results in making a new qeury to 
+   * the disco service.
+   */
   filtersChanged() {
     const { searchQuery  } = this.state;
     this.fetchData(searchQuery, false);
   }
 
-  /* handle page changs from pagination menu items */
+  /**
+   * pageChanged - (callback function)
+   * User has selected a new page of results to display.
+   */
   pageChanged(data) {
     this.setState({ currentPage: data.currentPage });
   }
 
-  /* handle search string changes from search box */
+  /**
+   * searchQueryChanged - (callback function)
+   * User has entered a new search string to query on. 
+   * This results in making a new qeury to the disco service.
+   */
   searchQueryChanged(query) {
     const { searchQuery } = query;
     console.log('searchQuery [FROM SEARCH]: ' + searchQuery);
@@ -94,26 +115,20 @@ class Main extends React.Component {
     this.fetchData(searchQuery, true);
   }
 
-  buildFullTagName(tag, collection) {
-    // find the tag in collection
-    for (var i=0; i<collection.length; i++) {
-      console.log('compare tag: ' + tag + ' with: ' + collection[i].key);
-      if (collection[i].key === tag) {
-        // return the fill tag so we can match the entries
-        // listed in the filters (which also show num of matches)
-        return collection[i].key + ' (' + collection[i].matching_results + ')';
-      }
-    }
-    return tag;
-  }
-
-  /* handle tag selection in the tag cloud */
+  /**
+   * tagItemSelected - (callback function)
+   * User has selected an item from the tag cloud object
+   * to filter on. This results in making a new qeury to the 
+   * disco service.
+   */
   tagItemSelected(tag) {
     var { selectedTagValue, cloudType } = tag;
     console.log('tagValue [FROM TAG CLOUD]: ' + selectedTagValue);
 
     // manually add this item to the list of selected items
-    // based on filter type
+    // based on filter type. This is needed so that both the 
+    // tag cloud and the filter objects stay in sync (both 
+    // reflect what items have been selected).
     const { entities, selectedEntities, 
             categories, selectedCategories, 
             concepts, selectedConcepts,
@@ -158,10 +173,15 @@ class Main extends React.Component {
     this.fetchData(searchQuery, false);
   }
 
+  /**
+   * fetchData - build the query that will be passed to the 
+   * discovery service.
+   */
   fetchData(query, clearFilters) {
     const searchQuery = query;
     var { selectedEntities, selectedCategories, selectedConcepts } = this.state;
 
+    // clear filters if this a new text search
     if (clearFilters) {
       selectedEntities.clear();
       selectedCategories.clear();
@@ -185,6 +205,7 @@ class Main extends React.Component {
     const qs = queryString.stringify({ query: searchQuery });
     const fs = this.buildFilterString(selectedEntities, selectedCategories, selectedConcepts);
     
+    // send request
     fetch(`/api/search?${qs}${fs}`)
     .then(response => {
       if (response.ok) {
@@ -219,72 +240,81 @@ class Main extends React.Component {
   }
 
   /**
-   * Convert set of selected entities into string
-   * @param {*} entities 
+   * buildFilterStringForType - build the filter string for
+   * one set of filter objects.
    */
-  buildFilterString(entities, categories, concepts) {
-    var filterString = '';
-    var firstOne = true;
-    
-    if (entities.size > 0) {
-      var entitiesString = '';
-      entities.forEach(function(value) {
-        // remove the '(count)' from each entity entry
-        // if it exists - tag cloud does not list '(count)'s
+  buildFilterStringForType(collection, keyName, firstOne) {
+    var str = '';
+    console.log('firstOne = ' + firstOne);
+    var firstValue = firstOne; 
+    if (collection.size > 0) {
+      collection.forEach(function(value) {
+        // remove the '(count)' from each entry, if it exists.
+        // note - tag cloud items don't have '(count)'s.
         var idx = value.lastIndexOf(' (');
         if (idx >= 0) {
           value = value.substr(0, idx);
         }
-        if (firstOne) {
-          firstOne = false;
-          entitiesString = 'enriched_text.entities.text::';
+        if (firstValue) {
+          firstValue = false;
+          str = keyName;
         } else {
-          entitiesString = entitiesString + ',enriched_text.entities.text::';
+          str = str + ',' + keyName;
         }
-        entitiesString = entitiesString + '"' + value + '"';
+        str = str + '"' + value + '"';
       });
-      //entitiesString = encodeURIComponent(entitiesString);
-      filterString = filterString + entitiesString;
     }
+    return str;
+  }
 
-    if (categories.size > 0) {
-      var categoryString = '';
-      categories.forEach(function(value) {
-        // remove the '(count)' from each category entry
-        var idx = value.lastIndexOf(' (');
-        value = value.substr(0, idx);
-        if (firstOne) {
-          firstOne = false;
-          categoryString = 'enriched_text.categories.label::';
-        } else {
-          categoryString = categoryString + ',enriched_text.categories.label::';
-        }
-        categoryString = categoryString + '"' + value + '"';
-      });
-      filterString = filterString + categoryString;
-    }
+  /**
+   * buildFilterString - convert all selected filters into a string
+   * to be added to the search query sent to the discovery service
+   */
+  buildFilterString(entities, categories, concepts) {
+    var filterString = '';
+    
+    // add any entities filters, if selected
+    var entitiesString = this.buildFilterStringForType(entities,
+      'enriched_text.entities.text::', true);
+    filterString = filterString + entitiesString;
+      
+    // add any category filters, if selected
+    var categoryString = this.buildFilterStringForType(categories,
+      'enriched_text.categories.label::', filterString === '');
+    filterString = filterString + categoryString;
 
-    if (concepts.size > 0) {
-      var conceptString = '';
-      concepts.forEach(function(value) {
-        // remove the '(count)' from each category entry
-        var idx = value.lastIndexOf(' (');
-        value = value.substr(0, idx);
-        if (firstOne) {
-          firstOne = false;
-          conceptString = 'enriched_text.concepts.text::';
-        } else {
-          conceptString = conceptString + ',enriched_text.concepts.text::';
-        }
-        conceptString = conceptString + '"' + value + '"';
-      });
-      filterString = filterString + conceptString;
-    }
+    // add any entities filters, if selected
+    var conceptString = this.buildFilterStringForType(concepts,
+      'enriched_text.concepts.text::', filterString === '');
+    filterString = filterString + conceptString;
 
     return filterString;
   }
 
-  // Functions to return render components
+  /**
+   * buildFullTagName - this matches the selected tag cloud item with
+   * the item in the filter collection. This is needed to keep them in 
+   * sync with each other. This takes care of the issue where the tag
+   * cloud item is formatted differently than the collection item (the
+   * collection item name has a count appended to it).
+   */
+  buildFullTagName(tag, collection) {
+    // find the tag in collection
+    for (var i=0; i<collection.length; i++) {
+      console.log('compare tag: ' + tag + ' with: ' + collection[i].key);
+      if (collection[i].key === tag) {
+        // return the full tag so we can match the entries
+        // listed in the filters (which also show num of matches)
+        return collection[i].key + ' (' + collection[i].matching_results + ')';
+      }
+    }
+    return tag;
+  }
+
+  /**
+   * getMatches - return collection matches to be rendered.
+   */
   getMatches() {
     const { data, currentPage } = this.state;
     if (!data) {
@@ -300,6 +330,9 @@ class Main extends React.Component {
     );
   }
 
+  /**
+   * getPaginationMenu - return pagination menu to be rendered.
+   */
   getPaginationMenu() {
     const { numMatches } = this.state;
     
@@ -315,6 +348,9 @@ class Main extends React.Component {
     }
   }
 
+  /**
+   * getEntities - return entities filter object to be rendered.
+   */
   getEntities() {
     const { entities, selectedEntities } = this.state;
     if (!entities) {
@@ -329,6 +365,9 @@ class Main extends React.Component {
     );
   }
   
+  /**
+   * getCategories - return categories filter object to be rendered.
+   */
   getCategories() {
     const { categories, selectedCategories } = this.state;
     if (!categories) {
@@ -343,6 +382,9 @@ class Main extends React.Component {
     );
   }
 
+  /**
+   * getConcepts - return concepts filter object to be rendered.
+   */
   getConcepts() {
     const { concepts, selectedConcepts } = this.state;
     if (!concepts) {
@@ -357,6 +399,9 @@ class Main extends React.Component {
     );
   }
 
+  /**
+   * render - return all the home page object to be rendered.
+   */
   render() {
     const { loading, data, error, searchQuery,
             entities, categories, concepts,
@@ -480,6 +525,51 @@ class Main extends React.Component {
   }
 }
 
+/**
+ * parseData - convert raw search results into collection of matching results.
+ */
+const parseData = data => ({
+  rawResponse: Object.assign({}, data),
+  // sentiment: data.aggregations[0].results.reduce((accumulator, result) =>
+  //   Object.assign(accumulator, { [result.key]: result.matching_results }), {}),
+  results: data.results
+});
+
+/**
+ * parseEntities - convert raw search results into collection of entities.
+ */
+const parseEntities = data => ({
+  rawResponse: Object.assign({}, data),
+  results: data.aggregations[utils.ENTITY_DATA_INDEX].results
+});
+
+/**
+ * parseCategories - convert raw search results into collection of categories.
+ */
+const parseCategories = data => ({
+  rawResponse: Object.assign({}, data),
+  results: data.aggregations[utils.CATEGORY_DATA_INDEX].results
+});
+
+/**
+ * parseConcepts - convert raw search results into collection of concepts.
+ */
+const parseConcepts = data => ({
+  rawResponse: Object.assign({}, data),
+  results: data.aggregations[utils.CONCEPT_DATA_INDEX].results
+});
+
+/**
+ * scrollToMain - scroll window to show 'main' rendered object.
+ */
+function scrollToMain() {
+  setTimeout(() => {
+    const scrollY = document.querySelector('main').getBoundingClientRect().top + window.scrollY;
+    window.scrollTo(0, scrollY);
+  }, 0);
+}
+
+// type check to ensure we are called correctly
 Main.propTypes = {
   data: PropTypes.object,
   entities: PropTypes.object,
@@ -494,34 +584,5 @@ Main.propTypes = {
   currentPage: PropTypes.string,
   error: PropTypes.object
 };
-
-const parseData = data => ({
-  rawResponse: Object.assign({}, data),
-  // sentiment: data.aggregations[0].results.reduce((accumulator, result) =>
-  //   Object.assign(accumulator, { [result.key]: result.matching_results }), {}),
-  results: data.results
-});
-
-const parseEntities = data => ({
-  rawResponse: Object.assign({}, data),
-  results: data.aggregations[utils.ENTITY_DATA_INDEX].results
-});
-
-const parseCategories = data => ({
-  rawResponse: Object.assign({}, data),
-  results: data.aggregations[utils.CATEGORY_DATA_INDEX].results
-});
-
-const parseConcepts = data => ({
-  rawResponse: Object.assign({}, data),
-  results: data.aggregations[utils.CONCEPT_DATA_INDEX].results
-});
-
-function scrollToMain() {
-  setTimeout(() => {
-    const scrollY = document.querySelector('main').getBoundingClientRect().top + window.scrollY;
-    window.scrollTo(0, scrollY);
-  }, 0);
-}
 
 module.exports = Main;

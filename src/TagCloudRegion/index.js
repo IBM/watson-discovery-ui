@@ -119,11 +119,13 @@ export default class TagCloudRegion extends React.Component {
   }
 
   // Important - this is needed to ensure changes to main properties
-  // are propagated down to our component.
+  // are propagated down to our component. In this case, some other
+  // search or filter event has occurred which has changed the list 
+  // items we are showing.
   componentWillReceiveProps(nextProps) {
     const { entities, categories, concepts } = this.state;
     doUpdate = false;
-    // to avoid unnecessary updates, check if data has changed
+    // to avoid unnecessary updates, check if data has actually changed
     if (! this.setsAreEqual(categories.results, nextProps.categories.results)) {
       this.setState({ categories: nextProps.categories });
       doUpdate = true;

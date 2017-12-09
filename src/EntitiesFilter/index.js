@@ -59,6 +59,10 @@ class EntitiesFilter extends FilterContainer {
     return 'Top Entities';
   }
   
+  // Important - this is needed to ensure changes to main properties
+  // are propagated down to our component. In this case, some other
+  // search or filter event has occured which has changed the list of 
+  // entities, or which entities are selected.
   componentWillReceiveProps(nextProps) {
     this.setState({ entities: nextProps.entities });
     this.setState({ selectedEntities: nextProps.selectedEntities });

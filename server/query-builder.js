@@ -28,7 +28,7 @@ module.exports = {
       environment_id: this.environment_id,
       collection_id: this.collection_id,
       count: 300,
-      sort: '-_score',
+      sort: '-score',
       return: 'title,text,url,host,html,crawl_date,score,id,' +
               'enriched_text.entities.text,enriched_text.sentiment.document.label',
       aggregation: '[term(enriched_text.entities.text,count:12).term(enriched_text.sentiment.document.label),' +

@@ -465,7 +465,7 @@ class Main extends React.Component {
               {loading ? (
                 <div className="results">
                   <div className="loader--container">
-                    <Dimmer active>
+                    <Dimmer active inverted>
                       <Loader>Loading</Loader>
                     </Dimmer>
                   </div>

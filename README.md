@@ -49,7 +49,7 @@ http://localhost:3000
 
 # TODO List:
 - Add 'keyword' extraction to discovery collection and represent the data as a filter (i.e. same UI components found for entities, categories, and concepts).
-- Add UI component to allow user to strict `discovery langauge qery` or simple `natural langauge query' (default and already done).
+- Add UI component to allow user to enter either strict `discovery langauge query` syntax (e.g. 'text:"new york"') or simple `natural langauge query' (default and already done).
 - Add UI component to allow user to limit the number of matches to 100.
 - Add UI component to allow user to specify they would like matches displayed with `passages` for result descriptions (instead of just dump of text field).
 - Add 'trending' graph to bottom left of web page. Graph will be independent of other UI components, and show sentiment trending of each of the filter options (entities, categories, concepts, and keywords).

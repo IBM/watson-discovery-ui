@@ -61,6 +61,7 @@ http://localhost:3000
   - Center pagination menu in 'matches' window.
   - Eliminate space when pagination menu is not shown.
   - Sentiment chart needs to default to "Term" when initally shown.
+  - Change 'loading...' panel to white background to avoid flash when new search is conducted.
 
 # Privacy Notice
 

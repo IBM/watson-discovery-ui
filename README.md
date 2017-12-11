@@ -39,12 +39,12 @@ http://localhost:3000
 
 ## UI controls and associated actions
 
-### 1. Search field and search parameters - return results based on search criteria. Search parameters will effect how the user will enter values, how they will be displayed, and limit the number of matches.
-### 2. Filter fields - Drop down lists of filters that can be applied to search resullts. Each drop down list contains entities/categories/concepts/keywords associated with results. For each drop down filter item, the number of matches will also be displayed. If a user selects a filter item, a new search will be conducted and will update the results panel (#3). Filter items selected will also effect what is shown in the tag cloud (#4).
-### 3. Search results and pagination menu - shows result items (e.g. 5 per page) and a pagination menu that allows user to scroll through pages of result items.
-### 4. Tag cloud - similar to the filter fields (#2) but in a different form. Associated drop down list will determine which filter items to display (default is 'entity'). User can select/deselect items in the cloud to turn on/off filters. Applied filters in both #2 and here should always be in sync.
-### 5. Trend chart - 
-### 6. Sentiment chart - donut chart that shows the total sentiment for search results. Associated drop down lists allow the user to show only those sentiment values for a filter type (default is 'entity'), or a specific filter value of a filter type.
+1. Search field and search parameters - return results based on search criteria. Search parameters will effect how the user will enter values, how they will be displayed, and limit the number of matches.
+2. Filter fields - Drop down lists of filters that can be applied to search resullts. Each drop down list contains entities/categories/concepts/keywords associated with results. For each drop down filter item, the number of matches will also be displayed. If a user selects a filter item, a new search will be conducted and will update the results panel (#3). Filter items selected will also effect what is shown in the tag cloud (#4).
+3. Search results and pagination menu - shows result items (e.g. 5 per page) and a pagination menu that allows user to scroll through pages of result items.
+4. Tag cloud - similar to the filter fields (#2) but in a different form. Associated drop down list will determine which filter items to display (default is 'entity'). User can select/deselect items in the cloud to turn on/off filters. Applied filters in both #2 and here should always be in sync.
+5. Trend chart - 
+6. Sentiment chart - donut chart that shows the total sentiment for search results. Associated drop down lists allow the user to show only those sentiment values for a filter type (default is 'entity'), or a specific filter value of a filter type.
 
 
 # TODO List:

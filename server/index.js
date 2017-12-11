@@ -21,7 +21,7 @@ const discovery = require('./watson-discovery-service');
 
 /**
  * Back end server which handles initializing the Watson Discovery
- * service, and processing fetch requests from the client.
+ * service, and setting up route methods to handle client requests.
  */
 
 /*eslint no-unused-vars: ["error", {"argsIgnorePattern": "response"}]*/

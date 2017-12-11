@@ -1,12 +1,12 @@
 {
-  "name": "watson-discovery-news",
+  "name": "watson-discovery-ui",
   "version": "1.0.0",
   "private": true,
   "main": "app.js",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/IBM/watson-discovery-news.git"
+    "url": "https://github.com/rhagarty/disco-ui.git"
   },
   "scripts": {
     "start": "node app.js",
@@ -26,7 +26,7 @@
     "express": "^4.15.3",
     "express-browserify": "^1.0.2",
     "express-react-views": "^0.10.2",
-    "moment": "^2.18.1",
+    "moment": "^2.19.4",
     "prop-types": "^15.5.10",
     "query-string": "^4.3.4",
     "react": "^15.6.2",
@@ -40,7 +40,7 @@
     "semantic-ui-react": "^0.75.0",
     "uglifyify": "^3.0.4",
     "vcap_services": "^0.2.0",
-    "watson-developer-cloud": "^2.32.1"
+    "watson-developer-cloud": "^2.42.0"
   },
   "babel": {
     "presets": [
@@ -56,10 +56,10 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-react": "^7.0.1",
+    "eslint-plugin-react": "^7.5.1",
     "eslint-plugin-standard": "^3.0.1",
     "jest": "^20.0.4",
-    "nodemon": "^1.11.0",
+    "nodemon": "^1.12.5",
     "react-addons-test-utils": "^15.5.1"
   }
 }

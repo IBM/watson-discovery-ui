@@ -32,6 +32,7 @@ app.use('/images', express.static(path.resolve(__dirname, '..', 'public/images')
 app.use(express.static(path.join(__dirname, '..', 'node_modules/semantic-ui/dist')));
 
 const isDev = (app.get('env') === 'development');
+console.log('isDev: ' + isDev);
 const searchBrowserifyier = expressBrowserify(path.resolve(__dirname, '..', 'public/js/bundle.js'), {
   watch: isDev,
   debug: isDev,

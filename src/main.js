@@ -49,6 +49,9 @@ class Main extends React.Component {
       tagCloudType,
       currentPage,
       numMatches,
+      queryType,
+      returnPassages,
+      limitResults,
       error 
     } = this.props;
 
@@ -67,7 +70,10 @@ class Main extends React.Component {
       tagCloudType: tagCloudType || utils.ENTITIY_FILTER,
       currentPage: currentPage || '1',
       numMatches: numMatches || 0,
-      activeFilterIndex: 0
+      activeFilterIndex: 0,
+      queryType: utils.QUERY_NATURAL_LANGUAGE,
+      returnPassages: false,
+      limitResults: false,
     };
   }
 
@@ -92,6 +98,25 @@ class Main extends React.Component {
   filtersChanged() {
     const { searchQuery  } = this.state;
     this.fetchData(searchQuery, false);
+  }
+
+  /**
+   * searchParamsChanged - (callback function)
+   * User has toggled one of the optional params listed in the
+   * search bar. Set state so that searchField checkboxes get
+   * set accordingly.
+   */
+  searchParamsChanged(data) {
+    const { queryType, returnPassages, limitResults} = this.state;
+    if (data.label === 'queryType') {
+      var newQueryType = queryType === utils.QUERY_DISCO_LANGUAGE ?
+        utils.QUERY_NATURAL_LANGUAGE : utils.QUERY_DISCO_LANGUAGE;
+      this.setState({ queryType: newQueryType });
+    } else if (data.label === 'returnPassages') {
+      this.setState({ returnPassages: !returnPassages });
+    } else if (data.label === 'limitResults') {
+      this.setState({ limitResults: !limitResults });
+    }
   }
 
   /**
@@ -179,7 +204,14 @@ class Main extends React.Component {
    */
   fetchData(query, clearFilters) {
     const searchQuery = query;
-    var { selectedEntities, selectedCategories, selectedConcepts } = this.state;
+    var { 
+      selectedEntities, 
+      selectedCategories, 
+      selectedConcepts,
+      queryType,
+      returnPassages,
+      limitResults
+    } = this.state;
 
     // clear filters if this a new text search
     if (clearFilters) {
@@ -202,11 +234,18 @@ class Main extends React.Component {
     scrollToMain();
     history.pushState({}, {}, `/${searchQuery.replace(/ /g, '+')}`);
 
-    const qs = queryString.stringify({ query: searchQuery });
-    const fs = this.buildFilterString(selectedEntities, selectedCategories, selectedConcepts);
-    
+    // build query string, with filters and optional params
+    const qs = queryString.stringify({
+      query: searchQuery,
+      filters: this.buildFilterString(),
+      count: (limitResults == true ? 100 : 1000),
+      returnPassages: returnPassages,
+      queryType: (queryType === utils.QUERY_NATURAL_LANGUAGE ? 
+        'natural_language_query' : 'query:'),
+    });
+
     // send request
-    fetch(`/api/search?${qs}${fs}`)
+    fetch(`/api/search?${qs}`)
     .then(response => {
       if (response.ok) {
         return response.json();
@@ -271,21 +310,26 @@ class Main extends React.Component {
    * buildFilterString - convert all selected filters into a string
    * to be added to the search query sent to the discovery service
    */
-  buildFilterString(entities, categories, concepts) {
+  buildFilterString() {
+    var { 
+      selectedEntities, 
+      selectedCategories, 
+      selectedConcepts
+    } = this.state;
     var filterString = '';
     
     // add any entities filters, if selected
-    var entitiesString = this.buildFilterStringForType(entities,
+    var entitiesString = this.buildFilterStringForType(selectedEntities,
       'enriched_text.entities.text::', true);
     filterString = filterString + entitiesString;
       
     // add any category filters, if selected
-    var categoryString = this.buildFilterStringForType(categories,
+    var categoryString = this.buildFilterStringForType(selectedCategories,
       'enriched_text.categories.label::', filterString === '');
     filterString = filterString + categoryString;
 
     // add any entities filters, if selected
-    var conceptString = this.buildFilterStringForType(concepts,
+    var conceptString = this.buildFilterStringForType(selectedConcepts,
       'enriched_text.concepts.text::', filterString === '');
     filterString = filterString + conceptString;
 
@@ -405,7 +449,8 @@ class Main extends React.Component {
   render() {
     const { loading, data, error, searchQuery,
             entities, categories, concepts,
-            tagCloudType, numMatches } = this.state;
+            tagCloudType, numMatches,
+            queryType, returnPassages, limitResults } = this.state;
 
     // used for filter accordions
     const { activeFilterIndex } = this.state;
@@ -416,7 +461,11 @@ class Main extends React.Component {
           <Grid.Column width={16} textAlign='center'>
             <SearchField
               onSearchQueryChange={this.searchQueryChanged.bind(this)}
+              onSearchParamsChange={this.searchParamsChanged.bind(this)}
               searchQuery={searchQuery}
+              queryType={queryType}
+              returnPassages={returnPassages}
+              limitResults={limitResults}
             />
           </Grid.Column>
         </Grid.Row>

@@ -36,7 +36,11 @@ const WatsonDiscoServer = new Promise((resolve, reject) => {
       queryBuilder.setCollectionId(collectionId);
     })
     .then(response => {
-      const params = queryBuilder.search({ natural_language_query: '' });
+      // this is the inital query to the discovery service
+      const params = queryBuilder.search({ 
+        natural_language_query: '',
+        count: 1000
+      });
       return new Promise((resolve, reject) => {
         discovery.query(params)
         .then(response =>  {
@@ -68,24 +72,23 @@ function createServer(results) {
 
   // handles search request from search bar
   server.get('/api/search', (req, res) => {
-    const { query } = req.query;
-    
+    const { query, filters, count, returnPassages, queryType } = req.query;
     var params;
-    console.log('In /api/search: query = ' + query);
     
-    // parse out search query from any filters
-    var idx = query.indexOf('enriched_text');
-    if (idx < 0) {
-      // only have search string
-      console.log('no entities found - query: ' + query);
-      params = queryBuilder.search({ natural_language_query: query });
+    if (queryType == 'natural_language_query') {
+      params = queryBuilder.search({
+        natural_language_query: query,
+        filter: filters,
+        count: count
+      });
     } else {
-      var queryPart = query.substr(0, idx);
-      var filters = query.substr(idx);
-      params = queryBuilder.search({ natural_language_query: queryPart, 
-        filter: filters });
-    }
-    
+      params = queryBuilder.search({
+        query: query,
+        filter: filters,
+        count: count
+      });
+    }        
+
     discovery.query(params)
       .then(response => res.json(response))
       .catch(error => {

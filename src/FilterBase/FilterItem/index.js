@@ -59,6 +59,8 @@ class FilterItem extends React.Component {
     return (
       <div>
         <Checkbox 
+          className='filter-checkbox'
+          fitted
           label={label}
           checked={isChecked}
           onChange={this.toggleCheckboxChange.bind(this)}

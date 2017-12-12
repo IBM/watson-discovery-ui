@@ -71,9 +71,9 @@ class Main extends React.Component {
       currentPage: currentPage || '1',
       numMatches: numMatches || 0,
       activeFilterIndex: 0,
-      queryType: utils.QUERY_NATURAL_LANGUAGE,
-      returnPassages: false,
-      limitResults: false,
+      queryType: queryType || utils.QUERY_NATURAL_LANGUAGE,
+      returnPassages: returnPassages || false,
+      limitResults: limitResults || false
     };
   }
 
@@ -631,6 +631,9 @@ Main.propTypes = {
   numMatches: PropTypes.number,
   tagCloudType: PropTypes.string,
   currentPage: PropTypes.string,
+  queryType: PropTypes.string,
+  returnPassages: PropTypes.bool,
+  limitResults: PropTypes.bool,
   error: PropTypes.object
 };
 

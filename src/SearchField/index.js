@@ -18,7 +18,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Input, Checkbox } from 'semantic-ui-react';
 const utils = require('../utils');
-const util = require('util');
 
 /**
  * This object renders a search field at the top of the web page,

@@ -73,23 +73,23 @@ function createServer(results) {
   // handles search request from search bar
   server.get('/api/search', (req, res) => {
     const { query, filters, count, returnPassages, queryType } = req.query;
-    var params;
-    
-    if (queryType == 'natural_language_query') {
-      params = queryBuilder.search({
-        natural_language_query: query,
-        filter: filters,
-        count: count
-      });
-    } else {
-      params = queryBuilder.search({
-        query: query,
-        filter: filters,
-        count: count
-      });
-    }        
+    var params = {};
 
-    discovery.query(params)
+    // add query and the type of query
+    if (queryType == 'natural_language_query') {
+      params.natural_language_query = query;
+    } else {
+      params.query = query;
+    }
+    
+    // add any filters and a limit to the number of matches that can be found
+    if (filters) {
+      params.filter = filters;
+    }
+    params.count = count;
+    
+    var searchParams = queryBuilder.search(params);
+    discovery.query(searchParams)
       .then(response => res.json(response))
       .catch(error => {
         if (error.message === 'Number of free queries per month exceeded') {

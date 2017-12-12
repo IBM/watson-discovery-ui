@@ -35,6 +35,10 @@ const objectWithoutProperties = (object, properties) => {
 // how many items will we show per page
 const ITEMS_PER_PAGE = 5;
 
+// query types
+const QUERY_NATURAL_LANGUAGE = 0;
+const QUERY_DISCO_LANGUAGE = 1;
+
 // the index of the fillter item in the aggrgation data returned 
 // from the discovery query
 const ENTITY_DATA_INDEX = 0;
@@ -56,6 +60,8 @@ module.exports = {
   // parseData,
   objectWithoutProperties,
   ITEMS_PER_PAGE,
+  QUERY_NATURAL_LANGUAGE,
+  QUERY_DISCO_LANGUAGE,
   ENTITY_DATA_INDEX,
   CATEGORY_DATA_INDEX,
   CONCEPT_DATA_INDEX,

@@ -27,7 +27,6 @@ module.exports = {
     const params = Object.assign({
       environment_id: this.environment_id,
       collection_id: this.collection_id,
-      count: 300,
       sort: '-score',
       return: 'title,text,url,host,html,crawl_date,score,id,' +
               'enriched_text.entities.text,enriched_text.sentiment.document.label',

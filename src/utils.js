@@ -54,7 +54,8 @@ const KEYWORD_FILTER  = 'KW';
 const filterTypes = [ 
   { key: ENTITIY_FILTER,  value: ENTITIY_FILTER, text: 'Entities'}, 
   { key: CATEGORY_FILTER, value: CATEGORY_FILTER, text: 'Categories'},
-  { key: CONCEPT_FILTER,  value: CONCEPT_FILTER, text: 'Concepts'} ];
+  { key: CONCEPT_FILTER,  value: CONCEPT_FILTER, text: 'Concepts'},
+  { key: KEYWORD_FILTER,  value: KEYWORD_FILTER, text: 'Keywords'} ];
 
 module.exports = {
   // parseData,

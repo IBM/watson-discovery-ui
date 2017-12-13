@@ -20,15 +20,15 @@ import { TagCloud } from 'react-tagcloud';
 import { Menu, Dropdown, Header, Divider } from 'semantic-ui-react';
 const utils = require('../utils');
 
-var doUpdate = true;    // determines if we render update or not
+var _gDoUpdate = true;    // determines if we render update or not
 
 /**
  * This object renders a tag cloud object that appears in the right column
  * of the home page. It contains selectable terms that the user can use
  * to filter the match list. It is essentially like the filter objects, but
  * in a different format. It comes with a drop down menu where the user can
- * select what filter (entities, categories, or concepts) values to display 
- * in the cloud. 
+ * select what filter (entities, categories, concepts, or keywords) values
+ * to display in the cloud.
  */
 export default class TagCloudRegion extends React.Component {
   constructor(...props) {
@@ -38,6 +38,7 @@ export default class TagCloudRegion extends React.Component {
       entities: this.props.entities,
       categories: this.props.categories,
       concepts: this.props.concepts,
+      keywords: this.props.keywords,
       tagCloudType: this.props.tagCloudType
     };
   }
@@ -47,14 +48,23 @@ export default class TagCloudRegion extends React.Component {
    * filter type.
    */
   getTagCloudItems() {
-    const { tagCloudType, entities, categories, concepts } = this.state;
+    const {
+      tagCloudType,
+      entities,
+      categories,
+      concepts,
+      keywords
+    } = this.state;
 
+    // console.log('tagCloudType: ' + tagCloudType);
     var oldArray = [];
     if (tagCloudType === utils.CATEGORY_FILTER) {
       oldArray = JSON.parse(JSON.stringify(categories.results));
-    } else if (tagCloudType == utils.CONCEPT_FILTER) {
+    } else if (tagCloudType === utils.CONCEPT_FILTER) {
       oldArray = JSON.parse(JSON.stringify(concepts.results));
-    } else if (tagCloudType == utils.ENTITIY_FILTER) {
+    } else if (tagCloudType === utils.KEYWORD_FILTER) {
+      oldArray = JSON.parse(JSON.stringify(keywords.results));
+    } else if (tagCloudType === utils.ENTITIY_FILTER) {
       oldArray = JSON.parse(JSON.stringify(entities.results));
     }
 
@@ -100,18 +110,13 @@ export default class TagCloudRegion extends React.Component {
    * setsAreEqual - shallow test to see if two data sets are equal.
    */
   setsAreEqual(arr1, arr2) {
-    // console.log('Set1length: ' + arr1.length);
     if (arr1.length != arr2.length) {
       return false;
     }
 
     for (var i=0; i<arr1.length; i++) {
-      // console.log('Set1[' + i + ']: ');
-      // console.log(util.inspect(arr1[i], false, null));
-      // console.log('Set2[' + i + ']: ');
-      // console.log(util.inspect(arr2[i], false, null));
-      if ((arr1.key != arr2.key) ||
-          (arr1.matching_results != arr2.matching_results)) {
+      if ((arr1[i].key != arr2[i].key) ||
+          (arr1[i].matching_results != arr2[i].matching_results)) {
         return false;
       }
     } 
@@ -123,24 +128,37 @@ export default class TagCloudRegion extends React.Component {
   // search or filter event has occurred which has changed the list 
   // items we are showing.
   componentWillReceiveProps(nextProps) {
-    const { entities, categories, concepts } = this.state;
-    doUpdate = false;
+    const { 
+      entities, 
+      categories, 
+      concepts,
+      keywords 
+    } = this.state;
+
+    _gDoUpdate = false;
+    
     // to avoid unnecessary updates, check if data has actually changed
     if (! this.setsAreEqual(categories.results, nextProps.categories.results)) {
       this.setState({ categories: nextProps.categories });
-      doUpdate = true;
+      _gDoUpdate = true;
     }
 
     if (! this.setsAreEqual(concepts.results, nextProps.concepts.results)) {
       this.setState({ concepts: nextProps.concepts });
-      doUpdate = true;
+      _gDoUpdate = true;
+    }
+
+    if (! this.setsAreEqual(keywords.results, nextProps.keywords.results)) {
+      this.setState({ keywords: nextProps.keywords });
+      _gDoUpdate = true;
     }
 
     if (! this.setsAreEqual(entities.results, nextProps.entities.results)) {
       this.setState({ entities: nextProps.entities });
-      doUpdate = true;
+      _gDoUpdate = true;
     }
   }
+
 
   // Only do update if something has changed
   // NOTE: we need to do this for this specific component because it
@@ -148,10 +166,10 @@ export default class TagCloudRegion extends React.Component {
   // nothing has changed.
   /*eslint no-unused-vars: ["error", { "args": "none" }]*/
   shouldComponentUpdate(nextProps, nextState) {
-    if (doUpdate) {
+    if (_gDoUpdate) {
       return true;
     } else {
-      doUpdate = true;
+      _gDoUpdate = true;
       return false;
     }
   }
@@ -197,6 +215,7 @@ TagCloudRegion.propTypes = {
   entities: PropTypes.object,
   categories: PropTypes.object,
   concepts: PropTypes.object,
+  keywords: PropTypes.object,
   tagCloudSelection: PropTypes.string,
   tagCloudType: PropTypes.string,
   onTagItemSelected: PropTypes.func.isRequired,

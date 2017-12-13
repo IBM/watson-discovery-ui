@@ -117,14 +117,18 @@ function createServer(results) {
         }
       })
       .then(json => {
-        res.render('index', { entities: json, 
-          categories: json, 
-          concepts: json, 
-          data: json, 
-          searchQuery, 
-          numMatches: json.matching_results,
-          error: null
-        });
+        res.render('index',
+          {
+            entities: json,
+            categories: json,
+            concepts: json,
+            keywords: json,
+            data: json,
+            searchQuery,
+            numMatches: json.matching_results,
+            error: null
+          }
+        );
       })
       .catch(response => {
         res.status(response.status).render('index', {
@@ -136,10 +140,12 @@ function createServer(results) {
   // initial start-up request
   server.get('/*', function(req, res) {
     console.log('In /*');
+
     res.render('index', { data: results, 
       entities: results,
       categories: results,
       concepts: results,
+      keywords: results,
       numMatches: results.matching_results
     });
   });

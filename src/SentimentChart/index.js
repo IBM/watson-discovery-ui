@@ -39,6 +39,7 @@ export default class SentimentChart extends React.Component {
       entities: this.props.entities,
       categories: this.props.categories,
       concepts: this.props.concepts,
+      keywords: this.props.keywords,
       chartType: utils.ENTITIY_FILTER,
       termValue: 'Term'
     };
@@ -56,7 +57,6 @@ export default class SentimentChart extends React.Component {
    * change the filter type values available to select from.
    */
   filterTypeChange(event, selection) {
-    console.log('selection.value: ' + selection.value);
     this.setState({
       chartType: selection.value,
       termValue: 'Term'
@@ -94,21 +94,30 @@ export default class SentimentChart extends React.Component {
    * all of the data needed to render the sentiment chart.
    */
   getChartData() {
-    const { chartType, termValue, entities, categories, concepts } = this.state;
+    const {
+      chartType,
+      termValue,
+      entities,
+      categories,
+      concepts,
+      keywords
+    } = this.state;
     
-    console.log('chartType: ' + chartType);
+    // console.log('chartType: ' + chartType);
     if (chartType === utils.ENTITIY_FILTER) {
       this.getTotals(entities, termValue);
     } else if (chartType === utils.CATEGORY_FILTER) {
       this.getTotals(categories, termValue);
     } else if (chartType === utils.CONCEPT_FILTER) {
       this.getTotals(concepts, termValue);
+    } else if (chartType === utils.KEYWORD_FILTER) {
+      this.getTotals(keywords, termValue);
     }
 
-    console.log('    totalMatches: ' + this.totals.matches);
-    console.log('    totalPositive: ' + this.totals.positiveNum);
-    console.log('    totalNeutral: ' + this.totals.neutralNum);
-    console.log('    totalNegative: ' + this.totals.negativeNum);
+    // console.log('    totalMatches: ' + this.totals.matches);
+    // console.log('    totalPositive: ' + this.totals.positiveNum);
+    // console.log('    totalNeutral: ' + this.totals.neutralNum);
+    // console.log('    totalNegative: ' + this.totals.negativeNum);
 
     var ret = {
       // legend
@@ -153,7 +162,7 @@ export default class SentimentChart extends React.Component {
    * getTermOptions - get the term items available to be selected by the user.
    */
   getTermOptions() {
-    const { chartType, entities, categories, concepts } = this.state;
+    const { chartType, entities, categories, concepts, keywords } = this.state;
     var options = [{ key: -1, value: 'Term', text: 'Term' }];
     var collection;
 
@@ -164,6 +173,8 @@ export default class SentimentChart extends React.Component {
       collection = categories.results;
     } else if (chartType === utils.CONCEPT_FILTER) {
       collection = concepts.results;
+    } else if (chartType === utils.KEYWORD_FILTER) {
+      collection = keywords.results;
     }
 
     if (collection) {
@@ -183,6 +194,7 @@ export default class SentimentChart extends React.Component {
     this.setState({ entities: nextProps.entities });
     this.setState({ categories: nextProps.categories });
     this.setState({ concepts: nextProps.concepts });
+    this.setState({ keywords: nextProps.keywords });
   }
 
   /**
@@ -253,6 +265,7 @@ SentimentChart.propTypes = {
   entities: PropTypes.object,
   categories: PropTypes.object,
   concepts: PropTypes.object,
+  keywords: PropTypes.object,
   chartType: PropTypes.string,
   termValue: PropTypes.string
 };

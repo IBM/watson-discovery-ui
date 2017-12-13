@@ -28,11 +28,17 @@ module.exports = {
       environment_id: this.environment_id,
       collection_id: this.collection_id,
       sort: '-score',
-      return: 'title,text,url,host,html,crawl_date,score,id,' +
-              'enriched_text.entities.text,enriched_text.sentiment.document.label',
-      aggregation: '[term(enriched_text.entities.text,count:12).term(enriched_text.sentiment.document.label),' +
-                   'term(enriched_text.categories.label,count:11).term(enriched_text.sentiment.document.label),' +
-                   'term(enriched_text.concepts.text,count:10).term(enriched_text.sentiment.document.label)]'
+      return: 'id,title,text,score,enriched_text.sentiment.document.label',
+      // return: 'title,text,url,host,html,crawl_date,score,id,' +
+      //          'enriched_text.entities.text,enriched_text.sentiment.document.label,' +
+      //          'enriched_text.categories.label,' +
+      //          'enriched_text.concepts.text,' +
+      //          'enriched_text.keywords.text',
+      aggregation:
+        '[term(enriched_text.entities.text).term(enriched_text.sentiment.document.label),' +
+        'term(enriched_text.categories.label).term(enriched_text.sentiment.document.label),' +
+        'term(enriched_text.concepts.text).term(enriched_text.sentiment.document.label),' +
+        'term(enriched_text.keywords.text).term(enriched_text.sentiment.document.label)]'
     }, queryOpts);
 
     console.log('Discovery Search Query Params: ');

@@ -24,6 +24,7 @@ import SearchField from './SearchField';
 import EntitiesFilter from './EntitiesFilter';
 import CategoriesFilter from './CategoriesFilter';
 import ConceptsFilter from './ConceptsFilter';
+import KeywordsFilter from './KeywordsFilter';
 import TagCloudRegion from './TagCloudRegion';
 import SentimentChart from './SentimentChart';
 import { Grid, Dimmer, Divider, Loader, Accordion, Icon, Header } from 'semantic-ui-react';
@@ -44,6 +45,8 @@ class Main extends React.Component {
       selectedCategories,
       concepts, 
       selectedConcepts,
+      keywords,
+      selectedKeywords,
       data, 
       searchQuery,
       tagCloudType,
@@ -62,11 +65,13 @@ class Main extends React.Component {
       entities: entities && parseEntities(entities),
       categories: categories && parseCategories(categories),
       concepts: concepts && parseConcepts(concepts),
+      keywords: keywords && parseKeywords(keywords),
       loading: false,
       searchQuery: searchQuery || '',
       selectedEntities: selectedEntities || new Set(),
       selectedCategories: selectedCategories || new Set(),
       selectedConcepts: selectedConcepts || new Set(),
+      selectedKeywords: selectedKeywords || new Set(),
       tagCloudType: tagCloudType || utils.ENTITIY_FILTER,
       currentPage: currentPage || '1',
       numMatches: numMatches || 0,
@@ -157,6 +162,7 @@ class Main extends React.Component {
     const { entities, selectedEntities, 
             categories, selectedCategories, 
             concepts, selectedConcepts,
+            keywords, selectedKeywords,
             searchQuery  } = this.state;
 
     if (cloudType === utils.CATEGORY_FILTER) {
@@ -180,6 +186,17 @@ class Main extends React.Component {
 
       this.setState({
         selectedConcepts: selectedConcepts
+      });
+    } else if (cloudType == utils.KEYWORD_FILTER) {
+      fullName = this.buildFullTagName(selectedTagValue, keywords.results);
+      if (selectedKeywords.has(fullName)) {
+        selectedKeywords.delete(fullName);
+      } else {
+        selectedKeywords.add(fullName);
+      }
+
+      this.setState({
+        selectedKeywords: selectedKeywords
       });
     } else if (cloudType == utils.ENTITIY_FILTER) {
       fullName = this.buildFullTagName(selectedTagValue, entities.results);
@@ -208,6 +225,7 @@ class Main extends React.Component {
       selectedEntities, 
       selectedCategories, 
       selectedConcepts,
+      selectedKeywords,
       queryType,
       returnPassages,
       limitResults
@@ -218,6 +236,7 @@ class Main extends React.Component {
       selectedEntities.clear();
       selectedCategories.clear();
       selectedConcepts.clear();
+      selectedKeywords.clear();
     }
 
     // console.log("QUERY2 - selectedCategories: ");
@@ -256,13 +275,14 @@ class Main extends React.Component {
     .then(json => {
       this.setState(
         { 
-          data: parseData(json), 
-          entities: parseEntities(json), 
-          categories: parseCategories(json), 
-          concepts: parseConcepts(json), 
+          data: parseData(json),
+          entities: parseEntities(json),
+          categories: parseCategories(json),
+          concepts: parseConcepts(json),
+          keywords: parseKeywords(json),
           loading: false,
           numMatches: json.results.length,
-          error: null 
+          error: null
         }
       );
       scrollToMain();
@@ -284,7 +304,6 @@ class Main extends React.Component {
    */
   buildFilterStringForType(collection, keyName, firstOne) {
     var str = '';
-    console.log('firstOne = ' + firstOne);
     var firstValue = firstOne; 
     if (collection.size > 0) {
       collection.forEach(function(value) {
@@ -314,7 +333,8 @@ class Main extends React.Component {
     var { 
       selectedEntities, 
       selectedCategories, 
-      selectedConcepts
+      selectedConcepts,
+      selectedKeywords
     } = this.state;
     var filterString = '';
     
@@ -328,10 +348,15 @@ class Main extends React.Component {
       'enriched_text.categories.label::', filterString === '');
     filterString = filterString + categoryString;
 
-    // add any entities filters, if selected
+    // add any concept filters, if selected
     var conceptString = this.buildFilterStringForType(selectedConcepts,
       'enriched_text.concepts.text::', filterString === '');
     filterString = filterString + conceptString;
+
+    // add any keyword filters, if selected
+    var keywordString = this.buildFilterStringForType(selectedKeywords,
+      'enriched_text.keywords.text::', filterString === '');
+    filterString = filterString + keywordString;
 
     return filterString;
   }
@@ -444,11 +469,28 @@ class Main extends React.Component {
   }
 
   /**
+   * getKeywords - return keywords filter object to be rendered.
+   */
+  getKeywords() {
+    const { keywords, selectedKeywords } = this.state;
+    if (!keywords) {
+      return null;
+    }
+    return (
+      <KeywordsFilter
+        onFilterItemsChange={this.filtersChanged.bind(this)}
+        keywords={keywords.results}
+        selectedKeywords={selectedKeywords}
+      />
+    );
+  }
+
+  /**
    * render - return all the home page object to be rendered.
    */
   render() {
     const { loading, data, error, searchQuery,
-            entities, categories, concepts,
+            entities, categories, concepts, keywords,
             tagCloudType, numMatches,
             queryType, returnPassages, limitResults } = this.state;
 
@@ -474,38 +516,50 @@ class Main extends React.Component {
               <Header as='h2' textAlign='left'>Filter</Header>
               <Accordion styled>
                 <Accordion.Title 
-                  active={activeFilterIndex == 0} 
-                  index={0} 
+                  active={activeFilterIndex == utils.ENTITY_DATA_INDEX}
+                  index={utils.ENTITY_DATA_INDEX}
                   onClick={this.handleAccordionClick.bind(this)}>
                   <Icon name='dropdown' />
                   Entities
                 </Accordion.Title>
-                <Accordion.Content active={activeFilterIndex == 0}>
+                <Accordion.Content active={activeFilterIndex == utils.ENTITY_DATA_INDEX}>
                   {this.getEntities()}
                 </Accordion.Content>
               </Accordion>
               <Accordion styled>
                 <Accordion.Title 
-                  active={activeFilterIndex == 1} 
-                  index={1} 
+                  active={activeFilterIndex == utils.CATEGORY_DATA_INDEX}
+                  index={utils.CATEGORY_DATA_INDEX}
                   onClick={this.handleAccordionClick.bind(this)}>
                   <Icon name='dropdown' />
                   Categories
                 </Accordion.Title>
-                <Accordion.Content active={activeFilterIndex == 1}>
+                <Accordion.Content active={activeFilterIndex == utils.CATEGORY_DATA_INDEX}>
                   {this.getCategories()}
                 </Accordion.Content>
               </Accordion>
               <Accordion styled>
                 <Accordion.Title 
-                  active={activeFilterIndex == 2} 
-                  index={2} 
+                  active={activeFilterIndex == utils.CONCEPT_DATA_INDEX}
+                  index={utils.CONCEPT_DATA_INDEX}
                   onClick={this.handleAccordionClick.bind(this)}>
                   <Icon name='dropdown' />
                   Concepts
                 </Accordion.Title>
-                <Accordion.Content active={activeFilterIndex == 2}>
+                <Accordion.Content active={activeFilterIndex == utils.CONCEPT_DATA_INDEX}>
                   {this.getConcepts()}
+                </Accordion.Content>
+              </Accordion>
+              <Accordion styled>
+                <Accordion.Title
+                  active={activeFilterIndex == utils.KEYWORD_DATA_INDEX}
+                  index={utils.KEYWORD_DATA_INDEX}
+                  onClick={this.handleAccordionClick.bind(this)}>
+                  <Icon name='dropdown' />
+                  Keywords
+                </Accordion.Title>
+                <Accordion.Content active={activeFilterIndex == utils.KEYWORD_DATA_INDEX}>
+                  {this.getKeywords()}
                 </Accordion.Content>
               </Accordion>
             </Grid.Column>
@@ -552,6 +606,7 @@ class Main extends React.Component {
               entities={entities}
               categories={categories}
               concepts={concepts}
+              keywords={keywords}
               tagCloudType={tagCloudType}
               onTagItemSelected={this.tagItemSelected.bind(this)}
             />
@@ -566,6 +621,7 @@ class Main extends React.Component {
               entities={entities}
               categories={categories}
               concepts={concepts}
+              keywords={keywords}
             />
           </Grid.Column>
         </Grid.Row>
@@ -609,6 +665,14 @@ const parseConcepts = data => ({
 });
 
 /**
+ * parseKeywords - convert raw search results into collection of keywords.
+ */
+const parseKeywords = data => ({
+  rawResponse: Object.assign({}, data),
+  results: data.aggregations[3].results
+});
+
+/**
  * scrollToMain - scroll window to show 'main' rendered object.
  */
 function scrollToMain() {
@@ -624,10 +688,12 @@ Main.propTypes = {
   entities: PropTypes.object,
   categories: PropTypes.object,
   concepts: PropTypes.object,
+  keywords: PropTypes.object,
   searchQuery: PropTypes.string,
   selectedEntities: PropTypes.object,
   selectedCategories: PropTypes.object,
   selectedConcepts: PropTypes.object,
+  selectedKeywords: PropTypes.object,
   numMatches: PropTypes.number,
   tagCloudType: PropTypes.string,
   currentPage: PropTypes.string,

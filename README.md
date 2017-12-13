@@ -13,6 +13,8 @@ $ git clone https://github.com/rhagarty/disco-ui
 ## 2. Create Watson Discovery collection
 ## 3. Load collection with data files
 
+IMPORTANT! Before loading data, define a new "Configuration" and add 'Keyword" extraction to enrichments.
+
 Data represents reviews from AirBnB for rentals in New York City.
 
 Files can be found in [data/airbnb](data/airbnb)
@@ -47,7 +49,7 @@ http://localhost:3000
 6. Sentiment chart - donut chart that shows the total sentiment for search results. Associated drop down lists allow the user to show only those sentiment values for a filter type (default is 'entity'), or a specific filter value of a filter type.
 
 # TODO List:
-- Add 'keyword' extraction to discovery collection and represent the data as a filter (i.e. same UI components found for entities, categories, and concepts).
+- ~~Add 'keyword' extraction to discovery collection and represent the data as a filter (i.e. same UI components found for entities, categories, and concepts).~~
 - ~~Add UI component to allow user to enter either strict `discovery langauge query` syntax (e.g. 'text:"new york"') or simple `natural langauge query' (default and already done).~~
 - ~~Add UI component to allow user to limit the number of matches to 100.~~
 - Add UI component to allow user to specify they would like matches displayed with `passages` for result descriptions (instead of just dump of text field).

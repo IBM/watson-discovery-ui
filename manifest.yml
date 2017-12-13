@@ -12,6 +12,6 @@ applications:
   disk_quota: 256M
   random-route: false
   services:
-  - wdui-news-service
+  - wdui-discovery-service
 env:
   SLACK_BOT_TOKEN: placeholder

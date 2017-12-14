@@ -18,7 +18,8 @@ const Promise = require('bluebird');
 const DiscoveryV1 = require('watson-developer-cloud/discovery/v1');
 
 const discovery = new DiscoveryV1({
-  version_date: '2017-08-01'
+  version: 'v1',
+  version_date: '2017-11-07'
 });
 
 discovery.environmentId = process.env.DISCOVERY_ENVIRONMENT_ID;

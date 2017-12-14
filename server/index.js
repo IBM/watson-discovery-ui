@@ -75,7 +75,15 @@ function createServer(results) {
 
   // handles search request from search bar
   server.get('/api/trending', (req, res) => {
-    var searchParams = queryTrendBuilder.search();
+    const { query, returnFields } = req.query;
+
+    console.log('In /api/trending: query = ' + query);
+    
+    // build params for the trending search request
+    var params = {};
+    params.query = query;
+    params.return = returnFields;
+    var searchParams = queryTrendBuilder.search(params);
     discovery.query(searchParams)
       .then(response => res.json(response))
       .catch(error => {
@@ -91,6 +99,8 @@ function createServer(results) {
   server.get('/api/search', (req, res) => {
     const { query, filters, count, returnPassages, queryType } = req.query;
     var params = {};
+
+    console.log('In /api/search: query = ' + query);
 
     // add query and the type of query
     if (queryType == 'natural_language_query') {

@@ -27,10 +27,7 @@ module.exports = {
     const params = Object.assign({
       environment_id: this.environment_id,
       collection_id: this.collection_id,
-      query: 'enriched_text.entities.text::Austin',
-      return: 'id,enriched_text.entities.text,' +
-        'enriched_text.entities.sentiment.label,' +
-        'enriched_text.entities.sentiment.score,date',
+      deduplicate: true,
       sort: 'date',
       count: 2000,
     }, queryOpts);

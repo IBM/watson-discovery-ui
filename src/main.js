@@ -26,6 +26,7 @@ import CategoriesFilter from './CategoriesFilter';
 import ConceptsFilter from './ConceptsFilter';
 import KeywordsFilter from './KeywordsFilter';
 import TagCloudRegion from './TagCloudRegion';
+import TrendChart from './TrendChart';
 import SentimentChart from './SentimentChart';
 import { Grid, Dimmer, Divider, Loader, Accordion, Icon, Header } from 'semantic-ui-react';
 const utils = require('./utils');
@@ -55,6 +56,7 @@ class Main extends React.Component {
       queryType,
       returnPassages,
       limitResults,
+      trendData,
       error 
     } = this.props;
 
@@ -78,7 +80,8 @@ class Main extends React.Component {
       activeFilterIndex: 0,
       queryType: queryType || utils.QUERY_NATURAL_LANGUAGE,
       returnPassages: returnPassages || false,
-      limitResults: limitResults || false
+      limitResults: limitResults || false,
+      trendData: trendData || null
     };
   }
 
@@ -215,6 +218,49 @@ class Main extends React.Component {
     this.fetchData(searchQuery, false);
   }
 
+  /**
+   * getTrendData - (callback function)
+   * User has entered a new search string to query on. 
+   * This results in making a new qeury to the disco service.
+   * 
+   * NOTE: This function is also called at startup to 
+   * display a default graph.
+   */
+  getTrendData(data) {
+    console.log("!!! CALL FOR TREND DATA: " + data.chartType + ":" + data.term);
+
+    // send request
+    fetch(`/api/trending`)
+    .then(response => {
+      if (response.ok) {
+        console.log("RETURN GOOD");
+        return response.json();
+      } else {
+        console.log("RETURN BAD 1");
+        throw response;
+      }
+    })
+    .then(json => {
+      const util = require('util');
+      // console.log("++++++++++++ DISCO TREND RESULTS ++++++++++++++++++++");
+      // console.log(util.inspect(json, false, null));
+  
+      this.setState(
+        { 
+          trendData: json
+        }
+      );
+    })
+    .catch(response => {
+      this.setState({
+        error: (response.status === 429) ? 'Number of free queries per month exceeded' : 'Error fetching results',
+        trendData: null
+      });
+      // eslint-disable-next-line no-console
+      console.error(response);
+    });
+  }
+  
   /**
    * fetchData - build the query that will be passed to the 
    * discovery service.
@@ -491,7 +537,7 @@ class Main extends React.Component {
   render() {
     const { loading, data, error, searchQuery,
             entities, categories, concepts, keywords,
-            tagCloudType, numMatches,
+            tagCloudType, numMatches, trendData,
             queryType, returnPassages, limitResults } = this.state;
 
     // used for filter accordions
@@ -511,7 +557,7 @@ class Main extends React.Component {
             />
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row>
+        <Grid.Row className='matches-grid-row'>
             <Grid.Column width={3}>
               <Header as='h2' textAlign='left'>Filter</Header>
               <Accordion styled>
@@ -614,7 +660,14 @@ class Main extends React.Component {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column width={8}>
-            <Header as='h2' textAlign='left'>Trend</Header>
+            <TrendChart
+              trendData={trendData}
+              entities={entities}
+              categories={categories}
+              concepts={concepts}
+              keywords={keywords}
+              onGetTrendDataRequest={this.getTrendData.bind(this)}
+            />
           </Grid.Column>
           <Grid.Column width={8}>
             <SentimentChart

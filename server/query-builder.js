@@ -28,6 +28,7 @@ module.exports = {
       environment_id: this.environment_id,
       collection_id: this.collection_id,
       sort: '-score',
+      deduplicate: true,
       return: 'id,title,text,score,enriched_text.sentiment.document.label',
       // return: 'title,text,url,host,html,crawl_date,score,id,' +
       //          'enriched_text.entities.text,enriched_text.sentiment.document.label,' +

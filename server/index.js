@@ -17,6 +17,7 @@
 require('isomorphic-fetch');
 const queryString = require('query-string');
 const queryBuilder = require('./query-builder');
+const queryTrendBuilder = require('./query-builder-trending');
 const discovery = require('./watson-discovery-service');
 
 /**
@@ -34,6 +35,8 @@ const WatsonDiscoServer = new Promise((resolve, reject) => {
       const collectionId = discovery.collectionId;
       queryBuilder.setEnvironmentId(environmentId);
       queryBuilder.setCollectionId(collectionId);
+      queryTrendBuilder.setEnvironmentId(environmentId);
+      queryTrendBuilder.setCollectionId(collectionId);
     })
     .then(response => {
       // this is the inital query to the discovery service
@@ -69,6 +72,20 @@ const WatsonDiscoServer = new Promise((resolve, reject) => {
  */
 function createServer(results) {
   const server = require('./express');
+
+  // handles search request from search bar
+  server.get('/api/trending', (req, res) => {
+    var searchParams = queryTrendBuilder.search();
+    discovery.query(searchParams)
+      .then(response => res.json(response))
+      .catch(error => {
+        if (error.message === 'Number of free queries per month exceeded') {
+          res.status(429).json(error);
+        } else {
+          res.status(error.code).json(error);
+        }
+      });
+  });
 
   // handles search request from search bar
   server.get('/api/search', (req, res) => {
@@ -140,6 +157,10 @@ function createServer(results) {
   // initial start-up request
   server.get('/*', function(req, res) {
     console.log('In /*');
+
+    // const util = require('util');
+    // console.log("++++++++++++ DISCO RESULTS ++++++++++++++++++++");
+    // console.log(util.inspect(results, false, null));
 
     res.render('index', { data: results, 
       entities: results,

@@ -51,6 +51,8 @@ const CATEGORY_FILTER = 'CA';
 const CONCEPT_FILTER  = 'CO';
 const KEYWORD_FILTER  = 'KW';
 
+const TERM_ITEM = 'Term';   // used to indicate no specific item is seleced
+
 const filterTypes = [ 
   { key: ENTITIY_FILTER,  value: ENTITIY_FILTER, text: 'Entities'}, 
   { key: CATEGORY_FILTER, value: CATEGORY_FILTER, text: 'Categories'},
@@ -71,5 +73,6 @@ module.exports = {
   CATEGORY_FILTER,
   CONCEPT_FILTER,
   KEYWORD_FILTER,
+  TERM_ITEM,
   filterTypes
 };

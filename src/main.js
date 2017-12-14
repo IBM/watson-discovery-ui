@@ -228,23 +228,59 @@ class Main extends React.Component {
    */
   getTrendData(data) {
     console.log("!!! CALL FOR TREND DATA: " + data.chartType + ":" + data.term);
+    // build query string, with based on filter type
+    var trendQuery = '';
+    var returnFields = 'id,,date,';
+    if (data.chartType === utils.ENTITIY_FILTER) {
+      if (data.term != utils.TERM_ITEM) {
+        trendQuery = 'enriched_text.entities.text::' + data.term;
+      }
+      returnFields = returnFields + 'enriched_text.entities.text,' +
+        'enriched_text.entities.sentiment.label,' +
+        'enriched_text.entities.sentiment.score';
+    } else if (data.chartType === utils.CATEGORY_FILTER) {
+      if (data.term != utils.TERM_ITEM) {
+        trendQuery = 'enriched_text.categories.label::' + data.term;
+      }
+      returnFields = returnFields + 'enriched_text.categories.label,' +
+        'enriched_text.categories.sentiment.label,' +
+        'enriched_text.categories.sentiment.score';
+    } else if (data.chartType === utils.CONCEPT_FILTER) {
+      if (data.term != utils.TERM_ITEM) {
+        trendQuery = 'enriched_text.concepts.text::' + data.term;
+      }
+      returnFields = returnFields + 'enriched_text.concepts.text,' +
+        'enriched_text.concepts.sentiment.label,' +
+        'enriched_text.concepts.sentiment.score';
+    } else if (data.chartType === utils.KEYWORD_FILTER) {
+      if (data.term != utils.TERM_ITEM) {
+        trendQuery = 'enriched_text.keywords.text::' + data.term;
+      }
+      returnFields = returnFields + 'enriched_text.keywords.text,' +
+        'enriched_text.keywords.sentiment.label,' +
+        'enriched_text.keywords.sentiment.score';
+    }
+
+    const qs = queryString.stringify({
+      query: trendQuery,
+      returnFields: returnFields
+    });
 
     // send request
-    fetch(`/api/trending`)
+    fetch(`/api/trending?${qs}`)
     .then(response => {
       if (response.ok) {
-        console.log("RETURN GOOD");
         return response.json();
       } else {
-        console.log("RETURN BAD 1");
         throw response;
       }
     })
     .then(json => {
-      const util = require('util');
+      // const util = require('util');
       // console.log("++++++++++++ DISCO TREND RESULTS ++++++++++++++++++++");
-      // console.log(util.inspect(json, false, null));
-  
+      //console.log(util.inspect(json, false, null));
+      // console.log("numMatches: " + json.matching_results);
+      
       this.setState(
         { 
           trendData: json
@@ -753,6 +789,7 @@ Main.propTypes = {
   queryType: PropTypes.string,
   returnPassages: PropTypes.bool,
   limitResults: PropTypes.bool,
+  trendData: PropTypes.object,
   error: PropTypes.object
 };
 

@@ -41,7 +41,7 @@ export default class SentimentChart extends React.Component {
       concepts: this.props.concepts,
       keywords: this.props.keywords,
       chartType: utils.ENTITIY_FILTER,
-      termValue: 'Term'
+      termValue: utils.TERM_ITEM
     };
 
     this.totals = {
@@ -59,7 +59,7 @@ export default class SentimentChart extends React.Component {
   filterTypeChange(event, selection) {
     this.setState({
       chartType: selection.value,
-      termValue: 'Term'
+      termValue: utils.TERM_ITEM
     });
   }
 
@@ -74,7 +74,7 @@ export default class SentimentChart extends React.Component {
     this.totals.negativeNum = 0;
 
     for (var item of collection.results) {
-      if (termValue === '' || termValue === 'Term' || termValue === item.key) {
+      if (termValue === '' || termValue === utils.TERM_ITEM || termValue === item.key) {
         this.totals.matches = this.totals.matches + item.matching_results;
         for (var sentiment of item.aggregations[0].results) {
           if (sentiment.key === 'positive') {
@@ -163,7 +163,7 @@ export default class SentimentChart extends React.Component {
    */
   getTermOptions() {
     const { chartType, entities, categories, concepts, keywords } = this.state;
-    var options = [{ key: -1, value: 'Term', text: 'Term' }];
+    var options = [{ key: -1, value: utils.TERM_ITEM, text: utils.TERM_ITEM }];
     var collection;
 
     // select based on the filter type
@@ -241,7 +241,7 @@ export default class SentimentChart extends React.Component {
           <Dropdown 
             item
             scrolling
-            defaultValue={'Term'}
+            defaultValue={ utils.TERM_ITEM }
             onChange={ this.termTypeChange.bind(this) }
             options={ this.getTermOptions() }
           />

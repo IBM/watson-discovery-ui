@@ -42,7 +42,7 @@ export default class TrendChart extends React.Component {
       concepts: this.props.concepts,
       keywords: this.props.keywords,
       chartType: utils.ENTITIY_FILTER,
-      termValue: 'Term'
+      termValue: utils.TERM_ITEM
     };
   }
 
@@ -53,7 +53,7 @@ export default class TrendChart extends React.Component {
   filterTypeChange(event, selection) {
     this.setState({
       chartType: selection.value,
-      termValue: 'Term'
+      termValue: utils.TERM_ITEM
     });
   }
 
@@ -62,32 +62,38 @@ export default class TrendChart extends React.Component {
    * all of the data needed to render the sentiment chart.
    */
   getChartData() {
-    const { trendData } = this.state;
+    const { trendData, termValue } = this.state;
 
     var posHits = [0,0,0,0,0,0,0];
     var negHits = [0,0,0,0,0,0,0];
     
     if (trendData) {
+      // console.log("numMatches2: " + trendData.matching_results);
+      // console.log("termValue: " + termValue);
       trendData.results.forEach(function(result) {
-        result.enriched_text.entities.forEach(function(entity) {
-          if (entity.text == 'Austin') {
-            // console.log('date: ' + result.date + 
-            // ' entity: ' + entity.text +
-            // ' sentiment.score: ' + entity.sentiment.score);
-            var arrayIdx = parseInt(result.date.substring(0,4)) - 2009;
-            // console.log("Index: " + arrayIdx);
-            if (arrayIdx < 0 || arrayIdx > posHits.length) {
-              console.log("Error processesing trend data - date out of range: " + result.date);
-            } else {
-              if (entity.sentiment.label == 'positive') {
-                posHits[arrayIdx] = posHits[arrayIdx] + 1;
-              } else if (entity.sentiment.label == 'negative') {
-                negHits[arrayIdx] = negHits[arrayIdx] + 1;
-              }                
+        if (result.enriched_text) {
+          // console.log("result.enriched_text: " + result.enriched_text);
+          result.enriched_text.entities.forEach(function(entity) {
+            // console.log("result.enriched_text.entities.length: " + result.enriched_text.entities.length);
+            if (termValue === utils.TERM_ITEM || entity.text === termValue) {
+              // console.log('date: ' + result.date + 
+              // ' entity: ' + entity.text +
+              // ' sentiment.score: ' + entity.sentiment.score);
+              var arrayIdx = parseInt(result.date.substring(0,4)) - 2009;
+              // console.log("Index: " + arrayIdx);
+              if (arrayIdx < 0 || arrayIdx > posHits.length) {
+                console.log("Error processesing trend data - date out of range: " + result.date);
+              } else {
+                if (entity.sentiment.label == 'positive') {
+                  posHits[arrayIdx] = posHits[arrayIdx] + 1;
+                } else if (entity.sentiment.label == 'negative') {
+                  negHits[arrayIdx] = negHits[arrayIdx] + 1;
+                }                
+              }
             }
-          }
-        });
-      });  
+          });
+        }
+      });
     }
 
     var ret = {
@@ -125,7 +131,7 @@ export default class TrendChart extends React.Component {
    */
   getTermOptions() {
     const { chartType, entities, categories, concepts, keywords } = this.state;
-    var options = [{ key: -1, value: 'Term', text: 'Term' }];
+    var options = [{ key: -1, value: utils.TERM_ITEM, text: utils.TERM_ITEM }];
     var collection;
 
     // select based on the filter type
@@ -204,7 +210,7 @@ export default class TrendChart extends React.Component {
           <Dropdown 
             item
             scrolling
-            defaultValue={'Term'}
+            defaultValue={ utils.TERM_ITEM }
             onChange={ this.termTypeChange.bind(this) }
             options={ this.getTermOptions() }
           />

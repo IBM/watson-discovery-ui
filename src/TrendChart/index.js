@@ -170,7 +170,12 @@ export default class TrendChart extends React.Component {
 
     return (
       <div>
-        <Header as='h2' textAlign='left'>Trend of Avg Reviews Scores (-1 to 1)</Header>
+        <Header as='h2' textAlign='left'>
+          Trending
+          <Header.Subheader>
+            Avg Reviews Scores (-1.0 to 1.0)
+          </Header.Subheader>
+        </Header>
         <Menu compact floated={true}>
           <Dropdown 
             item

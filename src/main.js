@@ -57,18 +57,21 @@ class Main extends React.Component {
       returnPassages,
       limitResults,
       trendData,
-      error 
+      error,
+      trendError
     } = this.props;
 
     // change in state fires re-render of components
     this.state = {
       error: error,
+      trendError: trendError,
       data: data && parseData(data),
       entities: entities && parseEntities(entities),
       categories: categories && parseCategories(categories),
       concepts: concepts && parseConcepts(concepts),
       keywords: keywords && parseKeywords(keywords),
       loading: false,
+      trendLoading: false,
       searchQuery: searchQuery || '',
       selectedEntities: selectedEntities || new Set(),
       selectedCategories: selectedCategories || new Set(),
@@ -227,43 +230,35 @@ class Main extends React.Component {
    * display a default graph.
    */
   getTrendData(data) {
-    console.log("!!! CALL FOR TREND DATA: " + data.chartType + ":" + data.term);
+    this.setState({
+      trendLoading: true
+    });
+
+    // we don't have any data to show for "all" items, so just clear chart
+    if (data.term === utils.TERM_ITEM) {
+      this.setState(
+        { 
+          trendData: new Array(),
+          trendLoading: false,
+          trendError: null
+        });
+        return;
+    }
+
     // build query string, with based on filter type
     var trendQuery = '';
-    var returnFields = 'id,,date,';
     if (data.chartType === utils.ENTITIY_FILTER) {
-      if (data.term != utils.TERM_ITEM) {
-        trendQuery = 'enriched_text.entities.text::' + data.term;
-      }
-      returnFields = returnFields + 'enriched_text.entities.text,' +
-        'enriched_text.entities.sentiment.label,' +
-        'enriched_text.entities.sentiment.score';
+      trendQuery = 'enriched_text.entities.text::' + data.term;
     } else if (data.chartType === utils.CATEGORY_FILTER) {
-      if (data.term != utils.TERM_ITEM) {
-        trendQuery = 'enriched_text.categories.label::' + data.term;
-      }
-      returnFields = returnFields + 'enriched_text.categories.label,' +
-        'enriched_text.categories.sentiment.label,' +
-        'enriched_text.categories.sentiment.score';
+      trendQuery = 'enriched_text.categories.label::' + data.term;
     } else if (data.chartType === utils.CONCEPT_FILTER) {
-      if (data.term != utils.TERM_ITEM) {
-        trendQuery = 'enriched_text.concepts.text::' + data.term;
-      }
-      returnFields = returnFields + 'enriched_text.concepts.text,' +
-        'enriched_text.concepts.sentiment.label,' +
-        'enriched_text.concepts.sentiment.score';
+      trendQuery = 'enriched_text.concepts.text::' + data.term;
     } else if (data.chartType === utils.KEYWORD_FILTER) {
-      if (data.term != utils.TERM_ITEM) {
-        trendQuery = 'enriched_text.keywords.text::' + data.term;
-      }
-      returnFields = returnFields + 'enriched_text.keywords.text,' +
-        'enriched_text.keywords.sentiment.label,' +
-        'enriched_text.keywords.sentiment.score';
+      trendQuery = 'enriched_text.keywords.text::' + data.term;
     }
 
     const qs = queryString.stringify({
-      query: trendQuery,
-      returnFields: returnFields
+      query: trendQuery
     });
 
     // send request
@@ -277,20 +272,23 @@ class Main extends React.Component {
     })
     .then(json => {
       // const util = require('util');
-      // console.log("++++++++++++ DISCO TREND RESULTS ++++++++++++++++++++");
-      //console.log(util.inspect(json, false, null));
-      // console.log("numMatches: " + json.matching_results);
+      console.log("++++++++++++ DISCO TREND RESULTS ++++++++++++++++++++");
+      // console.log(util.inspect(json.aggregations[0].results, false, null));
+      console.log("numMatches: " + json.matching_results);
       
       this.setState(
         { 
-          trendData: json
+          trendData: json,
+          trendLoading: false,
+          trendError: null
         }
       );
     })
     .catch(response => {
       this.setState({
-        error: (response.status === 429) ? 'Number of free queries per month exceeded' : 'Error fetching results',
-        trendData: null
+        trendError: (response.status === 429) ? 'Number of free queries per month exceeded' : 'Error fetching results',
+        trendLoading: false,
+        trendData: new Array()
       });
       // eslint-disable-next-line no-console
       console.error(response);
@@ -573,7 +571,8 @@ class Main extends React.Component {
   render() {
     const { loading, data, error, searchQuery,
             entities, categories, concepts, keywords,
-            tagCloudType, numMatches, trendData,
+            tagCloudType, numMatches, 
+            trendData, trendLoading, trendError,
             queryType, returnPassages, limitResults } = this.state;
 
     // used for filter accordions
@@ -698,6 +697,8 @@ class Main extends React.Component {
           <Grid.Column width={8}>
             <TrendChart
               trendData={trendData}
+              trendLoading={trendLoading}
+              trendError={trendError}
               entities={entities}
               categories={categories}
               concepts={concepts}

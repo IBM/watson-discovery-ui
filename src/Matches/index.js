@@ -20,15 +20,12 @@ import { Icon, Container, List } from 'semantic-ui-react';
 
 /**
  * This object renders the results of the search query on the web page. 
- * Each result item, or 'match', will display a title, description, relevance
- * score, and sentiment value.
+ * Each result item, or 'match', will display a title, description, and
+ * sentiment value.
  */
 
 const Match = props => (
   <List.Item>
-    <List.Content floated='right'>
-      {props.score}
-    </List.Content>
     <List.Content>
       <List.Header>{props.title}</List.Header>
       {props.text}
@@ -43,8 +40,7 @@ const Match = props => (
 Match.propTypes = {
   title: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
-  sentiment: PropTypes.node,
-  score: PropTypes.number.isRequired
+  sentiment: PropTypes.node
 };
 
 const Matches = props => (
@@ -57,7 +53,6 @@ const Matches = props => (
               key={item.id}
               title={item.title ? item.title : 'No Title'}
               text={item.text ? item.text : 'No Description'}
-              score={item.score}
               sentiment={getSentiment(item)}
             />)
           }

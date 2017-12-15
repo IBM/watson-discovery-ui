@@ -16,27 +16,29 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Header, Menu, Dropdown, Divider } from 'semantic-ui-react';
+import { Grid, Dimmer, Loader, Header, Menu, Dropdown, Divider } from 'semantic-ui-react';
 import { Line } from 'react-chartjs-2';
 const utils = require('../utils');
 
 /**
- * This object renders a sentiment graph object that appears at the bottom
- * of the web page. It is composed of multiple objects, the graph,
+ * This object renders a trending chart object that appears at the bottom
+ * of the web page. It is composed of multiple objects, the chart,
  * and 2 drop-down menus where the user can select what filter (entities,
  * categories, or concepts) and/or what filter value (referred to as 'term') 
  * to represent. 
  * NOTE: the filter value of 'Term' indicates all values.
  * NOTE: what the user selects to represent in the graph has no effect
- *       on any other objects on the page. It is just manipulating the
- *       search data already retrieved.
+ *       on any other objects on the page. It has it's own search
+ *       query.
  */
 export default class TrendChart extends React.Component {
   constructor(...props) {
     super(...props);
 
     this.state = {
-      trendData: this.props.trendData,
+      trendData: this.props.trendData || [],
+      trendLoading: this.props.trendLoading || false,
+      trendError: this.props.trendError,
       entities: this.props.entities,
       categories: this.props.categories,
       concepts: this.props.concepts,
@@ -53,59 +55,41 @@ export default class TrendChart extends React.Component {
   filterTypeChange(event, selection) {
     this.setState({
       chartType: selection.value,
-      termValue: utils.TERM_ITEM
+      termValue: utils.TERM_ITEM,
+      trendData: ''
+    });
+
+    this.props.onGetTrendDataRequest({
+      chartType: selection.value,
+      term: utils.TERM_ITEM
     });
   }
 
   /**
    * getChartData - based on what group filter user has selected, accumulate 
-   * all of the data needed to render the sentiment chart.
+   * all of the data needed to render the trending chart.
    */
   getChartData() {
     const { trendData, termValue } = this.state;
 
-    var posHits = [0,0,0,0,0,0,0];
-    var negHits = [0,0,0,0,0,0,0];
+    var labels = [];
+    var scores = [];
     
-    if (trendData) {
-      // console.log("numMatches2: " + trendData.matching_results);
-      // console.log("termValue: " + termValue);
-      trendData.results.forEach(function(result) {
-        if (result.enriched_text) {
-          // console.log("result.enriched_text: " + result.enriched_text);
-          result.enriched_text.entities.forEach(function(entity) {
-            // console.log("result.enriched_text.entities.length: " + result.enriched_text.entities.length);
-            if (termValue === utils.TERM_ITEM || entity.text === termValue) {
-              // console.log('date: ' + result.date + 
-              // ' entity: ' + entity.text +
-              // ' sentiment.score: ' + entity.sentiment.score);
-              var arrayIdx = parseInt(result.date.substring(0,4)) - 2009;
-              // console.log("Index: " + arrayIdx);
-              if (arrayIdx < 0 || arrayIdx > posHits.length) {
-                console.log("Error processesing trend data - date out of range: " + result.date);
-              } else {
-                if (entity.sentiment.label == 'positive') {
-                  posHits[arrayIdx] = posHits[arrayIdx] + 1;
-                } else if (entity.sentiment.label == 'negative') {
-                  negHits[arrayIdx] = negHits[arrayIdx] + 1;
-                }                
-              }
-            }
-          });
+    if (trendData && trendData.matching_results) {
+      trendData.aggregations[0].results.forEach(function(result) {
+        if (result.aggregations[0].value) {
+          labels.push(result.key_as_string.substring(0,10));
+          scores.push(Number((result.aggregations[0].value).toFixed(2)));
         }
       });
     }
 
     var ret = {
-      labels: ['2009', '2010', '2011', '2012', '2013', '2014', '2015'],
+      labels: labels,
       datasets: [{
-        label: 'Positive Reviews',
-        data: posHits,
-        backgroundColor: "rgba(153,255,51,0.4)"
-      }, {
-        label: 'Negative Reviews',
-        data: negHits,
-        backgroundColor: "rgba(255,153,0,0.4)"
+        label: 'Avg Scores',
+        data: scores,
+        backgroundColor: "rgba(0,255,0,0.6)"
       }]
     };
 
@@ -114,16 +98,19 @@ export default class TrendChart extends React.Component {
 
   /**
    * termTypeChange - user has selected a new term filter value. This will
-   * modify the sentiment chart to just represent this term.
+   * cause a new search query to be processed.
    */
   termTypeChange(event, selection) {
-    const { chartType } = this.state;
-    this.setState({ termValue: selection.value });
+    const { chartType, termValue } = this.state;
 
-    this.props.onGetTrendDataRequest({
-      chartType: chartType,
-      term: selection.value
-    });
+    // only update if term has actually changed
+    if (termValue != selection.value) {
+      this.setState({ termValue: selection.value });
+      this.props.onGetTrendDataRequest({
+        chartType: chartType,
+        term: selection.value
+      });
+    }
   }
 
   /**
@@ -160,6 +147,8 @@ export default class TrendChart extends React.Component {
   // items we are graphing, OR the graph data has arrived.
   componentWillReceiveProps(nextProps) {
     this.setState({ trendData: nextProps.trendData });
+    this.setState({ trendLoading: nextProps.trendLoading });
+    this.setState({ trendError: nextProps.trendError });
     this.setState({ entities: nextProps.entities });
     this.setState({ categories: nextProps.categories });
     this.setState({ concepts: nextProps.concepts });
@@ -167,37 +156,21 @@ export default class TrendChart extends React.Component {
   }
 
   /**
-   * render - return all the sentiment objects to render.
+   * render - return the trending chart object to render.
    */
   render() {
+    const { trendLoading, trendError, trendData } = this.state;
+    
     const options = {
       responsive: true,
       legend: {
         position: 'bottom'
-      },
-      animation: {
-        animateScale: true,
-        animateRotate: true
-      },
-      tooltips: {
-        callbacks: {
-          label: function(tooltipItem, data) {
-            // convert raw number to percentage of total
-            var dataset = data.datasets[tooltipItem.datasetIndex];
-            var total = dataset.data.reduce(function(previousValue, currentValue) {
-              return previousValue + currentValue;
-            });
-            var currentValue = dataset.data[tooltipItem.index];
-            var precentage = Math.floor(((currentValue/total) * 100)+0.5);
-            return precentage + '%';
-          }
-        }
       }
     };
 
     return (
       <div>
-        <Header as='h2' textAlign='left'>Trend</Header>
+        <Header as='h2' textAlign='left'>Trend of Avg Reviews Scores (-1 to 1)</Header>
         <Menu compact floated={true}>
           <Dropdown 
             item
@@ -216,12 +189,29 @@ export default class TrendChart extends React.Component {
           />
         </Menu>
         <Divider clearing hidden/>
-        <div>
-          <Line
-            type={'line'}
-            data={ this.getChartData() }
-          />       
-        </div>
+        <Grid.Row>
+          {trendLoading ? (
+            <div className="results">
+              <div className="loader--container">
+                  <Loader active>Loading</Loader>
+              </div>
+            </div>
+          ) : trendData ? (
+            <div className="results">
+              <Line
+                type={ 'line' }
+                options={ options }
+                data={ this.getChartData() }
+              />       
+            </div>
+          ) : trendError ? (
+            <div className="results">
+              <div className="row">
+                {JSON.stringify(error)}
+              </div>
+            </div>
+          ) : null}
+        </Grid.Row>
       </div>
     );
   }

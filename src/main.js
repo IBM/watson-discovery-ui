@@ -620,7 +620,7 @@ class Main extends React.Component {
     return (
       <Grid celled className='search-grid'>
 
-        {/* Search Field Header*/}
+        {/* Search Field Header */}
 
         <Grid.Row color={'blue'}>
           <Grid.Column width={16} textAlign='center'>
@@ -642,7 +642,15 @@ class Main extends React.Component {
           {/* Drop-Down Filters */}
 
           <Grid.Column width={3}>
-            <Header as='h2' textAlign='left'>Filter</Header>
+            <Header as='h2' block inverted textAlign='left'>
+              <Icon name='filter' />
+              <Header.Content>
+                Filter
+                <Header.Subheader>
+                  By List
+                </Header.Subheader>
+              </Header.Content>
+            </Header>
             <Accordion styled>
               <Accordion.Title 
                 active={activeFilterIndex == utils.ENTITY_DATA_INDEX}
@@ -727,6 +735,12 @@ class Main extends React.Component {
                   <div className="_container _container_large">
                     <div className="row">
                       <div>
+                        <Header as='h2' block inverted textAlign='left'>
+                          <Icon name='grid layout' />
+                          <Header.Content>
+                            Matches
+                          </Header.Content>
+                        </Header>
                         <Statistic.Group
                           size='mini'
                           items={ stat_items }

@@ -17,7 +17,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TagCloud } from 'react-tagcloud';
-import { Menu, Dropdown, Header, Divider } from 'semantic-ui-react';
+import { Menu, Dropdown, Header, Divider, Icon } from 'semantic-ui-react';
 const utils = require('../utils');
 
 var _gDoUpdate = true;    // determines if we render update or not
@@ -185,7 +185,15 @@ export default class TagCloudRegion extends React.Component {
 
     return (
       <div>
-        <Header as='h2' textAlign='left'>Tag Cloud</Header>
+        <Header as='h2' block inverted textAlign='left'>
+          <Icon name='filter' />
+          <Header.Content>
+            Filter
+            <Header.Subheader>
+              By Tag Cloud
+            </Header.Subheader>
+          </Header.Content>
+        </Header>
         <Menu compact floated='right'>
           <Dropdown 
             simple

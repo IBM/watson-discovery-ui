@@ -31,9 +31,6 @@ import SentimentChart from './SentimentChart';
 import { Grid, Dimmer, Divider, Loader, Accordion, Icon, Header, Statistic } from 'semantic-ui-react';
 const utils = require('./utils');
 
-// review totals used in various sections of the main page
-var _gReviewTotals = {};
-
 /**
  * Main React object that contains all objects on the web page.
  * This object manages all interaction between child objects as
@@ -251,7 +248,7 @@ class Main extends React.Component {
           trendLoading: false,
           trendError: null
         });
-        return;
+      return;
     }
 
     // build query string, with based on filter type
@@ -281,9 +278,9 @@ class Main extends React.Component {
     })
     .then(json => {
       // const util = require('util');
-      console.log("++++++++++++ DISCO TREND RESULTS ++++++++++++++++++++");
+      console.log('++++++++++++ DISCO TREND RESULTS ++++++++++++++++++++');
       // console.log(util.inspect(json.aggregations[0].results, false, null));
-      console.log("numMatches: " + json.matching_results);
+      console.log('numMatches: ' + json.matching_results);
       
       this.setState(
         { 
@@ -877,12 +874,16 @@ Main.propTypes = {
   selectedConcepts: PropTypes.object,
   selectedKeywords: PropTypes.object,
   numMatches: PropTypes.number,
+  numPositive: PropTypes.number,
+  numNeutral: PropTypes.number,
+  numNegative: PropTypes.number,
   tagCloudType: PropTypes.string,
   currentPage: PropTypes.string,
   queryType: PropTypes.string,
   returnPassages: PropTypes.bool,
   limitResults: PropTypes.bool,
   trendData: PropTypes.object,
+  trendError: PropTypes.object,
   error: PropTypes.object
 };
 

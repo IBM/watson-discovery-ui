@@ -16,7 +16,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Dimmer, Header, Menu, Dropdown, Divider } from 'semantic-ui-react';
+import { Grid, Dimmer, Header, Menu, Dropdown, Divider, Icon } from 'semantic-ui-react';
 import { Line } from 'react-chartjs-2';
 const utils = require('../utils');
 
@@ -170,11 +170,14 @@ export default class TrendChart extends React.Component {
 
     return (
       <div className="trend-chart">
-        <Header as='h2' textAlign='left'>
-          Trending
-          <Header.Subheader>
-            Avg Reviews Scores (-1.0 to 1.0)
-          </Header.Subheader>
+        <Header as='h2' block inverted textAlign='left'>
+          <Icon name='line chart' />
+          <Header.Content>
+            Trending Graph
+            <Header.Subheader>
+              Avg review scores (-1.0 to 1.0) over time
+            </Header.Subheader>
+          </Header.Content>
         </Header>
         <Menu compact floated={true}>
           <Dropdown 

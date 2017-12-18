@@ -619,6 +619,9 @@ class Main extends React.Component {
     
     return (
       <Grid celled className='search-grid'>
+
+        {/* Search Field Header*/}
+
         <Grid.Row color={'blue'}>
           <Grid.Column width={16} textAlign='center'>
             <SearchField
@@ -631,59 +634,85 @@ class Main extends React.Component {
             />
           </Grid.Column>
         </Grid.Row>
+
+        {/* Results Panel */}
+
         <Grid.Row className='matches-grid-row'>
-            <Grid.Column width={3}>
-              <Header as='h2' textAlign='left'>Filter</Header>
-              <Accordion styled>
-                <Accordion.Title 
-                  active={activeFilterIndex == utils.ENTITY_DATA_INDEX}
-                  index={utils.ENTITY_DATA_INDEX}
-                  onClick={this.handleAccordionClick.bind(this)}>
-                  <Icon name='dropdown' />
-                  Entities
-                </Accordion.Title>
-                <Accordion.Content active={activeFilterIndex == utils.ENTITY_DATA_INDEX}>
-                  {this.getEntities()}
-                </Accordion.Content>
-              </Accordion>
-              <Accordion styled>
-                <Accordion.Title 
-                  active={activeFilterIndex == utils.CATEGORY_DATA_INDEX}
-                  index={utils.CATEGORY_DATA_INDEX}
-                  onClick={this.handleAccordionClick.bind(this)}>
-                  <Icon name='dropdown' />
-                  Categories
-                </Accordion.Title>
-                <Accordion.Content active={activeFilterIndex == utils.CATEGORY_DATA_INDEX}>
-                  {this.getCategories()}
-                </Accordion.Content>
-              </Accordion>
-              <Accordion styled>
-                <Accordion.Title 
-                  active={activeFilterIndex == utils.CONCEPT_DATA_INDEX}
-                  index={utils.CONCEPT_DATA_INDEX}
-                  onClick={this.handleAccordionClick.bind(this)}>
-                  <Icon name='dropdown' />
-                  Concepts
-                </Accordion.Title>
-                <Accordion.Content active={activeFilterIndex == utils.CONCEPT_DATA_INDEX}>
-                  {this.getConcepts()}
-                </Accordion.Content>
-              </Accordion>
-              <Accordion styled>
-                <Accordion.Title
-                  active={activeFilterIndex == utils.KEYWORD_DATA_INDEX}
-                  index={utils.KEYWORD_DATA_INDEX}
-                  onClick={this.handleAccordionClick.bind(this)}>
-                  <Icon name='dropdown' />
-                  Keywords
-                </Accordion.Title>
-                <Accordion.Content active={activeFilterIndex == utils.KEYWORD_DATA_INDEX}>
-                  {this.getKeywords()}
-                </Accordion.Content>
-              </Accordion>
-            </Grid.Column>
-          <Grid.Column width={8}>
+
+          {/* Drop-Down Filters */}
+
+          <Grid.Column width={3}>
+            <Header as='h2' textAlign='left'>Filter</Header>
+            <Accordion styled>
+              <Accordion.Title 
+                active={activeFilterIndex == utils.ENTITY_DATA_INDEX}
+                index={utils.ENTITY_DATA_INDEX}
+                onClick={this.handleAccordionClick.bind(this)}>
+                <Icon name='dropdown' />
+                Entities
+              </Accordion.Title>
+              <Accordion.Content active={activeFilterIndex == utils.ENTITY_DATA_INDEX}>
+                {this.getEntities()}
+              </Accordion.Content>
+            </Accordion>
+            <Accordion styled>
+              <Accordion.Title 
+                active={activeFilterIndex == utils.CATEGORY_DATA_INDEX}
+                index={utils.CATEGORY_DATA_INDEX}
+                onClick={this.handleAccordionClick.bind(this)}>
+                <Icon name='dropdown' />
+                Categories
+              </Accordion.Title>
+              <Accordion.Content active={activeFilterIndex == utils.CATEGORY_DATA_INDEX}>
+                {this.getCategories()}
+              </Accordion.Content>
+            </Accordion>
+            <Accordion styled>
+              <Accordion.Title 
+                active={activeFilterIndex == utils.CONCEPT_DATA_INDEX}
+                index={utils.CONCEPT_DATA_INDEX}
+                onClick={this.handleAccordionClick.bind(this)}>
+                <Icon name='dropdown' />
+                Concepts
+              </Accordion.Title>
+              <Accordion.Content active={activeFilterIndex == utils.CONCEPT_DATA_INDEX}>
+                {this.getConcepts()}
+              </Accordion.Content>
+            </Accordion>
+            <Accordion styled>
+              <Accordion.Title
+                active={activeFilterIndex == utils.KEYWORD_DATA_INDEX}
+                index={utils.KEYWORD_DATA_INDEX}
+                onClick={this.handleAccordionClick.bind(this)}>
+                <Icon name='dropdown' />
+                Keywords
+              </Accordion.Title>
+              <Accordion.Content active={activeFilterIndex == utils.KEYWORD_DATA_INDEX}>
+                {this.getKeywords()}
+              </Accordion.Content>
+            </Accordion>
+            <Divider hidden/>
+            <Divider/>
+            <Divider hidden/>
+
+            {/* Tag Cloud Region */}
+    
+            <Grid.Row>
+              <TagCloudRegion
+                entities={entities}
+                categories={categories}
+                concepts={concepts}
+                keywords={keywords}
+                tagCloudType={tagCloudType}
+                onTagItemSelected={this.tagItemSelected.bind(this)}
+              />
+            </Grid.Row>
+            
+          </Grid.Column>
+
+          {/* Results */}
+
+          <Grid.Column width={7}>
             <Grid.Row>
               {loading ? (
                 <div className="results">
@@ -720,41 +749,48 @@ class Main extends React.Component {
               ) : null}
             </Grid.Row>
             <Divider clearing hidden/>
+
+            {/* Pagination Menu */}
+
             <Grid.Row>
               {this.getPaginationMenu()}
             </Grid.Row>
           </Grid.Column>
-          <Grid.Column width={5}>
-            <TagCloudRegion
-              entities={entities}
-              categories={categories}
-              concepts={concepts}
-              keywords={keywords}
-              tagCloudType={tagCloudType}
-              onTagItemSelected={this.tagItemSelected.bind(this)}
-            />
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column width={8}>
-            <TrendChart
-              trendData={trendData}
-              trendLoading={trendLoading}
-              trendError={trendError}
-              entities={entities}
-              categories={categories}
-              concepts={concepts}
-              keywords={keywords}
-              onGetTrendDataRequest={this.getTrendData.bind(this)}
-            />
-          </Grid.Column>
-          <Grid.Column width={8}>
-            <SentimentChart
-              entities={entities}
-              categories={categories}
-              concepts={concepts}
-              keywords={keywords}
-            />
+
+          <Grid.Column width={6}>
+
+            {/* Sentiment Chart Region */}
+
+            <Grid.Row className='rrr'>
+              <SentimentChart
+                entities={entities}
+                categories={categories}
+                concepts={concepts}
+                keywords={keywords}
+              />
+
+            <Divider hidden/>
+            <Divider/>
+            <Divider hidden/>
+
+            </Grid.Row>
+            {/* Trend Chart Region */}
+
+            <Grid.Row className='ttt'>
+              <div className="trend-chart">
+                <TrendChart
+                  trendData={trendData}
+                  trendLoading={trendLoading}
+                  trendError={trendError}
+                  entities={entities}
+                  categories={categories}
+                  concepts={concepts}
+                  keywords={keywords}
+                  onGetTrendDataRequest={this.getTrendData.bind(this)}
+                />
+              </div>
+            </Grid.Row>
+
           </Grid.Column>
         </Grid.Row>
       </Grid>

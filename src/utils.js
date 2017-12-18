@@ -53,11 +53,13 @@ const KEYWORD_FILTER  = 'KW';
 
 const TERM_ITEM = 'Term';   // used to indicate no specific item is seleced
 
+// filter types and strings to use
 const filterTypes = [ 
   { key: ENTITIY_FILTER,  value: ENTITIY_FILTER, text: 'Entities'}, 
   { key: CATEGORY_FILTER, value: CATEGORY_FILTER, text: 'Categories'},
   { key: CONCEPT_FILTER,  value: CONCEPT_FILTER, text: 'Concepts'},
   { key: KEYWORD_FILTER,  value: KEYWORD_FILTER, text: 'Keywords'} ];
+
 
 module.exports = {
   // parseData,

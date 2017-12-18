@@ -171,12 +171,29 @@ function createServer(results) {
     // console.log("++++++++++++ DISCO RESULTS ++++++++++++++++++++");
     // console.log(util.inspect(results, false, null));
 
+    // add up totals for the sentiment of reviews
+    var numPositive = 0;
+    var numNegative = 0;
+    var numNeutral = 0;
+    results.results.forEach(function (result) {
+      if (result.enriched_text.sentiment.document.label === 'positive') {
+        numPositive = numPositive + 1;
+      } else if (result.enriched_text.sentiment.document.label === 'negative') {
+        numNegative = numNegative + 1;
+      } else if (result.enriched_text.sentiment.document.label === 'neutral') {
+        numNeutral = numNeutral + 1;
+      }
+    });
+
     res.render('index', { data: results, 
       entities: results,
       categories: results,
       concepts: results,
       keywords: results,
-      numMatches: results.matching_results
+      numMatches: results.matching_results,
+      numPositive: numPositive,
+      numNeutral: numNeutral,
+      numNegative: numNegative
     });
   });
 

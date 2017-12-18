@@ -16,7 +16,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Dimmer, Loader, Header, Menu, Dropdown, Divider } from 'semantic-ui-react';
+import { Grid, Dimmer, Header, Menu, Dropdown, Divider } from 'semantic-ui-react';
 import { Line } from 'react-chartjs-2';
 const utils = require('../utils');
 
@@ -169,8 +169,13 @@ export default class TrendChart extends React.Component {
     };
 
     return (
-      <div>
-        <Header as='h2' textAlign='left'>Trend of Avg Reviews Scores (-1 to 1)</Header>
+      <div className="trend-chart">
+        <Header as='h2' textAlign='left'>
+          Trending
+          <Header.Subheader>
+            Avg Reviews Scores (-1.0 to 1.0)
+          </Header.Subheader>
+        </Header>
         <Menu compact floated={true}>
           <Dropdown 
             item
@@ -190,27 +195,14 @@ export default class TrendChart extends React.Component {
         </Menu>
         <Divider clearing hidden/>
         <Grid.Row>
-          {trendLoading ? (
-            <div className="results">
-              <div className="loader--container">
-                  <Loader active>Loading</Loader>
-              </div>
-            </div>
-          ) : trendData ? (
-            <div className="results">
-              <Line
-                type={ 'line' }
-                options={ options }
-                data={ this.getChartData() }
-              />       
-            </div>
-          ) : trendError ? (
-            <div className="results">
-              <div className="row">
-                {JSON.stringify(error)}
-              </div>
-            </div>
-          ) : null}
+          <div className="trending-chart">
+            <Line
+              type={ 'line' }
+              options={ options }
+              data={ this.getChartData() }
+              height={ 200 }
+            />
+          </div>
         </Grid.Row>
       </div>
     );

@@ -16,8 +16,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Container, List, Label } from 'semantic-ui-react';
-const util = require('util');
+import { Container, List, Label } from 'semantic-ui-react';
+
 /**
  * This object renders the results of the search query on the web page. 
  * Each result item, or 'match', will display a title, description, and
@@ -43,7 +43,8 @@ const Match = props => (
 Match.propTypes = {
   title: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
-  sentiment: PropTypes.node
+  date: PropTypes.string.isRequired,
+  sentiment: PropTypes.object.isRequired
 };
 
 const Matches = props => (
@@ -79,12 +80,12 @@ const getSentiment = item => {
   var score = Number(item.enriched_text.sentiment.document.score).toFixed(2);
   var color = 'grey';
   switch (item.enriched_text.sentiment.document.label) {
-    case 'negative': 
-      color='red';
-      break;
-    case 'positive': 
-      color='green';
-      break;
+  case 'negative': 
+    color='red';
+    break;
+  case 'positive': 
+    color='green';
+    break;
   }
 
   return <Label 

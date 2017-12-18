@@ -16,7 +16,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Input, Checkbox } from 'semantic-ui-react';
+import { Icon, Header, Grid, Input, Checkbox } from 'semantic-ui-react';
 const utils = require('../utils');
 
 /**
@@ -82,6 +82,12 @@ export default class SearchField extends React.Component {
     return (
       <Grid className='search-field-grid'>
         <Grid.Column width={12} verticalAlign='middle' textAlign='center'>
+          <Header as='h1' textAlign='center'>
+            <Icon.Group size='large'>
+              <Icon name='hotel' />
+            </Icon.Group>
+            Airbnb Review Data for Ausin, TX
+          </Header>
           <Input
             className='searchinput'
             icon='search'

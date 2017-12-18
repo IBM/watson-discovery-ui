@@ -16,7 +16,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Dimmer, Header, Menu, Dropdown, Divider, Icon } from 'semantic-ui-react';
+import { Grid, Header, Menu, Dropdown, Divider, Icon } from 'semantic-ui-react';
 import { Line } from 'react-chartjs-2';
 const utils = require('../utils');
 
@@ -70,7 +70,7 @@ export default class TrendChart extends React.Component {
    * all of the data needed to render the trending chart.
    */
   getChartData() {
-    const { trendData, termValue } = this.state;
+    const { trendData } = this.state;
 
     var labels = [];
     var scores = [];
@@ -89,7 +89,7 @@ export default class TrendChart extends React.Component {
       datasets: [{
         label: 'Avg Scores',
         data: scores,
-        backgroundColor: "rgba(0,255,0,0.6)"
+        backgroundColor: 'rgba(0,255,0,0.6)'
       }]
     };
 
@@ -159,7 +159,7 @@ export default class TrendChart extends React.Component {
    * render - return the trending chart object to render.
    */
   render() {
-    const { trendLoading, trendError, trendData } = this.state;
+    // const { trendLoading, trendError, trendData } = this.state;
     
     const options = {
       responsive: true,
@@ -220,5 +220,8 @@ TrendChart.propTypes = {
   keywords: PropTypes.object,
   chartType: PropTypes.string,
   termValue: PropTypes.string,
+  trendData: PropTypes.object,
+  trendLoading: PropTypes.bool,
+  trendError: PropTypes.object,
   onGetTrendDataRequest: PropTypes.func.isRequired,
 };

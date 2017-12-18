@@ -16,8 +16,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Container, List } from 'semantic-ui-react';
-
+import { Icon, Container, List, Label } from 'semantic-ui-react';
+const util = require('util');
 /**
  * This object renders the results of the search query on the web page. 
  * Each result item, or 'match', will display a title, description, and
@@ -28,10 +28,13 @@ const Match = props => (
   <List.Item>
     <List.Content>
       <List.Header>{props.title}</List.Header>
-      {props.text}
+      { props.text }
     </List.Content>
     <List.Content>
-      Sentiment: {props.sentiment}
+      Date:  { props.date }
+    </List.Content>
+    <List.Content>
+      Sentiment:  { props.sentiment }
     </List.Content>
   </List.Item>
 );
@@ -50,10 +53,11 @@ const Matches = props => (
         <List divided verticalAlign='middle'>
           {props.matches.map(item =>
             <Match
-              key={item.id}
-              title={item.title ? item.title : 'No Title'}
-              text={item.text ? item.text : 'No Description'}
-              sentiment={getSentiment(item)}
+              key={ item.id }
+              title={ item.title ? item.title : 'No Title' }
+              text={ item.text ? item.text : 'No Description' }
+              date={ item.date }
+              sentiment={ getSentiment(item) }
             />)
           }
         </List>
@@ -72,14 +76,23 @@ Matches.propTypes = {
  * positive, negative, and neutral sentiment.
  */
 const getSentiment = item => {
-  // console.log('item.enriched_text.sentiment: ' + item.enriched_text.sentiment);
-  // console.log('item.enriched_text.sentiment.document: ' + util.inspect(item.enriched_text.sentiment.document, false, null));
-  // console.log('item.enriched_text.sentiment.document.label: ' + util.inspect(item.enriched_text.sentiment.document.label, false, null));
-  switch (item.enriched_text.sentiment && item.enriched_text.sentiment.document && item.enriched_text.sentiment.document.label) {
-  case 'negative': return <Icon name='thumbs down' size='large' color='red'/>;
-  case 'positive': return <Icon name='thumbs up' size='large' color='green'/>;
-  default: return <Icon name='like outline' size='large' color='yellow'/>;
+  var score = Number(item.enriched_text.sentiment.document.score).toFixed(2);
+  var color = 'grey';
+  switch (item.enriched_text.sentiment.document.label) {
+    case 'negative': 
+      color='red';
+      break;
+    case 'positive': 
+      color='green';
+      break;
   }
+
+  return <Label 
+    className='sentiment-value' 
+    as='a'
+    color={ color }
+    size='tiny' 
+    tag>{ score  }</Label>;  
 };
 
 // export so we are visible to parent

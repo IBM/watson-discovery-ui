@@ -29,8 +29,7 @@ module.exports = {
       collection_id: this.collection_id,
       deduplicate: true,
       sort: 'date',
-      aggregation: 'timeslice(date,1month).average(enriched_text.sentiment.document.score)',
-      count: 2000,
+      aggregation: 'timeslice(date,1month).average(enriched_text.sentiment.document.score)'
     }, queryOpts);
 
     console.log('Discovery Trending Query Params: ');

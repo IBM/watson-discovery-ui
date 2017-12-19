@@ -40,6 +40,7 @@ class Main extends React.Component {
   constructor(...props) {
     super(...props);
     const { 
+      // query data
       entities, 
       selectedEntities,
       categories, 
@@ -48,49 +49,66 @@ class Main extends React.Component {
       selectedConcepts,
       keywords,
       selectedKeywords,
-      data, 
-      searchQuery,
-      tagCloudType,
-      currentPage,
+      data,
       numMatches,
       numPositive,
       numNeutral,
       numNegative,
+      error,
+      // query params
+      searchQuery,
       queryType,
       returnPassages,
       limitResults,
+      // matches panel
+      currentPage,
+      // tag cloud
+      tagCloudType,
+      // trending chart
       trendData,
-      error,
-      trendError
+      trendError,
+      trendTerm,
+      // sentiment chart
+      sentimentTerm
     } = this.props;
 
     // change in state fires re-render of components
     this.state = {
-      error: error,
-      trendError: trendError,
-      data: data && parseData(data),
+      // query data
       entities: entities && parseEntities(entities),
-      categories: categories && parseCategories(categories),
-      concepts: concepts && parseConcepts(concepts),
-      keywords: keywords && parseKeywords(keywords),
-      loading: false,
-      trendLoading: false,
-      searchQuery: searchQuery || '',
       selectedEntities: selectedEntities || new Set(),
+      categories: categories && parseCategories(categories),
       selectedCategories: selectedCategories || new Set(),
+      concepts: concepts && parseConcepts(concepts),
       selectedConcepts: selectedConcepts || new Set(),
+      keywords: keywords && parseKeywords(keywords),
       selectedKeywords: selectedKeywords || new Set(),
-      tagCloudType: tagCloudType || utils.ENTITIY_FILTER,
-      currentPage: currentPage || '1',
+      data: data && parseData(data),
       numMatches: numMatches || 0,
       numPositive: numPositive || 0,
       numNeutral: numNeutral || 0,
       numNegative: numNegative || 0,
-      activeFilterIndex: 0,
+      error: error,
+      // query params
+      searchQuery: searchQuery || '',
       queryType: queryType || utils.QUERY_NATURAL_LANGUAGE,
       returnPassages: returnPassages || false,
       limitResults: limitResults || false,
-      trendData: trendData || null
+      // matches panel
+      currentPage: currentPage || '1',
+      // tag cloud
+      tagCloudType: tagCloudType || utils.ENTITIY_FILTER,
+      // trending chart
+      trendData: trendData || null,
+      trendError: trendError,
+      trendTerm: trendTerm || utils.TERM_ITEM,
+      trendLoading: false,  // !!!!!!!!!!!!!
+      // sentiment chart
+      sentimentTerm: sentimentTerm || utils.TERM_ITEM,
+
+      // !!!!!!!!!!!!!!!!!!
+      loading: false,
+      activeFilterIndex: 0,
     };
   }
 
@@ -169,6 +187,16 @@ class Main extends React.Component {
   }
 
   /**
+   * sentimentTermChanged - (callback function)
+   * User has selected a new term to use in the sentiment
+   * chart. Keep track of this so that main stays in sync.
+   */
+  sentimentTermChanged(data) {
+    const { term } = data;
+    this.setState({ sentimentTerm: term });
+  }
+
+  /**
    * tagItemSelected - (callback function)
    * User has selected an item from the tag cloud object
    * to filter on. This results in making a new qeury to the 
@@ -242,40 +270,49 @@ class Main extends React.Component {
    * getTrendData - (callback function)
    * User has entered a new search string to query on. 
    * This results in making a new qeury to the disco service.
+   * Keep track of the current term value so that main stays
+   * in sync with the trending chart component.
    * 
    * NOTE: This function is also called at startup to 
    * display a default graph.
    */
   getTrendData(data) {
-    this.setState({
-      trendLoading: true
-    });
+    var { limitResults } = this.state;
+    var { chartType, term } = data;
 
     // we don't have any data to show for "all" items, so just clear chart
-    if (data.term === utils.TERM_ITEM) {
+    if (term === utils.TERM_ITEM) {
       this.setState(
         { 
-          trendData: new Array(),
+          trendData: null,
           trendLoading: false,
-          trendError: null
+          trendError: null,
+          trendTerm: term
         });
       return;
-    }
+    } 
+    
+    this.setState({
+      trendLoading: true,
+      trendTerm: term
+    });
 
     // build query string, with based on filter type
     var trendQuery = '';
-    if (data.chartType === utils.ENTITIY_FILTER) {
-      trendQuery = 'enriched_text.entities.text::' + data.term;
-    } else if (data.chartType === utils.CATEGORY_FILTER) {
-      trendQuery = 'enriched_text.categories.label::' + data.term;
-    } else if (data.chartType === utils.CONCEPT_FILTER) {
-      trendQuery = 'enriched_text.concepts.text::' + data.term;
-    } else if (data.chartType === utils.KEYWORD_FILTER) {
-      trendQuery = 'enriched_text.keywords.text::' + data.term;
+    if (chartType === utils.ENTITIY_FILTER) {
+      trendQuery = 'enriched_text.entities.text::' + term;
+    } else if (chartType === utils.CATEGORY_FILTER) {
+      trendQuery = 'enriched_text.categories.label::' + term;
+    } else if (chartType === utils.CONCEPT_FILTER) {
+      trendQuery = 'enriched_text.concepts.text::' + term;
+    } else if (chartType === utils.KEYWORD_FILTER) {
+      trendQuery = 'enriched_text.keywords.text::' + term;
     }
 
     const qs = queryString.stringify({
-      query: trendQuery
+      query: trendQuery,
+      filters: this.buildFilterString(),
+      count: (limitResults == true ? 100 : 5000)
     });
 
     // send request
@@ -289,7 +326,7 @@ class Main extends React.Component {
     })
     .then(json => {
       // const util = require('util');
-      console.log('++++++++++++ DISCO TREND RESULTS ++++++++++++++++++++');
+      console.log('+++ DISCO TREND RESULTS +++');
       // console.log(util.inspect(json.aggregations[0].results, false, null));
       console.log('numMatches: ' + json.matching_results);
       
@@ -297,7 +334,8 @@ class Main extends React.Component {
         { 
           trendData: json,
           trendLoading: false,
-          trendError: null
+          trendError: null,
+          trendTerm: term
         }
       );
     })
@@ -305,7 +343,8 @@ class Main extends React.Component {
       this.setState({
         trendError: (response.status === 429) ? 'Number of free queries per month exceeded' : 'Error fetching results',
         trendLoading: false,
-        trendData: new Array()
+        trendData: null,
+        trendTerm: utils.TERM_ITEM
       });
       // eslint-disable-next-line no-console
       console.error(response);
@@ -354,7 +393,7 @@ class Main extends React.Component {
     const qs = queryString.stringify({
       query: searchQuery,
       filters: this.buildFilterString(),
-      count: (limitResults == true ? 100 : 1000),
+      count: (limitResults == true ? 100 : 5000),
       returnPassages: returnPassages,
       queryType: (queryType === utils.QUERY_NATURAL_LANGUAGE ? 
         'natural_language_query' : 'query:'),
@@ -402,7 +441,10 @@ class Main extends React.Component {
           numPositive: numPositive,
           numNegative: numNegative,
           numNeutral: numNeutral,
-          error: null
+          error: null,
+          trendData: null,
+          sentimentTerm: utils.TERM_ITEM,
+          trendTerm: utils.TERM_ITEM
         }
       );
       scrollToMain();
@@ -613,8 +655,9 @@ class Main extends React.Component {
             entities, categories, concepts, keywords,
             selectedEntities, selectedCategories, selectedConcepts, selectedKeywords,
             numMatches, numPositive, numNeutral, numNegative,
-            tagCloudType, trendData, trendLoading, trendError,
-            queryType, returnPassages, limitResults } = this.state;
+            tagCloudType, trendData, trendLoading, trendError, trendTerm,
+            queryType, returnPassages, limitResults,
+            sentimentTerm } = this.state;
 
     // used for filter accordions
     const { activeFilterIndex } = this.state;
@@ -808,6 +851,8 @@ class Main extends React.Component {
                 categories={categories}
                 concepts={concepts}
                 keywords={keywords}
+                term={sentimentTerm}
+                onSentimentTermChanged={this.sentimentTermChanged.bind(this)}
               />
 
             <Divider hidden/>
@@ -827,6 +872,7 @@ class Main extends React.Component {
                   categories={categories}
                   concepts={concepts}
                   keywords={keywords}
+                  term={trendTerm}
                   onGetTrendDataRequest={this.getTrendData.bind(this)}
                 />
               </div>
@@ -914,6 +960,8 @@ Main.propTypes = {
   limitResults: PropTypes.bool,
   trendData: PropTypes.object,
   trendError: PropTypes.object,
+  trendTerm: PropTypes.string,
+  sentimentTerm: PropTypes.string,
   error: PropTypes.object
 };
 

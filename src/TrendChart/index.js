@@ -16,7 +16,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Grid, Header, Menu, Dropdown, Divider, Icon } from 'semantic-ui-react';
+import { Grid, Header, Menu, Dropdown, Divider, Icon } from 'semantic-ui-react';
 import { Line } from 'react-chartjs-2';
 const utils = require('../utils');
 
@@ -36,7 +36,7 @@ export default class TrendChart extends React.Component {
     super(...props);
 
     this.state = {
-      trendData: this.props.trendData || [],
+      trendData: this.props.trendData || null,
       trendLoading: this.props.trendLoading || false,
       trendError: this.props.trendError,
       entities: this.props.entities,
@@ -56,7 +56,7 @@ export default class TrendChart extends React.Component {
     this.setState({
       chartType: selection.value,
       termValue: utils.TERM_ITEM,
-      trendData: ''
+      trendData: null
     });
 
     this.props.onGetTrendDataRequest({
@@ -153,13 +153,14 @@ export default class TrendChart extends React.Component {
     this.setState({ categories: nextProps.categories });
     this.setState({ concepts: nextProps.concepts });
     this.setState({ keywords: nextProps.keywords });
+    this.setState({ termValue: nextProps.term });
   }
 
   /**
    * render - return the trending chart object to render.
    */
   render() {
-    const { trendLoading } = this.state;
+    const { trendLoading, termValue } = this.state;
     
     const options = {
       responsive: true,
@@ -191,16 +192,12 @@ export default class TrendChart extends React.Component {
           <Dropdown 
             item
             scrolling
-            defaultValue={ utils.TERM_ITEM }
+            value={ termValue }
+            loading={ trendLoading }
             onChange={ this.termTypeChange.bind(this) }
             options={ this.getTermOptions() }
           />
         </Menu>
-        {trendLoading ? (
-          <div>
-          <Button basic loading floated='right' size='large'>Loading</Button>
-          </div>
-        ) : null}
 
         <Divider clearing hidden/>
         <Grid.Row>
@@ -230,5 +227,6 @@ TrendChart.propTypes = {
   trendData: PropTypes.object,
   trendLoading: PropTypes.bool,
   trendError: PropTypes.object,
+  term: PropTypes.string,
   onGetTrendDataRequest: PropTypes.func.isRequired,
 };

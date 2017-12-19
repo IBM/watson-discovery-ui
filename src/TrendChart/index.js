@@ -16,7 +16,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Header, Menu, Dropdown, Divider, Icon } from 'semantic-ui-react';
+import { Button, Grid, Header, Menu, Dropdown, Divider, Icon } from 'semantic-ui-react';
 import { Line } from 'react-chartjs-2';
 const utils = require('../utils');
 
@@ -87,7 +87,7 @@ export default class TrendChart extends React.Component {
     var ret = {
       labels: labels,
       datasets: [{
-        label: 'Avg Scores',
+        label: 'Avg Scores (range -1.0 to 1.0)',
         data: scores,
         backgroundColor: 'rgba(0,255,0,0.6)'
       }]
@@ -159,7 +159,7 @@ export default class TrendChart extends React.Component {
    * render - return the trending chart object to render.
    */
   render() {
-    // const { trendLoading, trendError, trendData } = this.state;
+    const { trendLoading } = this.state;
     
     const options = {
       responsive: true,
@@ -175,7 +175,7 @@ export default class TrendChart extends React.Component {
           <Header.Content>
             Trending Graph
             <Header.Subheader>
-              Avg review scores (-1.0 to 1.0) over time
+              Avg review scores per month for selected term
             </Header.Subheader>
           </Header.Content>
         </Header>
@@ -196,6 +196,12 @@ export default class TrendChart extends React.Component {
             options={ this.getTermOptions() }
           />
         </Menu>
+        {trendLoading ? (
+          <div>
+          <Button basic loading floated='right' size='large'>Loading</Button>
+          </div>
+        ) : null}
+
         <Divider clearing hidden/>
         <Grid.Row>
           <div className="trending-chart">
@@ -206,6 +212,7 @@ export default class TrendChart extends React.Component {
               height={ 200 }
             />
           </div>
+
         </Grid.Row>
       </div>
     );

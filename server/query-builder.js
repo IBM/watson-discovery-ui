@@ -27,15 +27,10 @@ module.exports = {
     const params = Object.assign({
       environment_id: this.environment_id,
       collection_id: this.collection_id,
-      deduplicate: true,
+      sort: 'date',
       return: 'id,title,date,text,' + 
         'enriched_text.sentiment.document.label,' +
         'enriched_text.sentiment.document.score',
-      // return: 'title,text,url,host,html,crawl_date,score,id,' +
-      //          'enriched_text.entities.text,enriched_text.sentiment.document.label,' +
-      //          'enriched_text.categories.label,' +
-      //          'enriched_text.concepts.text,' +
-      //          'enriched_text.keywords.text',
       aggregation:
         '[term(enriched_text.entities.text).term(enriched_text.sentiment.document.label),' +
         'term(enriched_text.categories.label).term(enriched_text.sentiment.document.label),' +

@@ -669,3 +669,8 @@ ui celled grid search-grid style {
 div.ui.compact.floated.menu style {
   margin-left: 20px;
 }
+
+div.matches-pagination-bar {
+  display: flex;
+  justify-content: center;
+}

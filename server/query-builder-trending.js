@@ -27,7 +27,6 @@ module.exports = {
     const params = Object.assign({
       environment_id: this.environment_id,
       collection_id: this.collection_id,
-      deduplicate: true,
       sort: 'date',
       aggregation: 'timeslice(date,1month).average(enriched_text.sentiment.document.score)'
     }, queryOpts);

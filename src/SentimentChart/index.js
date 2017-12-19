@@ -103,7 +103,6 @@ export default class SentimentChart extends React.Component {
       keywords
     } = this.state;
     
-    // console.log('chartType: ' + chartType);
     if (chartType === utils.ENTITIY_FILTER) {
       this.getTotals(entities, termValue);
     } else if (chartType === utils.CATEGORY_FILTER) {
@@ -160,9 +159,17 @@ export default class SentimentChart extends React.Component {
    * modify the sentiment chart to just represent this term.
    */
   termTypeChange(event, selection) {
-    this.setState({
-      termValue: selection.value
-    });
+    const { termValue } = this.state;
+
+    // only update if term has actually changed
+    if (termValue != selection.value) {
+      this.setState({
+        termValue: selection.value
+      });
+      this.props.onSentimentTermChanged({
+        term: selection.value
+      });
+    }
   }
 
   /**
@@ -202,12 +209,15 @@ export default class SentimentChart extends React.Component {
     this.setState({ categories: nextProps.categories });
     this.setState({ concepts: nextProps.concepts });
     this.setState({ keywords: nextProps.keywords });
+    this.setState({ termValue: nextProps.term });
   }
 
   /**
    * render - return all the sentiment objects to render.
    */
   render() {
+    const { termValue } = this.state;
+
     const options = {
       responsive: true,
       legend: {
@@ -240,7 +250,7 @@ export default class SentimentChart extends React.Component {
           <Header.Content>
             Sentiment Chart
             <Header.Subheader>
-              Review sentiment by percentage
+              Sentiment scores by percentage
             </Header.Subheader>
           </Header.Content>
         </Header>
@@ -256,7 +266,7 @@ export default class SentimentChart extends React.Component {
           <Dropdown 
             item
             scrolling
-            defaultValue={ utils.TERM_ITEM }
+            value={ termValue }
             onChange={ this.termTypeChange.bind(this) }
             options={ this.getTermOptions() }
           />
@@ -282,5 +292,6 @@ SentimentChart.propTypes = {
   concepts: PropTypes.object,
   keywords: PropTypes.object,
   chartType: PropTypes.string,
-  termValue: PropTypes.string
+  term: PropTypes.string,
+  onSentimentTermChanged: PropTypes.func.isRequired,
 };

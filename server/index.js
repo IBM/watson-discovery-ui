@@ -42,7 +42,7 @@ const WatsonDiscoServer = new Promise((resolve, reject) => {
       // this is the inital query to the discovery service
       const params = queryBuilder.search({ 
         natural_language_query: '',
-        count: 1000
+        count: 5000
       });
       return new Promise((resolve, reject) => {
         discovery.query(params)
@@ -75,13 +75,20 @@ function createServer(results) {
 
   // handles search request from search bar
   server.get('/api/trending', (req, res) => {
-    const { query } = req.query;
+    const { query, filters, count } = req.query;
 
     console.log('In /api/trending: query = ' + query);
     
     // build params for the trending search request
     var params = {};
     params.query = query;
+
+    // add any filters and a limit to the number of matches that can be found
+    if (filters) {
+      params.filter = filters;
+    }
+    params.count = count;
+
     var searchParams = queryTrendBuilder.search(params);
     discovery.query(searchParams)
       .then(response => res.json(response))

@@ -28,7 +28,7 @@ import KeywordsFilter from './KeywordsFilter';
 import TagCloudRegion from './TagCloudRegion';
 import TrendChart from './TrendChart';
 import SentimentChart from './SentimentChart';
-import { Grid, Dimmer, Divider, Loader, Accordion, Icon, Header, Statistic } from 'semantic-ui-react';
+import { Grid, Dimmer, Button, Divider, Loader, Accordion, Icon, Header, Statistic } from 'semantic-ui-react';
 const utils = require('./utils');
 
 /**
@@ -115,6 +115,17 @@ class Main extends React.Component {
   filtersChanged() {
     const { searchQuery  } = this.state;
     this.fetchData(searchQuery, false);
+  }
+
+  /**
+   * handleClearAllFiltersClick - (callback function)
+   * User has selected button to clear out all filters.
+   * This results in making a new qeury to the disco
+   * service with no filters turned on.
+   */
+  handleClearAllFiltersClick() {
+    const { searchQuery  } = this.state;
+    this.fetchData(searchQuery, true);
   }
 
   /**
@@ -600,6 +611,7 @@ class Main extends React.Component {
   render() {
     const { loading, data, error, searchQuery,
             entities, categories, concepts, keywords,
+            selectedEntities, selectedCategories, selectedConcepts, selectedKeywords,
             numMatches, numPositive, numNeutral, numNegative,
             tagCloudType, trendData, trendLoading, trendError,
             queryType, returnPassages, limitResults } = this.state;
@@ -613,6 +625,14 @@ class Main extends React.Component {
       { key: 'neutral', label: 'NEUTRAL', value: numNeutral },
       { key: 'negative', label: 'NEGATIVE', value: numNegative }
     ];
+
+    var filtersOn = false;
+    if (selectedEntities.size > 0 ||
+      selectedCategories.size > 0 ||
+      selectedConcepts.size > 0 ||
+      selectedKeywords.size > 0) {
+      filtersOn = true;
+    }
     
     return (
       <Grid celled className='search-grid'>
@@ -639,6 +659,16 @@ class Main extends React.Component {
           {/* Drop-Down Filters */}
 
           <Grid.Column width={3}>
+            {filtersOn ? (
+              <Button
+                compact
+                basic
+                color='red'
+                content='clear all'
+                icon='remove'
+                onClick={this.handleClearAllFiltersClick.bind(this)}
+              />
+            ) : null}
             <Header as='h2' block inverted textAlign='left'>
               <Icon name='filter' />
               <Header.Content>

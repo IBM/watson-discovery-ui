@@ -88,27 +88,25 @@ class Main extends React.Component {
       numPositive: numPositive || 0,
       numNeutral: numNeutral || 0,
       numNegative: numNegative || 0,
+      loading: false,
       error: error,
       // query params
       searchQuery: searchQuery || '',
       queryType: queryType || utils.QUERY_NATURAL_LANGUAGE,
       returnPassages: returnPassages || false,
       limitResults: limitResults || false,
-      // matches panel
-      currentPage: currentPage || '1',
       // tag cloud
       tagCloudType: tagCloudType || utils.ENTITIY_FILTER,
       // trending chart
       trendData: trendData || null,
       trendError: trendError,
-      trendTerm: trendTerm || utils.TERM_ITEM,
-      trendLoading: false,  // !!!!!!!!!!!!!
+      trendTerm: trendTerm || utils.TRENDING_TERM_ITEM,
+      trendLoading: false,
       // sentiment chart
-      sentimentTerm: sentimentTerm || utils.TERM_ITEM,
-
-      // !!!!!!!!!!!!!!!!!!
-      loading: false,
-      activeFilterIndex: 0,
+      sentimentTerm: sentimentTerm || utils.SENTIMENT_TERM_ITEM,
+      // misc panel
+      currentPage: currentPage || '1',  // which page of matches are we showing
+      activeFilterIndex: 0,             // which filter index is expanded/active
     };
   }
 
@@ -281,7 +279,7 @@ class Main extends React.Component {
     var { chartType, term } = data;
 
     // we don't have any data to show for "all" items, so just clear chart
-    if (term === utils.TERM_ITEM) {
+    if (term === utils.TRENDING_TERM_ITEM) {
       this.setState(
         { 
           trendData: null,
@@ -344,7 +342,7 @@ class Main extends React.Component {
         trendError: (response.status === 429) ? 'Number of free queries per month exceeded' : 'Error fetching results',
         trendLoading: false,
         trendData: null,
-        trendTerm: utils.TERM_ITEM
+        trendTerm: utils.TRENDING_TERM_ITEM
       });
       // eslint-disable-next-line no-console
       console.error(response);
@@ -443,8 +441,8 @@ class Main extends React.Component {
           numNeutral: numNeutral,
           error: null,
           trendData: null,
-          sentimentTerm: utils.TERM_ITEM,
-          trendTerm: utils.TERM_ITEM
+          sentimentTerm: utils.SENTIMENT_TERM_ITEM,
+          trendTerm: utils.TRENDING_TERM_ITEM
         }
       );
       scrollToMain();

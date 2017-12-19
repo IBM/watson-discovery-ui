@@ -413,9 +413,10 @@ class Main extends React.Component {
       var numNeutral = 0;
 
       // const util = require('util');
-      // console.log("++++++++++++ DISCO RESULTS ++++++++++++++++++++");
+      console.log("+++ DISCO RESULTS +++");
       // console.log(util.inspect(data.results, false, null));
-
+      console.log('numMatches: ' + json.matching_results);
+      
       // add up totals for the sentiment of reviews
       data.results.forEach(function (result) {
         if (result.enriched_text.sentiment.document.label === 'positive') {
@@ -567,10 +568,12 @@ class Main extends React.Component {
     
     if (numMatches > 1) {
       return (
-        <PaginationMenu
-          numMatches={numMatches}
-          onPageChange={this.pageChanged.bind(this)}
-        />
+        <div className='matches-pagination-bar'>
+          <PaginationMenu
+            numMatches={numMatches}
+            onPageChange={this.pageChanged.bind(this)}
+          />
+        </div>
       );
     } else {
       return null;

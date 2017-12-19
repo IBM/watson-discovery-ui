@@ -40,6 +40,7 @@ const WatsonDiscoServer = new Promise((resolve, reject) => {
     })
     .then(response => {
       // this is the inital query to the discovery service
+      console.log('Initial Search Query at start-up');
       const params = queryBuilder.search({ 
         natural_language_query: '',
         count: 5000
@@ -136,10 +137,14 @@ function createServer(results) {
   // handles search string appened to url
   server.get('/:searchQuery', function(req, res){
     var searchQuery = req.params.searchQuery.replace(/\+/g, ' ');
-    const qs = queryString.stringify({ query: searchQuery });
+    const qs = queryString.stringify({ 
+      query: searchQuery,
+      count: 5000,
+      queryType: 'natural_language_query'
+     });
     const fullUrl = req.protocol + '://' + req.get('host');
 
-    console.log('In /:search: query = ' + qs);
+    console.log('In /:searchQuery: query = ' + qs);
 
     fetch(fullUrl + `/api/search?${qs}`)
       .then(response => {

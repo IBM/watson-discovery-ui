@@ -51,7 +51,8 @@ const CATEGORY_FILTER = 'CA';
 const CONCEPT_FILTER  = 'CO';
 const KEYWORD_FILTER  = 'KW';
 
-const TERM_ITEM = 'Term';   // used to indicate no specific item is seleced
+const SENTIMENT_TERM_ITEM = 'All Terms';   // used to indicate no specific item is seleced
+const TRENDING_TERM_ITEM = 'Select Term';  // used to indicate no specific item is seleced
 
 // filter types and strings to use
 const filterTypes = [ 
@@ -75,6 +76,7 @@ module.exports = {
   CATEGORY_FILTER,
   CONCEPT_FILTER,
   KEYWORD_FILTER,
-  TERM_ITEM,
+  SENTIMENT_TERM_ITEM,
+  TRENDING_TERM_ITEM,
   filterTypes
 };

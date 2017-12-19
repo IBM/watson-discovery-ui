@@ -44,7 +44,7 @@ export default class TrendChart extends React.Component {
       concepts: this.props.concepts,
       keywords: this.props.keywords,
       chartType: utils.ENTITIY_FILTER,
-      termValue: utils.TERM_ITEM
+      termValue: utils.TRENDING_TERM_ITEM
     };
   }
 
@@ -55,13 +55,13 @@ export default class TrendChart extends React.Component {
   filterTypeChange(event, selection) {
     this.setState({
       chartType: selection.value,
-      termValue: utils.TERM_ITEM,
+      termValue: utils.TRENDING_TERM_ITEM,
       trendData: null
     });
 
     this.props.onGetTrendDataRequest({
       chartType: selection.value,
-      term: utils.TERM_ITEM
+      term: utils.TRENDING_TERM_ITEM
     });
   }
 
@@ -118,7 +118,7 @@ export default class TrendChart extends React.Component {
    */
   getTermOptions() {
     const { chartType, entities, categories, concepts, keywords } = this.state;
-    var options = [{ key: -1, value: utils.TERM_ITEM, text: utils.TERM_ITEM }];
+    var options = [{ key: -1, value: utils.TRENDING_TERM_ITEM, text: utils.TRENDING_TERM_ITEM }];
     var collection;
 
     // select based on the filter type

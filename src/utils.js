@@ -33,7 +33,7 @@ const objectWithoutProperties = (object, properties) => {
 };
 
 // how many items will we show per page
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 7;
 
 // query types
 const QUERY_NATURAL_LANGUAGE = 0;
@@ -46,6 +46,7 @@ const CATEGORY_DATA_INDEX = 1;
 const CONCEPT_DATA_INDEX = 2;
 const KEYWORD_DATA_INDEX = 3;
 
+// keys/values for menu items
 const ENTITIY_FILTER  = 'EN';
 const CATEGORY_FILTER = 'CA';
 const CONCEPT_FILTER  = 'CO';
@@ -54,13 +55,35 @@ const KEYWORD_FILTER  = 'KW';
 const SENTIMENT_TERM_ITEM = 'All Terms';   // used to indicate no specific item is seleced
 const TRENDING_TERM_ITEM = 'Select Term';  // used to indicate no specific item is seleced
 
+const BY_HIGHEST = 'HIGHEST';
+const BY_LOWEST  = 'LOWEST';
+const BY_OLDEST  = 'OLDEST';
+const BY_NEWEST  = 'NEWEST';
+const BY_BEST    = 'BEST';
+const BY_WORST   = 'WORST';
+
+const BY_HIGHEST_QUERY = '-result_metadata.score';
+const BY_LOWEST_QUERY  = 'result_metadata.score';
+const BY_OLDEST_QUERY  = 'date';
+const BY_NEWEST_QUERY  = '-date';
+const BY_BEST_QUERY    = '-enriched_text.sentiment.document.score';
+const BY_WORST_QUERY   = 'enriched_text.sentiment.document.score';
+
 // filter types and strings to use
-const filterTypes = [ 
-  { key: ENTITIY_FILTER,  value: ENTITIY_FILTER, text: 'Entities'}, 
+const filterTypes = [
+  { key: ENTITIY_FILTER,  value: ENTITIY_FILTER, text: 'Entities'},
   { key: CATEGORY_FILTER, value: CATEGORY_FILTER, text: 'Categories'},
   { key: CONCEPT_FILTER,  value: CONCEPT_FILTER, text: 'Concepts'},
   { key: KEYWORD_FILTER,  value: KEYWORD_FILTER, text: 'Keywords'} ];
 
+// sort types and strings to use
+const sortTypes = [
+  { key: BY_HIGHEST, value: BY_HIGHEST_QUERY, text: 'Highest Score'},
+  { key: BY_LOWEST,  value: BY_LOWEST_QUERY,  text: 'Lowest Score'},
+  { key: BY_NEWEST,  value: BY_NEWEST_QUERY,  text: 'Newest First'},
+  { key: BY_OLDEST,  value: BY_OLDEST_QUERY,  text: 'Oldest First'},
+  { key: BY_BEST,    value: BY_BEST_QUERY,    text: 'Highest Rated'},
+  { key: BY_WORST,   value: BY_WORST_QUERY,   text: 'Lowest Rated'} ];
 
 module.exports = {
   // parseData,
@@ -78,5 +101,18 @@ module.exports = {
   KEYWORD_FILTER,
   SENTIMENT_TERM_ITEM,
   TRENDING_TERM_ITEM,
-  filterTypes
+  BY_HIGHEST,
+  BY_LOWEST,
+  BY_OLDEST,
+  BY_NEWEST,
+  BY_BEST,
+  BY_WORST,
+  BY_HIGHEST_QUERY,
+  BY_LOWEST_QUERY,
+  BY_OLDEST_QUERY,
+  BY_NEWEST_QUERY,
+  BY_BEST_QUERY,
+  BY_WORST_QUERY,
+  filterTypes,
+  sortTypes
 };

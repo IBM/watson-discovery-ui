@@ -38,6 +38,7 @@
     "semantic-ui": "^2.2.13",
     "semantic-ui-css": "^2.2.12",
     "semantic-ui-react": "^0.75.0",
+    "sort-by": "^1.2.0",
     "uglifyify": "^3.0.4",
     "vcap_services": "^0.2.0",
     "watson-developer-cloud": "^2.42.0"

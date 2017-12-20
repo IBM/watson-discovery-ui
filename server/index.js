@@ -105,7 +105,7 @@ function createServer(results) {
 
   // handles search request from search bar
   server.get('/api/search', (req, res) => {
-    const { query, filters, count, returnPassages, queryType } = req.query;
+    const { query, filters, count, returnPassages, sort, queryType } = req.query;
     var params = {};
 
     console.log('In /api/search: query = ' + query);
@@ -121,8 +121,10 @@ function createServer(results) {
     if (filters) {
       params.filter = filters;
     }
+
     params.count = count;
     params.passages = returnPassages;
+    params.sort = sort;
     
     var searchParams = queryBuilder.search(params);
     discovery.query(searchParams)
@@ -144,7 +146,7 @@ function createServer(results) {
       count: 5000,
       returnPassages: false,
       queryType: 'natural_language_query'
-     });
+    });
     const fullUrl = req.protocol + '://' + req.get('host');
 
     console.log('In /:searchQuery: query = ' + qs);
@@ -189,7 +191,7 @@ function createServer(results) {
     console.log('In /*');
 
     // const util = require('util');
-    console.log("++++++++++++ DISCO RESULTS ++++++++++++++++++++");
+    //console.log('++++++++++++ DISCO RESULTS ++++++++++++++++++++');
     // console.log(util.inspect(results, false, null));
 
     // add up totals for the sentiment of reviews

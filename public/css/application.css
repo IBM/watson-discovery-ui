@@ -682,3 +682,11 @@ div.matches-pagination-bar {
   display: flex;
   justify-content: center;
 }
+
+div.ui.mini.statistics {
+  display: inline-block;
+}
+
+div.ui.compact.sort-dropdown.menu {
+  float: right;
+}

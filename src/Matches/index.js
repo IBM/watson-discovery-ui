@@ -16,7 +16,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Header, Container, List, Label } from 'semantic-ui-react';
+import { Container, List, Label } from 'semantic-ui-react';
 
 /**
  * This object renders the results of the search query on the web page. 

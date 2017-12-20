@@ -43,7 +43,8 @@ const WatsonDiscoServer = new Promise((resolve, reject) => {
       console.log('Initial Search Query at start-up');
       const params = queryBuilder.search({ 
         natural_language_query: '',
-        count: 5000
+        count: 5000,
+        passages: false
       });
       return new Promise((resolve, reject) => {
         discovery.query(params)
@@ -121,6 +122,7 @@ function createServer(results) {
       params.filter = filters;
     }
     params.count = count;
+    params.passages = returnPassages;
     
     var searchParams = queryBuilder.search(params);
     discovery.query(searchParams)
@@ -140,6 +142,7 @@ function createServer(results) {
     const qs = queryString.stringify({ 
       query: searchQuery,
       count: 5000,
+      returnPassages: false,
       queryType: 'natural_language_query'
      });
     const fullUrl = req.protocol + '://' + req.get('host');
@@ -155,6 +158,9 @@ function createServer(results) {
         }
       })
       .then(json => {
+        // add up totals for the sentiment of reviews
+        var totals = getTotals(json);
+
         res.render('index',
           {
             entities: json,
@@ -164,6 +170,9 @@ function createServer(results) {
             data: json,
             searchQuery,
             numMatches: json.matching_results,
+            numPositive: totals.numPositive,
+            numNeutral: totals.numNeutral,
+            numNegative: totals.numNegative,
             error: null
           }
         );
@@ -180,22 +189,11 @@ function createServer(results) {
     console.log('In /*');
 
     // const util = require('util');
-    // console.log("++++++++++++ DISCO RESULTS ++++++++++++++++++++");
+    console.log("++++++++++++ DISCO RESULTS ++++++++++++++++++++");
     // console.log(util.inspect(results, false, null));
 
     // add up totals for the sentiment of reviews
-    var numPositive = 0;
-    var numNegative = 0;
-    var numNeutral = 0;
-    results.results.forEach(function (result) {
-      if (result.enriched_text.sentiment.document.label === 'positive') {
-        numPositive = numPositive + 1;
-      } else if (result.enriched_text.sentiment.document.label === 'negative') {
-        numNegative = numNegative + 1;
-      } else if (result.enriched_text.sentiment.document.label === 'neutral') {
-        numNeutral = numNeutral + 1;
-      }
-    });
+    var totals = getTotals(results);
 
     res.render('index', { data: results, 
       entities: results,
@@ -203,13 +201,41 @@ function createServer(results) {
       concepts: results,
       keywords: results,
       numMatches: results.matching_results,
-      numPositive: numPositive,
-      numNeutral: numNeutral,
-      numNegative: numNegative
+      numPositive: totals.numPositive,
+      numNeutral: totals.numNeutral,
+      numNegative: totals.numNegative
     });
   });
 
   return server;
+}
+
+/**
+ * getTotals - add up sentiment types from all result items.
+ */
+function getTotals(data) {
+  var totals = {
+    numPositive: 0,
+    numNegative: 0,
+    numNeutral: 0
+  };
+
+  data.results.forEach(function (result) {
+    if (result.enriched_text.sentiment.document.label === 'positive') {
+      totals.numPositive = totals.numPositive + 1;
+    } else if (result.enriched_text.sentiment.document.label === 'negative') {
+      totals.numNegative = totals.numNegative + 1;
+    } else if (result.enriched_text.sentiment.document.label === 'neutral') {
+      totals.numNeutral = totals.numNeutral + 1;
+    }
+  });
+
+  // console.log('numMatches: ' + data.matching_results);
+  // console.log('numPositive: ' + totals.numPositive);
+  // console.log('numNegative: ' + totals.numNegative);
+  // console.log('numNeutral: ' + totals.numNeutral);
+
+  return totals;
 }
 
 module.exports = WatsonDiscoServer;

@@ -103,7 +103,7 @@ export default class SearchField extends React.Component {
           </Grid.Row>
           <Grid.Row>
             <Checkbox 
-              label='Return Passages'
+              label='Passage Search'
               checked={ returnPassages }
               onChange={this.toggleCheckbox.bind(this, 'returnPassages')}
             />

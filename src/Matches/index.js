@@ -16,7 +16,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Container, List, Label } from 'semantic-ui-react';
+import { Header, Container, List, Label } from 'semantic-ui-react';
 
 /**
  * This object renders the results of the search query on the web page. 
@@ -31,10 +31,13 @@ const Match = props => (
       { props.text }
     </List.Content>
     <List.Content>
-      Date:  { props.date }
+      Score: { props.score }
     </List.Content>
     <List.Content>
-      Sentiment:  { props.sentiment }
+      Date: { props.date }
+    </List.Content>
+    <List.Content>
+      Sentiment: { props.sentiment }
     </List.Content>
   </List.Item>
 );
@@ -44,6 +47,7 @@ Match.propTypes = {
   title: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
+  score: PropTypes.string.isRequired,
   sentiment: PropTypes.object.isRequired
 };
 
@@ -57,6 +61,7 @@ const Matches = props => (
               key={ item.id }
               title={ item.title ? item.title : 'No Title' }
               text={ item.text ? item.text : 'No Description' }
+              score={ (item.result_metadata.score).toFixed(4) }
               date={ item.date }
               sentiment={ getSentiment(item) }
             />)

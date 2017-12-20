@@ -188,7 +188,7 @@ export default class TrendChart extends React.Component {
             options={ utils.filterTypes }
           />
         </Menu>
-        <Menu compact floated={true}>
+        <Menu  className='term-menu' compact floated={true}>
           <Dropdown 
             item
             scrolling

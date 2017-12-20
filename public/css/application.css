@@ -666,8 +666,8 @@ ui celled grid search-grid style {
   width: 250px;
 } */
 
-div.ui.compact.floated.menu style {
-  margin-left: 20px;
+div.ui.compact.floated.term-menu.menu {
+  margin-left: 8px;
 }
 
 div.matches-pagination-bar {

@@ -42,13 +42,9 @@ class Main extends React.Component {
     const { 
       // query data
       entities, 
-      selectedEntities,
       categories, 
-      selectedCategories,
       concepts, 
-      selectedConcepts,
       keywords,
-      selectedKeywords,
       data,
       numMatches,
       numPositive,
@@ -60,6 +56,11 @@ class Main extends React.Component {
       queryType,
       returnPassages,
       limitResults,
+      // for filters
+      selectedEntities,
+      selectedCategories,
+      selectedConcepts,
+      selectedKeywords,
       // matches panel
       currentPage,
       // tag cloud
@@ -76,13 +77,9 @@ class Main extends React.Component {
     this.state = {
       // query data
       entities: entities && parseEntities(entities),
-      selectedEntities: selectedEntities || new Set(),
       categories: categories && parseCategories(categories),
-      selectedCategories: selectedCategories || new Set(),
       concepts: concepts && parseConcepts(concepts),
-      selectedConcepts: selectedConcepts || new Set(),
       keywords: keywords && parseKeywords(keywords),
-      selectedKeywords: selectedKeywords || new Set(),
       data: data && parseData(data),
       numMatches: numMatches || 0,
       numPositive: numPositive || 0,
@@ -95,6 +92,11 @@ class Main extends React.Component {
       queryType: queryType || utils.QUERY_NATURAL_LANGUAGE,
       returnPassages: returnPassages || false,
       limitResults: limitResults || false,
+      // used by filters
+      selectedEntities: selectedEntities || new Set(),
+      selectedCategories: selectedCategories || new Set(),
+      selectedConcepts: selectedConcepts || new Set(),
+      selectedKeywords: selectedKeywords || new Set(),
       // tag cloud
       tagCloudType: tagCloudType || utils.ENTITIY_FILTER,
       // trending chart

@@ -28,7 +28,7 @@ import KeywordsFilter from './KeywordsFilter';
 import TagCloudRegion from './TagCloudRegion';
 import TrendChart from './TrendChart';
 import SentimentChart from './SentimentChart';
-import { Grid, Dimmer, Button, Divider, Loader, Accordion, Icon, Header, Statistic } from 'semantic-ui-react';
+import { Grid, Dimmer, Button, Menu, Dropdown, Divider, Loader, Accordion, Icon, Header, Statistic } from 'semantic-ui-react';
 const utils = require('./utils');
 
 /**
@@ -56,6 +56,7 @@ class Main extends React.Component {
       queryType,
       returnPassages,
       limitResults,
+      sortOrder,
       // for filters
       selectedEntities,
       selectedCategories,
@@ -92,6 +93,7 @@ class Main extends React.Component {
       queryType: queryType || utils.QUERY_NATURAL_LANGUAGE,
       returnPassages: returnPassages || false,
       limitResults: limitResults || false,
+      sortOrder: sortOrder || utils.BY_HIGHEST_QUERY,
       // used by filters
       selectedEntities: selectedEntities || new Set(),
       selectedCategories: selectedCategories || new Set(),
@@ -194,6 +196,29 @@ class Main extends React.Component {
   sentimentTermChanged(data) {
     const { term } = data;
     this.setState({ sentimentTerm: term });
+  }
+
+  /**
+   * sortOrderChange - (callback function)
+   * User has changed how to sort the matches (defaut
+   * is by highest score first). Save the value for
+   * all subsequent queries to discovery.
+   */
+  sortOrderChange(event, selection) {
+    const { sortOrder, data } = this.state;
+    if (sortOrder != selection.value) {
+      // data.results = this.sortData(selection.value, data.results);
+
+      var sortBy = require('sort-by');
+      var sortedData = data.results.slice();
+      sortedData.sort(sortBy(selection.value));
+      data.results = sortedData;
+
+      this.setState({
+        data: data,
+        sortOrder: selection.value
+      });
+    }
   }
 
   /**
@@ -364,7 +389,8 @@ class Main extends React.Component {
       selectedKeywords,
       queryType,
       returnPassages,
-      limitResults
+      limitResults,
+      sortOrder
     } = this.state;
 
     // clear filters if this a new text search
@@ -394,6 +420,7 @@ class Main extends React.Component {
       query: searchQuery,
       filters: this.buildFilterString(),
       count: (limitResults == true ? 100 : 5000),
+      sort: sortOrder,
       returnPassages: returnPassages,
       queryType: (queryType === utils.QUERY_NATURAL_LANGUAGE ? 
         'natural_language_query' : 'query:'),
@@ -415,7 +442,7 @@ class Main extends React.Component {
       var numNeutral = 0;
 
       // const util = require('util');
-      console.log("+++ DISCO RESULTS +++");
+      console.log('+++ DISCO RESULTS +++');
       // console.log(util.inspect(data.results, false, null));
       console.log('numMatches: ' + json.matching_results);
       
@@ -659,7 +686,7 @@ class Main extends React.Component {
             selectedEntities, selectedCategories, selectedConcepts, selectedKeywords,
             numMatches, numPositive, numNeutral, numNegative,
             tagCloudType, trendData, trendLoading, trendError, trendTerm,
-            queryType, returnPassages, limitResults,
+            queryType, returnPassages, limitResults, sortOrder,
             sentimentTerm } = this.state;
 
     // used for filter accordions
@@ -814,10 +841,20 @@ class Main extends React.Component {
                             Matches
                           </Header.Content>
                         </Header>
-                        <Statistic.Group
-                          size='mini'
-                          items={ stat_items }
-                        />
+                          <Statistic.Group
+                            size='mini'
+                            items={ stat_items }
+                          />
+                          <Menu compact className="sort-dropdown">
+                            <Icon name='sort' size='large' bordered inverted />
+                            <Dropdown 
+                              item
+                              onChange={ this.sortOrderChange.bind(this) }
+                              value={ sortOrder }
+                              options={ utils.sortTypes }
+                            />
+                          </Menu>
+
                       </div>
                       <div>
                         {this.getMatches()}
@@ -961,6 +998,7 @@ Main.propTypes = {
   queryType: PropTypes.string,
   returnPassages: PropTypes.bool,
   limitResults: PropTypes.bool,
+  sortOrder: PropTypes.string,
   trendData: PropTypes.object,
   trendError: PropTypes.object,
   trendTerm: PropTypes.string,

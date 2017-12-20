@@ -666,6 +666,14 @@ ui celled grid search-grid style {
   width: 250px;
 } */
 
+div.ui.celled.grid.search-grid {
+  margin-top: 0px;
+}
+
+div.ui.icon.input.searchinput {
+  width: 500px;
+}
+
 div.ui.compact.floated.term-menu.menu {
   margin-left: 8px;
 }

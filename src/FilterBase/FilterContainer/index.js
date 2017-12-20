@@ -62,6 +62,37 @@ class FilterContainer extends React.Component {
   }
 
   /**
+   * removeLabelIfExists - Remove label is it exists in the list of 
+   * currently selected items. Note that the list contains the label
+   * name along with a count, like 'foo (14)'. If it was originally
+   * selected when it had that count, the count may change due to other
+   * filters being applied. In this case, we need to now the 'foo (14)'
+   * is the same as 'foo (3)'. 
+   * Return true if the label was found and removed from the list.
+   */
+  removeLabelIfExists(selectedItems, label) {
+    // handle easy cases first, like no selected items or perfect match found
+    if (selectedItems.size < 1) {
+      return false;
+    }
+    if (selectedItems.has(label)) {
+      selectedItems.delete(label);
+      return true;
+    }
+
+    // now we have to handle the case where the label has just changed the 
+    // number of matches it has, i.e. 'test (3)' should equal 'test (1)'
+    for (let item of selectedItems) {
+      if (item.split('(')[0] === label.split('(')[0]) {
+        selectedItems.delete(item);
+        return true;
+      }
+    }
+    // label does not exist in list
+    return false;
+  }
+
+  /**
    * toggleCheckbox - Keep track of which filter items are
    * currently selected. Update 'props' so that this data
    * is saved with the parent. 
@@ -69,9 +100,7 @@ class FilterContainer extends React.Component {
   toggleCheckbox(label) {
     const selectedItems = this.getSelectedCollection();
 
-    if (selectedItems.has(label)) {
-      selectedItems.delete(label);
-    } else {
+    if (! this.removeLabelIfExists(selectedItems, label)) {
       selectedItems.add(label);
     }
 

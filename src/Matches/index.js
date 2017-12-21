@@ -61,7 +61,7 @@ const Matches = props => (
               key={ item.id }
               title={ item.title ? item.title : 'No Title' }
               text={ item.text ? item.text : 'No Description' }
-              score={ (item.result_metadata.score).toFixed(4) }
+              score={ getScore(item) }
               date={ item.date }
               sentiment={ getSentiment(item) }
             />)
@@ -75,6 +75,18 @@ const Matches = props => (
 // type check to ensure we are called correctly
 Matches.propTypes = {
   matches: PropTypes.arrayOf(PropTypes.object).isRequired
+};
+
+/**
+ * getScore - round up to 4 decimal places.
+ */
+const getScore = item => {
+  var score = 0.0;
+
+  if (item.result_metadata.score) {
+    score = (item.result_metadata.score).toFixed(4);
+  }
+  return score;
 };
 
 /**

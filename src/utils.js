@@ -47,7 +47,7 @@ const CONCEPT_DATA_INDEX = 2;
 const KEYWORD_DATA_INDEX = 3;
 
 // keys/values for menu items
-const ENTITIY_FILTER  = 'EN';
+const ENTITY_FILTER   = 'EN';
 const CATEGORY_FILTER = 'CA';
 const CONCEPT_FILTER  = 'CO';
 const KEYWORD_FILTER  = 'KW';
@@ -71,10 +71,10 @@ const BY_WORST_QUERY   = 'enriched_text.sentiment.document.score';
 
 // filter types and strings to use
 const filterTypes = [
-  { key: ENTITIY_FILTER,  value: ENTITIY_FILTER, text: 'Entities'},
+  { key: ENTITY_FILTER,   value: ENTITY_FILTER,   text: 'Entities'},
   { key: CATEGORY_FILTER, value: CATEGORY_FILTER, text: 'Categories'},
-  { key: CONCEPT_FILTER,  value: CONCEPT_FILTER, text: 'Concepts'},
-  { key: KEYWORD_FILTER,  value: KEYWORD_FILTER, text: 'Keywords'} ];
+  { key: CONCEPT_FILTER,  value: CONCEPT_FILTER,  text: 'Concepts'},
+  { key: KEYWORD_FILTER,  value: KEYWORD_FILTER,  text: 'Keywords'} ];
 
 // sort types and strings to use
 const sortTypes = [
@@ -95,7 +95,7 @@ module.exports = {
   CATEGORY_DATA_INDEX,
   CONCEPT_DATA_INDEX,
   KEYWORD_DATA_INDEX,
-  ENTITIY_FILTER,
+  ENTITY_FILTER,
   CATEGORY_FILTER,
   CONCEPT_FILTER,
   KEYWORD_FILTER,

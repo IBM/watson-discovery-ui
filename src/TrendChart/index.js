@@ -43,7 +43,7 @@ export default class TrendChart extends React.Component {
       categories: this.props.categories,
       concepts: this.props.concepts,
       keywords: this.props.keywords,
-      chartType: utils.ENTITIY_FILTER,
+      chartType: utils.ENTITY_FILTER,
       termValue: utils.TRENDING_TERM_ITEM
     };
   }
@@ -122,7 +122,7 @@ export default class TrendChart extends React.Component {
     var collection;
 
     // select based on the filter type
-    if (chartType === utils.ENTITIY_FILTER) {
+    if (chartType === utils.ENTITY_FILTER) {
       collection = entities.results;
     } else if (chartType === utils.CATEGORY_FILTER) {
       collection = categories.results;
@@ -184,7 +184,7 @@ export default class TrendChart extends React.Component {
           <Dropdown 
             item
             onChange={ this.filterTypeChange.bind(this) }
-            defaultValue={ utils.ENTITIY_FILTER }
+            defaultValue={ utils.ENTITY_FILTER }
             options={ utils.filterTypes }
           />
         </Menu>

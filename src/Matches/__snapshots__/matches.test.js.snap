@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div>
+  <div
+    className="ui left aligned container"
+  >
+    <div
+      className="matches--list"
+    >
+      <div
+        className="ui divided middle aligned list"
+        role="list"
+      >
+        <div
+          className="item"
+          data-value={undefined}
+          onClick={[Function]}
+          role="listitem"
+        >
+          <div
+            className="content"
+          >
+            <div
+              className="header"
+            >
+              test title
+            </div>
+            I had a great time
+          </div>
+          <div
+            className="content"
+          >
+            Score: 
+            1.0000
+          </div>
+          <div
+            className="content"
+          >
+            Date: 
+            2014-11-01
+          </div>
+          <div
+            className="content"
+          >
+            Sentiment: 
+            <a
+              className="ui green tiny tag label sentiment-value"
+              onClick={[Function]}
+            >
+              0.76
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

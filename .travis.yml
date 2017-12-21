@@ -3,7 +3,7 @@ dist: trusty
 sudo: required
 node_js: 6
 script:
-  - ./.travis_script.sh
+  npm test && npm run lint
 cache:
   directories:
   - node_modules

@@ -443,7 +443,7 @@ class Main extends React.Component {
 
       // const util = require('util');
       console.log('+++ DISCO RESULTS +++');
-      // console.log(util.inspect(data.results, false, null));
+      // console.log(util.inspect(data, false, null));
       console.log('numMatches: ' + json.matching_results);
       
       // add up totals for the sentiment of reviews
@@ -610,9 +610,9 @@ class Main extends React.Component {
   }
 
   /**
-   * getEntities - return entities filter object to be rendered.
+   * getEntitiesFilter - return entities filter object to be rendered.
    */
-  getEntities() {
+  getEntitiesFilter() {
     const { entities, selectedEntities } = this.state;
     if (!entities) {
       return null;
@@ -627,9 +627,9 @@ class Main extends React.Component {
   }
   
   /**
-   * getCategories - return categories filter object to be rendered.
+   * getCategoriesFilter - return categories filter object to be rendered.
    */
-  getCategories() {
+  getCategoriesFilter() {
     const { categories, selectedCategories } = this.state;
     if (!categories) {
       return null;
@@ -644,9 +644,9 @@ class Main extends React.Component {
   }
 
   /**
-   * getConcepts - return concepts filter object to be rendered.
+   * getConceptsFilter - return concepts filter object to be rendered.
    */
-  getConcepts() {
+  getConceptsFilter() {
     const { concepts, selectedConcepts } = this.state;
     if (!concepts) {
       return null;
@@ -661,9 +661,9 @@ class Main extends React.Component {
   }
 
   /**
-   * getKeywords - return keywords filter object to be rendered.
+   * getKeywordsFilter - return keywords filter object to be rendered.
    */
-  getKeywords() {
+  getKeywordsFilter() {
     const { keywords, selectedKeywords } = this.state;
     if (!keywords) {
       return null;
@@ -760,7 +760,7 @@ class Main extends React.Component {
                 Entities
               </Accordion.Title>
               <Accordion.Content active={activeFilterIndex == utils.ENTITY_DATA_INDEX}>
-                {this.getEntities()}
+                {this.getEntitiesFilter()}
               </Accordion.Content>
             </Accordion>
             <Accordion styled>
@@ -772,7 +772,7 @@ class Main extends React.Component {
                 Categories
               </Accordion.Title>
               <Accordion.Content active={activeFilterIndex == utils.CATEGORY_DATA_INDEX}>
-                {this.getCategories()}
+                {this.getCategoriesFilter()}
               </Accordion.Content>
             </Accordion>
             <Accordion styled>
@@ -784,7 +784,7 @@ class Main extends React.Component {
                 Concepts
               </Accordion.Title>
               <Accordion.Content active={activeFilterIndex == utils.CONCEPT_DATA_INDEX}>
-                {this.getConcepts()}
+                {this.getConceptsFilter()}
               </Accordion.Content>
             </Accordion>
             <Accordion styled>
@@ -796,7 +796,7 @@ class Main extends React.Component {
                 Keywords
               </Accordion.Title>
               <Accordion.Content active={activeFilterIndex == utils.KEYWORD_DATA_INDEX}>
-                {this.getKeywords()}
+                {this.getKeywordsFilter()}
               </Accordion.Content>
             </Accordion>
             <Divider hidden/>

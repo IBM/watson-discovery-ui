@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="ui grid search-field-grid"
+>
+  <div
+    className="center aligned middle aligned twelve wide column"
+  >
+    <h1
+      className="ui center aligned header"
+    >
+      Airbnb Review Data for Ausin, TX
+    </h1>
+    <div
+      className="ui icon input searchinput"
+    >
+      <input
+        defaultValue="test"
+        disabled={undefined}
+        onChange={[Function]}
+        onKeyPress={[Function]}
+        placeholder="Enter search string..."
+        tabIndex={undefined}
+        type="text"
+      />
+      <i
+        aria-hidden="true"
+        className="search icon"
+      />
+    </div>
+  </div>
+  <div
+    className="left aligned top aligned four wide column"
+  >
+    <div
+      className="row"
+    >
+      <div
+        className="ui checkbox"
+        onChange={[Function]}
+        onClick={[Function]}
+        onMouseDown={[Function]}
+      >
+        <input
+          checked={false}
+          className="hidden"
+          name={undefined}
+          readOnly={true}
+          tabIndex={0}
+          type="checkbox"
+          value={undefined}
+        />
+        <label>
+          Natural Language Query
+        </label>
+      </div>
+    </div>
+    <div
+      className="row"
+    >
+      <div
+        className="ui checkbox"
+        onChange={[Function]}
+        onClick={[Function]}
+        onMouseDown={[Function]}
+      >
+        <input
+          checked={false}
+          className="hidden"
+          name={undefined}
+          readOnly={true}
+          tabIndex={0}
+          type="checkbox"
+          value={undefined}
+        />
+        <label>
+          Passage Search
+        </label>
+      </div>
+    </div>
+    <div
+      className="row"
+    >
+      <div
+        className="ui checked checkbox"
+        onChange={[Function]}
+        onClick={[Function]}
+        onMouseDown={[Function]}
+      >
+        <input
+          checked={true}
+          className="hidden"
+          name={undefined}
+          readOnly={true}
+          tabIndex={0}
+          type="checkbox"
+          value={undefined}
+        />
+        <label>
+          Limit to 100 Results
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+`;

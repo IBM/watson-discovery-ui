@@ -15,7 +15,6 @@
  */
 
 import queryBuilder from './query-builder';
-import moment from 'moment';
 
 beforeEach(() => {
   queryBuilder.setCollectionId('collection');
@@ -24,28 +23,42 @@ beforeEach(() => {
 
 describe('Query builder returns params for discovery service', () => {
   test('when opts are NOT passed', () => {
-    expect(queryBuilder.trending()).toEqual({
+    expect(queryBuilder.search()).toEqual({
       environment_id: 'environment',
       collection_id: 'collection',
-      return: 'enriched_title.entities.text',
-      aggregation: [
-        'term(enriched_title.entities.text,count:20).top_hits(1)'
-      ],
-      filter: `crawl_date>${moment().subtract(24,'h').toISOString().slice(0, -5)}`
+      return: 'id,title,date,text,result_metadata,' + 
+        'enriched_text.sentiment.document.label,' +
+        'enriched_text.sentiment.document.score',
+      aggregation: '[term(enriched_text.entities.text).term(enriched_text.sentiment.document.label),' +
+      'term(enriched_text.categories.label).term(enriched_text.sentiment.document.label),' +
+      'term(enriched_text.concepts.text).term(enriched_text.sentiment.document.label),' +
+      'term(enriched_text.keywords.text).term(enriched_text.sentiment.document.label)]'
     });
   });
 
   test('when opts are passed', () => {
-    expect(queryBuilder.trending({
-      filter: 'enriched_text.categories.label:"test"'
+    expect(queryBuilder.search({
+      filter: 'enriched_text.categories.label::"test"',
+      count: 500,
+      natural_language_query: 'test',
+      passages: false,
+      sort: 'enriched_text.sentiment.document.score'
     })).toEqual({
       environment_id: 'environment',
       collection_id: 'collection',
-      return: 'enriched_title.entities.text',
-      aggregation: [
-        'term(enriched_title.entities.text,count:20).top_hits(1)'
-      ],
-      filter: `enriched_text.categories.label:"test",crawl_date>${moment().subtract(24,'h').toISOString().slice(0, -5)}`
+      return: 'id,title,date,text,result_metadata,' + 
+        'enriched_text.sentiment.document.label,' +
+        'enriched_text.sentiment.document.score',
+      aggregation: 
+        '[term(enriched_text.entities.text).term(enriched_text.sentiment.document.label),' +
+        'term(enriched_text.categories.label).term(enriched_text.sentiment.document.label),' +
+        'term(enriched_text.concepts.text).term(enriched_text.sentiment.document.label),' +
+        'term(enriched_text.keywords.text).term(enriched_text.sentiment.document.label)]',
+      natural_language_query: 'test',
+      filter: 'enriched_text.categories.label::"test"',
+      count: 500,
+      passages: false,
+      sort: 'enriched_text.sentiment.document.score'
     });
   });
 });

@@ -40,7 +40,7 @@ export default class SentimentChart extends React.Component {
       categories: this.props.categories,
       concepts: this.props.concepts,
       keywords: this.props.keywords,
-      chartType: utils.ENTITIY_FILTER,
+      chartType: utils.ENTITY_FILTER,
       termValue: utils.SENTIMENT_TERM_ITEM
     };
 
@@ -73,16 +73,18 @@ export default class SentimentChart extends React.Component {
     this.totals.neutralNum = 0;
     this.totals.negativeNum = 0;
 
-    for (var item of collection.results) {
-      if (termValue === '' || termValue === utils.SENTIMENT_TERM_ITEM || termValue === item.key) {
-        this.totals.matches = this.totals.matches + item.matching_results;
-        for (var sentiment of item.aggregations[0].results) {
-          if (sentiment.key === 'positive') {
-            this.totals.positiveNum = this.totals.positiveNum + sentiment.matching_results;
-          } else if (sentiment.key === 'neutral') {
-            this.totals.neutralNum = this.totals.neutralNum + sentiment.matching_results;
-          } else if (sentiment.key === 'negative') {
-            this.totals.negativeNum = this.totals.negativeNum + sentiment.matching_results;
+    if (collection.results) {
+      for (var item of collection.results) {
+        if (termValue === '' || termValue === utils.SENTIMENT_TERM_ITEM || termValue === item.key) {
+          this.totals.matches = this.totals.matches + item.matching_results;
+          for (var sentiment of item.aggregations[0].results) {
+            if (sentiment.key === 'positive') {
+              this.totals.positiveNum = this.totals.positiveNum + sentiment.matching_results;
+            } else if (sentiment.key === 'neutral') {
+              this.totals.neutralNum = this.totals.neutralNum + sentiment.matching_results;
+            } else if (sentiment.key === 'negative') {
+              this.totals.negativeNum = this.totals.negativeNum + sentiment.matching_results;
+            }
           }
         }
       }
@@ -103,7 +105,7 @@ export default class SentimentChart extends React.Component {
       keywords
     } = this.state;
     
-    if (chartType === utils.ENTITIY_FILTER) {
+    if (chartType === utils.ENTITY_FILTER) {
       this.getTotals(entities, termValue);
     } else if (chartType === utils.CATEGORY_FILTER) {
       this.getTotals(categories, termValue);
@@ -175,7 +177,7 @@ export default class SentimentChart extends React.Component {
     var collection;
 
     // select based on the filter type
-    if (chartType === utils.ENTITIY_FILTER) {
+    if (chartType === utils.ENTITY_FILTER) {
       collection = entities.results;
     } else if (chartType === utils.CATEGORY_FILTER) {
       collection = categories.results;
@@ -252,7 +254,7 @@ export default class SentimentChart extends React.Component {
           <Dropdown 
             item
             onChange={ this.filterTypeChange.bind(this) }
-            defaultValue={ utils.ENTITIY_FILTER }
+            defaultValue={ utils.ENTITY_FILTER }
             options={ utils.filterTypes }
           />
         </Menu>

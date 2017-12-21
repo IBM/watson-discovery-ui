@@ -1,0 +1,9 @@
+language: node_js
+dist: trusty
+sudo: required
+node_js: 6
+script:
+  - ./.travis_script.sh
+cache:
+  directories:
+  - node_modules

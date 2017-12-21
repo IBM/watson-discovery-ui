@@ -82,7 +82,7 @@ and give the data collection a unique name.
 
 IMPORTANT! Before loading anydata, define a new "Configuration" and add 'Keyword" extraction to enrichments.
 
-Under `Add data to this collection` use `Drag and drop your documents here or browse from computer` to seed the content with the json files extracted from `data/austin-2015-11-07-reviews.csv`.
+Under `Add data to this collection` use `Drag and drop your documents here or browse from computer` to seed the content with the json files extracted from `data/airbnb/austin-airbnb-review-data/`.
 
 ![Upload data to collection](doc/source/images/upload-data.gif)
 

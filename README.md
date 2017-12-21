@@ -1,69 +1,125 @@
-Cognitive Discovery UI
+# Develop a fully featured web app built on the Watson Discovery Service
 
-Code pattern to provide working example of:
-- Utilizing Watson Discovery service built with external data
-- Node.js API server using the Express web framework
-- HTML frontend written in React with React and semantic-ui-react components
+In this Code Pattern, we walk you through a working example of a web application that queries and manipulates data from the Watson Discovery Service. This web app contains multiple components that can provide you with a blueprint to follow when you develop your own applications. 
+
+The main benefit of using the Watson Discovery Service is to take advantage of its powerful enrichment process that provides additional cognitive insights into your data. This app provides examples of how to showcase these enrichments through the use of filters, lists and graphs. The key enrichments that we will focus on are:
+
+* Entities
+* Categories
+* Concepts
+* Keywords
+* Sentiment
+
+For this Code Pattern, we will be using data that contains reviews of Airbnb properties located in the Austin, TX area. 
+
+![](doc/source/images/architecture.png)
+
+## Flow
+1. The Airbnb review json files are added to the Discovery collection.
+2. The user interacts with the backend server via the app UI. The frontend app UI uses React to render search results and can reuse all of the views that are used by the backend for server side rendering. The frontend is using semantic-ui-react components and is responsive.
+3. User input is processed and routed to the backend server, which is responsible for server side rendering of the views to be displayed on the browser. The backend server is written using express and uses express-react-views engine to render views written using React.
+4. The backend server sends user requests to the Watson Discovery Service. It acts as a proxy server, forwarding queries from the frontend to the Watson Discovery Service API while keeping sensitive API keys concealed from the user.
+
+## UI controls and associated actions
+
+Here is a rough sketch of the main UI screen, followed by a description of each UI component and their assoicated actions:
+
+![](doc/source/images/ui-panel.png)
+
+1. Search field and search parameters: Return results based on search criteria. Search parameters will effect how the user will enter values, how they will be displayed, and limit the number of matches.
+2. List Filters: Multiple drop-down lists of filters that are applied to the search resullts. Each drop down list contains entities, categories, concepts and keywords associated with the results. For each drop down filter item, the number of matches will also be displayed. If a user selects a filter item, a new search will be conducted and will update the results panel (#3). Filter items selected will also effect what is shown in the tag cloud (#4).
+3. Search results and pagination menu: Shows a page of result items (e.g. 5 per page) and a pagination menu that allows user to scroll through pages of result items.
+4. Tag cloud filter: Similar to the list filters (#2) but in a different format. One set of filter items (either entities, categories, concepts or keywords) can be displayed at one time. User can select/deselect items in the cloud to turn on/off filters. Applied filters in both filter views (#2 and #4) will always be in sync.
+5. Trend chart: Chart to show the sentiment trend for a specific entity, category, concept, or keyword over time. The data will reflect the current matching result set.
+6. Sentiment chart; Donut chart that shows the total percentages of postive, neutral and negative reviews of selected entities, categories, concepts, or keywords. The data will reflect the current matching result set.
+
+## Included components
+* [Watson Discovery](https://www.ibm.com/watson/developercloud/discovery.html): A cognitive search and content analytics engine for applications to identify patterns, trends, and actionable insights.
+
+## Featured technologies
+* [Node.js](https://nodejs.org/): An open-source JavaScript run-time environment for executing server-side JavaScript code.
+* Express
+* React
+* SemanticUI React Components
+* ChartJS
+* Jest test framework
+
+# Watch the Video
+
+!!!! COMING
 
 # Steps
-## 1. Clone the repo
+
+## Run locally
+
+1. [Clone the repo](#1-clone-the-repo)
+2. [Create IBM Cloud services](#2-create-ibm-cloud-services)
+3. [Load the Discovery files](#3-load-the-discovery-files)
+4. [Configure credentials](#4-configure-credentials)
+5. [Run the application](#5-run-the-application)
+
+### 1. Clone the repo
 ```
 $ git clone https://github.com/rhagarty/disco-ui
 ```
-## 2. Create Watson Discovery collection
-## 3. Load collection with data files
 
-IMPORTANT! Before loading data, define a new "Configuration" and add 'Keyword" extraction to enrichments.
+### 2. Create IBM Cloud services
 
-Data represents reviews from AirBnB for rentals in New York City.
+Create the following services:
 
-Files can be found in [data/airbnb](data/airbnb)
+* [**Watson Discovery**](https://console.ng.bluemix.net/catalog/services/discovery)
 
-## 4. Configure credentials
+### 3. Load the Discovery files
+
+Launch the **Watson Discovery** tool. Create a **new data collection**
+and give the data collection a unique name.
+
+<p align="center">
+  <img width="600" src="doc/source/images/create-collection.png">
+</p>
+
+> Save the **environment_id** and **collection_id** for your `.env` file in the next step.
+
+IMPORTANT! Before loading anydata, define a new "Configuration" and add 'Keyword" extraction to enrichments.
+
+Under `Add data to this collection` use `Drag and drop your documents here or browse from computer` to seed the content with the json files extracted from `data/austin-2015-11-07-reviews.csv`.
+
+![Upload data to collection](doc/source/images/upload-data.gif)
+
+### 4. Configure credentials
 ```
 cp env.sample .env
 ```
-Edit the `.env` file with the necessary settings
+Edit the `.env` file with the necessary settings.
 
-## 5. Run the application
+#### `env.sample:`
+
 ```
-$ npm install
-$ npm start
+# Replace the credentials here with your own.
+# Rename this file to .env before starting the app.
+
+# Watson Discovery
+DISCOVERY_USERNAME=<add_discovery_username>
+DISCOVERY_PASSWORD=<add_discovery_password>
+DISCOVERY_ENVIRONMENT_ID=<add_discovery_environment>
+DISCOVERY_COLLECTION_ID=<add_discovery_collection>
+
+# Run locally on a non-default port (default is 3000)
+# PORT=3000
+
 ```
-Run the UI, by entering the following URL in your browser:
-```
-http://localhost:3000
-```
+
+### 5. Run the application
+1. Install [Node.js](https://nodejs.org/en/) runtime or NPM.
+1. Start the app by running `npm install`, followed by `npm start`.
+1. Access the UI by pointing your browser at `localhost:3000`.
+> Note: server host can be changed as required in app.js and `PORT` can be set in `.env`.
 
 # Sample UI layout
  
 ![](doc/source/images/sample-output.png)
 
-## UI controls and associated actions
-
-1. Search field and search parameters - return results based on search criteria. Search parameters will effect how the user will enter values, how they will be displayed, and limit the number of matches.
-2. Filter fields - Drop down lists of filters that can be applied to search resullts. Each drop down list contains entities/categories/concepts/keywords associated with results. For each drop down filter item, the number of matches will also be displayed. If a user selects a filter item, a new search will be conducted and will update the results panel (#3). Filter items selected will also effect what is shown in the tag cloud (#4).
-3. Search results and pagination menu - shows result items (e.g. 5 per page) and a pagination menu that allows user to scroll through pages of result items.
-4. Tag cloud - similar to the filter fields (#2) but in a different form. Associated drop down list will determine which filter items to display (default is 'entity'). User can select/deselect items in the cloud to turn on/off filters. Applied filters in both #2 and here should always be in sync.
-5. Trend chart - 
-6. Sentiment chart - donut chart that shows the total sentiment for search results. Associated drop down lists allow the user to show only those sentiment values for a filter type (default is 'entity'), or a specific filter value of a filter type.
-
-# TODO List:
-- ~~Add 'keyword' extraction to discovery collection and represent the data as a filter (i.e. same UI components found for entities, categories, and concepts).~~
-- ~~Add UI component to allow user to enter either strict `discovery langauge query` syntax (e.g. 'text:"new york"') or simple `natural langauge query' (default and already done).~~
-- ~~Add UI component to allow user to limit the number of matches to 100.~~
-- Add UI component to allow user to specify they would like matches displayed with `passages` for result descriptions (instead of just dump of text field).
-- ~~Add 'trending' graph to bottom left of web page. Graph will be independent of other UI components, and show sentiment trending of each of the filter options (entities, categories, concepts, and keywords).~~
-- Add 'Deploy to IBM Cloud' option. This includes the automation of loading discovery data.
-- Display sentiment value with each result.
-- Use arrow functions for callbacks to avoid having to 'bind(this)'.
-- Add unit tests.
-- Improve look and feel with CSS. This includes:
-  - Make column depth fixed size so data doesn't jump around on page. 
-  - Center pagination menu in 'matches' window.
-  - Eliminate space when pagination menu is not shown.
-  - Sentiment chart needs to default to "Term" when initally shown.
-  - ~~Change 'loading...' panel to white background to avoid flash when new search is conducted.~~
+# Troubleshooting
 
 # Privacy Notice
 

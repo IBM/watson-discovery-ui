@@ -15,7 +15,8 @@ Below is a general overview of the most important directories and files in the p
 ├── server # Contains code specific to the server
 │   ├── express.js # File that configures express
 │   ├── index.js # Configures the endpoint for Discovery API and create express server
-│   ├── query-builder.js # Helper file which helps generate the query params passed to Discovery API
+│   ├── query-builder.js # Helper file that generates the search query params passed to Discovery API
+│   ├── query-builder-trending.js # Helper file that generate the trending query params passed to Discovery API 
 │   └── watson-discovery-service.js # Helper file to promisify Waston SDK APIs
 ├── src # Views that get rendered by the server and the client bundle.js
 │   ├── index.js # HTML view that is rendered
@@ -26,6 +27,7 @@ Below is a general overview of the most important directories and files in the p
 │   ├── CategoriesFilter # Filter Component that contains Category items
 │   ├── ConceptsFilter # Filter Component that contains Concept items
 │   ├── EntitiesFilter # Filter Component that contains Entity items
+│   ├── KeywordsFilter # Filter Component that contains Keyword items
 │   ├── Matches # Component that display all search results
 │   ├── PaginationMenu # Component the displays a menu to page through search results
 │   ├── SearchField # Component that allows the user to specifiy the search string
@@ -34,4 +36,5 @@ Below is a general overview of the most important directories and files in the p
 │   ├── layouts # Layout for page
 │   │   └── default.js
 │   └── utils.js # Helper file containing utility functions shared in the project
+├── test # Jest test files
 ```

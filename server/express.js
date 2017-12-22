@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, '..', 'node_modules/semantic-ui/dist
 
 const isDev = (app.get('env') === 'development');
 console.log('isDev: ' + isDev);
-const searchBrowserifyier = expressBrowserify(path.resolve(__dirname, '..', 'public/js/bundle.js'), {
+const browserifier = expressBrowserify(path.resolve(__dirname, '..', 'public/js/bundle.js'), {
   watch: isDev,
   debug: isDev,
   extension: ['js'],
@@ -41,10 +41,10 @@ const searchBrowserifyier = expressBrowserify(path.resolve(__dirname, '..', 'pub
 });
 
 if (!isDev) {
-  searchBrowserifyier.browserify.transform('uglifyify', { global: true });
+  browserifier.browserify.transform('uglifyify', { global: true });
 }
 
 // Client Side Bundle route
-app.get('/js/bundle.js', searchBrowserifyier);
+app.get('/js/bundle.js', browserifier);
 
 module.exports = app;

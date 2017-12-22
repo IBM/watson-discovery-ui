@@ -15,15 +15,19 @@
  */
 
 import React from 'react';
-import PaginationMenu from '../PaginationMenu';
+import TagCloudRegion from '../src/TagCloudRegion';
 import renderer from 'react-test-renderer';
 
 it('renders correctly', () => {
   const tree = renderer
     .create(
-      <PaginationMenu 
-        numMatches={100} 
-        onPageChange={Function}
+      <TagCloudRegion 
+        entities={{Object}}
+        categories={{Object}}
+        concepts={{Object}}
+        keywords={{Object}}
+        tagCloudType={'test'}
+        onTagItemSelected={Function}
       />)
     .toJSON();
   expect(tree).toMatchSnapshot();

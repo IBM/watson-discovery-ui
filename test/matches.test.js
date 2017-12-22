@@ -15,7 +15,7 @@
  */
 
 import React from 'react';
-import Matches from '../Matches';
+import Matches from '../src/Matches';
 import renderer from 'react-test-renderer';
 
 var match = {

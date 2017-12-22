@@ -36,4 +36,5 @@ Below is a general overview of the most important directories and files in the p
 │   ├── layouts # Layout for page
 │   │   └── default.js
 │   └── utils.js # Helper file containing utility functions shared in the project
+├── test # Jest test files
 ```

@@ -51,7 +51,9 @@ exports[`renders correctly 1`] = `
           type="checkbox"
           value={undefined}
         />
-        <label>
+        <label
+          htmlFor={undefined}
+        >
           Natural Language Query
         </label>
       </div>
@@ -74,7 +76,9 @@ exports[`renders correctly 1`] = `
           type="checkbox"
           value={undefined}
         />
-        <label>
+        <label
+          htmlFor={undefined}
+        >
           Passage Search
         </label>
       </div>
@@ -97,7 +101,9 @@ exports[`renders correctly 1`] = `
           type="checkbox"
           value={undefined}
         />
-        <label>
+        <label
+          htmlFor={undefined}
+        >
           Limit to 100 Results
         </label>
       </div>

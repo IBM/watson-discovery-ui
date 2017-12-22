@@ -17,8 +17,8 @@ lib-cov
 # Coverage directory used by tools like istanbul
 coverage
 
-# nyc test coverage
-.nyc_output
+# Test data
+data/*.csv
 
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
@@ -35,10 +35,6 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
-
-# Semantic-ui components
-semantic/
-semantic.json
 
 # Typescript v1 declaration files
 typings/

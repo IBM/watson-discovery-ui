@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/rhagarty/disco-ui.svg?branch=master)](https://travis-ci.org/rhagarty/disco-ui)
+
+
 # Develop a fully featured web app built on the Watson Discovery Service
 
 In this Code Pattern, we walk you through a working example of a web application that queries and manipulates data from the Watson Discovery Service. This web app contains multiple components that can provide you with a blueprint to follow when you develop your own applications. 

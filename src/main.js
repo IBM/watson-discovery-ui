@@ -236,10 +236,10 @@ class Main extends React.Component {
     // tag cloud and the filter objects stay in sync (both 
     // reflect what items have been selected).
     const { entities, selectedEntities, 
-            categories, selectedCategories, 
-            concepts, selectedConcepts,
-            keywords, selectedKeywords,
-            searchQuery  } = this.state;
+      categories, selectedCategories, 
+      concepts, selectedConcepts,
+      keywords, selectedKeywords,
+      searchQuery  } = this.state;
 
     if (cloudType === utils.CATEGORY_FILTER) {
       var fullName = this.buildFullTagName(selectedTagValue, categories.results);
@@ -342,38 +342,36 @@ class Main extends React.Component {
 
     // send request
     fetch(`/api/trending?${qs}`)
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw response;
-      }
-    })
-    .then(json => {
-      // const util = require('util');
-      console.log('+++ DISCO TREND RESULTS +++');
-      // console.log(util.inspect(json.aggregations[0].results, false, null));
-      console.log('numMatches: ' + json.matching_results);
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw response;
+        }
+      })
+      .then(json => {
+        // const util = require('util');
+        console.log('+++ DISCO TREND RESULTS +++');
+        // console.log(util.inspect(json.aggregations[0].results, false, null));
+        console.log('numMatches: ' + json.matching_results);
       
-      this.setState(
-        { 
+        this.setState({ 
           trendData: json,
           trendLoading: false,
           trendError: null,
           trendTerm: term
-        }
-      );
-    })
-    .catch(response => {
-      this.setState({
-        trendError: (response.status === 429) ? 'Number of free queries per month exceeded' : 'Error fetching results',
-        trendLoading: false,
-        trendData: null,
-        trendTerm: utils.TRENDING_TERM_ITEM
+        });
+      })
+      .catch(response => {
+        this.setState({
+          trendError: (response.status === 429) ? 'Number of free queries per month exceeded' : 'Error fetching results',
+          trendLoading: false,
+          trendData: null,
+          trendTerm: utils.TRENDING_TERM_ITEM
+        });
+        // eslint-disable-next-line no-console
+        console.error(response);
       });
-      // eslint-disable-next-line no-console
-      console.error(response);
-    });
   }
   
   /**
@@ -428,37 +426,36 @@ class Main extends React.Component {
 
     // send request
     fetch(`/api/search?${qs}`)
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw response;
-      }
-    })
-    .then(json => {
-      var data = parseData(json);
-      var numPositive = 0;
-      var numNegative = 0;
-      var numNeutral = 0;
-
-      // const util = require('util');
-      console.log('+++ DISCO RESULTS +++');
-      // console.log(util.inspect(data, false, null));
-      console.log('numMatches: ' + json.matching_results);
-      
-      // add up totals for the sentiment of reviews
-      data.results.forEach(function (result) {
-        if (result.enriched_text.sentiment.document.label === 'positive') {
-          numPositive = numPositive + 1;
-        } else if (result.enriched_text.sentiment.document.label === 'negative') {
-          numNegative = numNegative + 1;
-        } else if (result.enriched_text.sentiment.document.label === 'neutral') {
-          numNeutral = numNeutral + 1;
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw response;
         }
-      });
+      })
+      .then(json => {
+        var data = parseData(json);
+        var numPositive = 0;
+        var numNegative = 0;
+        var numNeutral = 0;
 
-      this.setState(
-        { 
+        // const util = require('util');
+        console.log('+++ DISCO RESULTS +++');
+        // console.log(util.inspect(data, false, null));
+        console.log('numMatches: ' + json.matching_results);
+      
+        // add up totals for the sentiment of reviews
+        data.results.forEach(function (result) {
+          if (result.enriched_text.sentiment.document.label === 'positive') {
+            numPositive = numPositive + 1;
+          } else if (result.enriched_text.sentiment.document.label === 'negative') {
+            numNegative = numNegative + 1;
+          } else if (result.enriched_text.sentiment.document.label === 'neutral') {
+            numNeutral = numNeutral + 1;
+          }
+        });
+
+        this.setState({ 
           data: data,
           entities: parseEntities(json),
           categories: parseCategories(json),
@@ -473,19 +470,18 @@ class Main extends React.Component {
           trendData: null,
           sentimentTerm: utils.SENTIMENT_TERM_ITEM,
           trendTerm: utils.TRENDING_TERM_ITEM
-        }
-      );
-      scrollToMain();
-    })
-    .catch(response => {
-      this.setState({
-        error: (response.status === 429) ? 'Number of free queries per month exceeded' : 'Error fetching results',
-        loading: false,
-        data: null
+        });
+        scrollToMain();
+      })
+      .catch(response => {
+        this.setState({
+          error: (response.status === 429) ? 'Number of free queries per month exceeded' : 'Error fetching results',
+          loading: false,
+          data: null
+        });
+        // eslint-disable-next-line no-console
+        console.error(response);
       });
-      // eslint-disable-next-line no-console
-      console.error(response);
-    });
   }
 
   /**
@@ -682,12 +678,12 @@ class Main extends React.Component {
    */
   render() {
     const { loading, data, error, searchQuery,
-            entities, categories, concepts, keywords,
-            selectedEntities, selectedCategories, selectedConcepts, selectedKeywords,
-            numMatches, numPositive, numNeutral, numNegative,
-            tagCloudType, trendData, trendLoading, trendError, trendTerm,
-            queryType, returnPassages, limitResults, sortOrder,
-            sentimentTerm } = this.state;
+      entities, categories, concepts, keywords,
+      selectedEntities, selectedCategories, selectedConcepts, selectedKeywords,
+      numMatches, numPositive, numNeutral, numNegative,
+      tagCloudType, trendData, trendLoading, trendError, trendTerm,
+      queryType, returnPassages, limitResults, sortOrder,
+      sentimentTerm } = this.state;
 
     // used for filter accordions
     const { activeFilterIndex } = this.state;
@@ -841,20 +837,19 @@ class Main extends React.Component {
                             Matches
                           </Header.Content>
                         </Header>
-                          <Statistic.Group
-                            size='mini'
-                            items={ stat_items }
+                        <Statistic.Group
+                          size='mini'
+                          items={ stat_items }
+                        />
+                        <Menu compact className="sort-dropdown">
+                          <Icon name='sort' size='large' bordered inverted />
+                          <Dropdown 
+                            item
+                            onChange={ this.sortOrderChange.bind(this) }
+                            value={ sortOrder }
+                            options={ utils.sortTypes }
                           />
-                          <Menu compact className="sort-dropdown">
-                            <Icon name='sort' size='large' bordered inverted />
-                            <Dropdown 
-                              item
-                              onChange={ this.sortOrderChange.bind(this) }
-                              value={ sortOrder }
-                              options={ utils.sortTypes }
-                            />
-                          </Menu>
-
+                        </Menu>
                       </div>
                       <div>
                         {this.getMatches()}
@@ -894,12 +889,12 @@ class Main extends React.Component {
                 term={sentimentTerm}
                 onSentimentTermChanged={this.sentimentTermChanged.bind(this)}
               />
+            </Grid.Row>
 
             <Divider hidden/>
             <Divider/>
             <Divider hidden/>
 
-            </Grid.Row>
             {/* Trend Chart Region */}
 
             <Grid.Row className='ttt'>

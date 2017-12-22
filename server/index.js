@@ -48,13 +48,13 @@ const WatsonDiscoServer = new Promise((resolve, reject) => {
       });
       return new Promise((resolve, reject) => {
         discovery.query(params)
-        .then(response =>  {
-          resolve(response);
-        })
-        .catch(error => {
-          console.error(error);
-          reject(error);
-        });
+          .then(response =>  {
+            resolve(response);
+          })
+          .catch(error => {
+            console.error(error);
+            reject(error);
+          });
       });
     })
     .then(response => {
@@ -191,7 +191,7 @@ function createServer(results) {
     console.log('In /*');
 
     // const util = require('util');
-    //console.log('++++++++++++ DISCO RESULTS ++++++++++++++++++++');
+    // console.log('++++++++++++ DISCO RESULTS ++++++++++++++++++++');
     // console.log(util.inspect(results, false, null));
 
     // add up totals for the sentiment of reviews

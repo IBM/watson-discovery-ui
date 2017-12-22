@@ -17,9 +17,9 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "babelify": "^7.3.0",
+    "babelify": "^8.0.0",
     "bluebird": "^3.5.0",
-    "botkit": "^0.5.4",
+    "botkit": "^0.6.7",
     "cfenv": "^1.0.3",
     "chart.js": "^2.7.1",
     "dotenv": "^4.0.0",
@@ -31,21 +31,19 @@
     "moment": "^2.19.4",
     "npm-check-updates": "^2.13.0",
     "prop-types": "^15.5.10",
-    "query-string": "^4.3.4",
+    "query-string": "^5.0.1",
     "react": "^16.2.0",
     "react-chartjs-2": "^2.6.4",
     "react-dom": "^16.2.0",
-    "react-dotdotdot": "^1.1.0",
     "react-scrollbar": "^0.5.1",
-    "react-scrollbar-js": "^1.0.1",
     "react-tagcloud": "^1.2.0",
     "semantic-ui": "^2.2.13",
     "semantic-ui-css": "^2.2.12",
-    "semantic-ui-react": "^0.75.0",
+    "semantic-ui-react": "^0.77.1",
     "sort-by": "^1.2.0",
-    "uglifyify": "^3.0.4",
-    "vcap_services": "^0.2.0",
-    "watson-developer-cloud": "^2.42.0"
+    "uglifyify": "^4.0.5",
+    "vcap_services": "^0.3.4",
+    "watson-developer-cloud": "^3.0.3"
   },
   "babel": {
     "presets": [
@@ -55,17 +53,18 @@
     "ignore": "node_modules"
   },
   "devDependencies": {
-    "enzyme": "^2.8.2",
-    "eslint": "^3.19.0",
-    "eslint-config-standard": "^10.2.1",
+    "enzyme": "^3.2.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "eslint": "^4.13.1",
+    "eslint-config-standard": "^11.0.0-beta.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-react": "^7.5.1",
     "eslint-plugin-standard": "^3.0.1",
-    "jest": "^20.0.4",
+    "jest": "^22.0.3",
+    "jest-cli": "^22.0.3",
     "nodemon": "^1.12.5",
-    "react-addons-test-utils": "^15.5.1",
     "react-test-renderer": "^16.2.0"
   }
 }

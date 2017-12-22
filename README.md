@@ -82,7 +82,7 @@ and give the data collection a unique name.
 
 IMPORTANT! Before loading any data, create and save a new "Configuration" and add "Keyword" extraction to enrichments.
 
-Under `Add data to this collection` use `Drag and drop your documents here or browse from computer` to seed the content with the json files extracted from `data/airbnb/austin-airbnb-review-data/`.
+Under `Add data to this collection` use `Drag and drop your documents here or browse from computer` to seed the content with the json files extracted from `data/airbnb/`.
 
 ![Upload data to collection](doc/source/images/upload-data.gif)
 

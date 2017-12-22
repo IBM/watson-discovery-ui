@@ -14,7 +14,7 @@
  * the License.
  */
 
-import queryBuilderTrending from './query-builder-trending';
+import queryBuilderTrending from '../server/query-builder-trending';
 
 beforeEach(() => {
   queryBuilderTrending.setCollectionId('collection');

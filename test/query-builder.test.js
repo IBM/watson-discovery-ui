@@ -14,7 +14,7 @@
  * the License.
  */
 
-import queryBuilder from './query-builder';
+import queryBuilder from '../server/query-builder';
 
 beforeEach(() => {
   queryBuilder.setCollectionId('collection');

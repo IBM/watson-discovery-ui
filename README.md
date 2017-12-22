@@ -80,7 +80,7 @@ and give the data collection a unique name.
 
 > Save the **environment_id** and **collection_id** for your `.env` file in the next step.
 
-IMPORTANT! Before loading anydata, define a new "Configuration" and add 'Keyword" extraction to enrichments.
+IMPORTANT! Before loading any data, create and save a new "Configuration" and add "Keyword" extraction to enrichments.
 
 Under `Add data to this collection` use `Drag and drop your documents here or browse from computer` to seed the content with the json files extracted from `data/airbnb/austin-airbnb-review-data/`.
 

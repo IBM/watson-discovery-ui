@@ -12,6 +12,7 @@
     "start": "node app.js",
     "start:watch": "nodemon app.js",
     "bootstrap": "cp env.sample .env",
+    "test -u": "jest -u",
     "test": "jest",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"

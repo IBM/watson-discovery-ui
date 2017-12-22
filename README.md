@@ -1,19 +1,25 @@
 [![Build Status](https://travis-ci.org/rhagarty/disco-ui.svg?branch=master)](https://travis-ci.org/rhagarty/disco-ui)
 
-
 # Develop a fully featured web app built on the Watson Discovery Service
 
-In this Code Pattern, we walk you through a working example of a web application that queries and manipulates data from the Watson Discovery Service. This web app contains multiple components that can provide you with a blueprint to follow when you develop your own applications. 
+In this Code Pattern, we walk you through a working example of a web application that queries and manipulates data from the Watson Discovery Service. This web app contains multiple UI components that you can use as a blueprint for developing your own Watson Discovery Service applications. 
 
-The main benefit of using the Watson Discovery Service is to take advantage of its powerful analytics engine that provides cognitive enrichments and insights into your data. This app provides examples of how to showcase these enrichments through the use of filters, lists and graphs. The key enrichments that we will focus on are:
+The main benefit of using the Watson Discovery Service is its powerful analytics engine that provides cognitive enrichments and insights into your data. This app provides examples of how to showcase these enrichments through the use of filters, lists and graphs. The key enrichments that we will focus on are:
 
-* Entities
-* Categories
-* Concepts
-* Keywords
-* Sentiment
+* Entities - people, companies, organizations, cities, and more.
+* Categories - classification of the data into a hierarchy of categories up to 5 levels deep.
+* Concepts - identified general concepts that aren't necessarily referenced in the data.
+* Keywords - important topics typically used to index or search the data.
+* Sentiment - the overall positive or negative sentiment of each document.
 
 For this Code Pattern, we will be using data that contains reviews of Airbnb properties located in the Austin, TX area. 
+
+When the reader has completed this Code Pattern, they will understand how to:
+* 1
+* 2
+* 3
+* 4
+
 
 ![](doc/source/images/architecture.png)
 
@@ -41,11 +47,11 @@ Here is a rough sketch of the main UI screen, followed by a description of each 
 
 ## Featured technologies
 * [Node.js](https://nodejs.org/): An open-source JavaScript run-time environment for executing server-side JavaScript code.
-* Express
-* React
-* SemanticUI React Components
-* ChartJS
-* Jest test framework
+* [React](https://facebook.github.io/react/): A JavaScript library for building User Interfaces.
+* [Express](https://expressjs.com) - A popular and minimalistic web framework for creating an API and Web server.
+* [Semantic UI React](https://react.semantic-ui.com/introduction): React integration of Semantic UI components. 
+* [Chart.js](http://www.chartjs.org/): JavaScript charting package.
+* [Jest](https://facebook.github.io/jest/): A JavaScript test framework.
 
 # Watch the Video
 
@@ -149,10 +155,6 @@ To disable tracking, simply remove `require("metrics-tracker-client").track();` 
 
 * [Demo on Youtube](https://????): Watch the video.
 * [Watson Node.js SDK](https://github.com/watson-developer-cloud/node-sdk): Download the Watson Node SDK.
-* [Blog: Bring your own data to Watson Discovery Service](doc/index.md): Steps to building the data for your application.
-* [Watson Discovery, an IBM API adding value to corporate data](https://bbvaopen4u.com/en/actualidad/watson-discovery-ibm-api-adding-value-corporate-data): Dive into IBM Watson Discovery Service, enabling companies to structure and understand large masses of data.
-* [Blog: Watson Discovery Service – Understand your data at scale with less effort](https://www.ibm.com/blogs/watson/2016/12/watson-discovery-service-understand-data-scale-less-effort/): Align and connect different data sets to expose critical correlations and causal factors.
-* [Blog: Using IBM Watson Discovery to query unstructured data](https://dzone.com/articles/using-ibm-watson-discovery-to-query-unstructured-d): Make sense of and identify patterns in large amounts of unstructured data.
 
 # Learn more
 

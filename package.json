@@ -28,6 +28,7 @@
     "express-browserify": "^1.0.2",
     "express-react-views": "^0.10.2",
     "g": "^2.0.1",
+    "gulp": "^3.9.1",
     "help": "^3.0.2",
     "moment": "^2.19.4",
     "npm-check-updates": "^2.13.0",

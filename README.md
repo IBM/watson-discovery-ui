@@ -2,7 +2,7 @@
 
 # Develop a fully featured web app built on the Watson Discovery Service
 
-In this Code Pattern, we walk you through a working example of a web application that queries and manipulates data from the Watson Discovery Service. This web app contains multiple UI components that you can use as a blueprint for developing your own Watson Discovery Service applications. 
+In this Code Pattern, we walk you through a working example of a web application that queries and manipulates data from the Watson Discovery Service. This web app contains multiple UI components that you can use as a starting point for developing your own Watson Discovery Service applications. 
 
 The main benefit of using the Watson Discovery Service is its powerful analytics engine that provides cognitive enrichments and insights into your data. This app provides examples of how to showcase these enrichments through the use of filters, lists and graphs. The key enrichments that we will focus on are:
 
@@ -15,11 +15,10 @@ The main benefit of using the Watson Discovery Service is its powerful analytics
 For this Code Pattern, we will be using data that contains reviews of Airbnb properties located in the Austin, TX area. 
 
 When the reader has completed this Code Pattern, they will understand how to:
-* 1
-* 2
-* 3
-* 4
-
+* Load and enrich data in the Watson Discovery Service.
+* Query and manipulate data in the Watson Discovery Service.
+* Create UI components to represent enriched data created by the Watson Discovery Service.
+* Build a complete web app that utilizes popular JavaScript technologies to feature Watson Discovery Service data and enrichments.
 
 ![](doc/source/images/architecture.png)
 

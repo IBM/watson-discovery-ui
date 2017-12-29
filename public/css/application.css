@@ -636,7 +636,7 @@ input[type=radio]:checked + label.buttons-group--button {
   padding: 6px;
 }
 
-/* semantic-ui overrides */
+/* overrides for semantic-ui components */
 
 .ui.centered.fluid.card {
   background: #d9e5ef;
@@ -645,26 +645,6 @@ input[type=radio]:checked + label.buttons-group--button {
 .ui.checkbox.filter-checkbox label {
   font-size: x-small !important;
 }
-
-/* div.ui.celled.grid.search-grid.ui element.style {
-  margin-top: 0px;
-  margin-bottom: 0px;
-}
-
-ui celled grid search-grid style {
-  margin-top: 0px;
-  margin-bottom: 0px;
-} */
-
-/* .results-row {
-  height: 450px;
-}
-
-.filterCol {
-  overflow: auto;
-  height: 450px;
-  width: 250px;
-} */
 
 div.ui.celled.grid.search-grid {
   margin-top: 0px;

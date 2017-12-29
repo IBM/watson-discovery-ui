@@ -2,6 +2,13 @@ require 'smarter_csv'
 require 'json'
 require 'fileutils'
 
+# This takes a csv file and converts in into individual json files.
+# It limits the number of files due to limits in the trial version 
+# of the Watson Discovery Service.
+# Note that this script will fail for 2 common reasons:
+# 1 - old Ruby version (requires >= 2.4.2)
+# 2 - bad entry found in the csv file 
+
 options = {
   :remove_empty_values => false,
   :encoding => 'ISO-8859-1',

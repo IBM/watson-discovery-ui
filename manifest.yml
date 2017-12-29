@@ -13,5 +13,3 @@ applications:
   random-route: false
   services:
   - wdui-discovery-service
-env:
-  SLACK_BOT_TOKEN: placeholder

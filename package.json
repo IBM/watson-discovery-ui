@@ -46,6 +46,9 @@
     "vcap_services": "^0.3.4",
     "watson-developer-cloud": "^3.0.3"
   },
+  "engines": {
+    "node": "8.4.0"
+  },
   "babel": {
     "presets": [
       "es2015",

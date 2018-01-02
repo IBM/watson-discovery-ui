@@ -29,8 +29,6 @@ class DefaultLayout extends React.Component {
   }
 
   render() {
-    // const { hideHeader } = this.props;
-
     return (
       <html>
         <head>

@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/rhagarty/disco-ui.svg?branch=master)](https://travis-ci.org/rhagarty/disco-ui)
+[![Build Status](https://travis-ci.org/IBM/watson-discovery-ui.svg?branch=master)](https://travis-ci.org/IBM/watson-discovery-ui)
+
+!!! WORK IN PROGRESS
 
 # Develop a fully featured web app built on the Watson Discovery Service
 
@@ -58,7 +60,21 @@ Here is a rough sketch of the main UI screen, followed by a description of each 
 
 # Steps
 
+Use the ``Deploy to IBM Cloud`` button **OR** create the services and run locally.
+
+## Deploy to IBM Cloud
+[![Deploy to Bluemix](https://metrics-tracker.mybluemix.net/stats/527357940ca5e1027fbf945add3b15c4/button.svg)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-discovery-ui.git)
+
+1. Press the above ``Deploy to IBM Cloud`` button and then click on ``Deploy``.
+
+2. In Toolchains, click on Delivery Pipeline to watch while the app is deployed. Once deployed, the app can be viewed by clicking 'View app'.
+![](doc/source/images/toolchain-pipeline.png)
+
+3. To see the app and services created and configured for this journey, use the Bluemix dashboard. The app is named `watson-discovery-ui` with a unique suffix. The following services are created and easily identified by the `wdui-` prefix:
+    * wdui-discovery-service
+
 ## Run locally
+> NOTE: These steps are only needed when running locally instead of using the ``Deploy to IBM Cloud`` button.
 
 1. [Clone the repo](#1-clone-the-repo)
 2. [Create IBM Cloud services](#2-create-ibm-cloud-services)
@@ -68,7 +84,7 @@ Here is a rough sketch of the main UI screen, followed by a description of each 
 
 ### 1. Clone the repo
 ```
-$ git clone https://github.com/rhagarty/disco-ui
+$ git clone https://github.com/IBM/watson-discovery-ui
 ```
 
 ### 2. Create IBM Cloud services

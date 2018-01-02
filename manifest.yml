@@ -1,6 +1,6 @@
 ---
 declared-services:
-  wdui-discovery-service:
+  wdui-discovery-service-test:
     label: discovery
     plan: lite
 applications:
@@ -9,6 +9,6 @@ applications:
   buildpack: sdk-for-nodejs
   memory: 1024M
   instances: 1
-  random-route: false
+  random-route: true
   services:
-  - wdui-discovery-service
+  - wdui-discovery-service-test

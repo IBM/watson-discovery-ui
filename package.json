@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rhagarty/disco-ui.git"
+    "url": "https://github.com/IBM/watson-discovery-ui.git"
   },
   "scripts": {
     "start": "node app.js",

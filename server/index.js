@@ -47,7 +47,7 @@ arrayOfFiles.forEach(function(file) {
 });
 // shorten the list if we are loading - trail version of IBM Cloud 
 // is limited to 256MB application size
-discoveryDocs = discoveryDocs.slice(0,100);
+// discoveryDocs = discoveryDocs.slice(0,100);
 
 const discovery = watson.discovery({
   // uname/pwd will be pulled in from VCAP_SERVICES or .env

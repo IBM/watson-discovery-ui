@@ -69,6 +69,7 @@ Use the ``Deploy to IBM Cloud`` button **OR** create the services and run locall
 1. Press the above ``Deploy to IBM Cloud`` button and then click on ``Deploy``.
 
 2. In Toolchains, click on Delivery Pipeline to watch while the app is deployed. Once deployed, the app can be viewed by clicking 'View app'.
+
 ![](doc/source/images/toolchain-pipeline.png)
 
 3. To see the app and services created and configured for this journey, use the IBM Cloud dashboard. The app is named `watson-discovery-ui` with a unique suffix. The following services are created and easily identified by the `wdui-` prefix:

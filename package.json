@@ -29,6 +29,7 @@
     "express-react-views": "^0.10.2",
     "g": "^2.0.1",
     "help": "^3.0.2",
+    "metrics-tracker-client": "*",
     "moment": "^2.19.4",
     "npm-check-updates": "^2.13.0",
     "prop-types": "^15.5.10",
@@ -56,6 +57,7 @@
   },
   "devDependencies": {
     "enzyme": "^3.2.0",
+    "dezalgo": "~1.0",
     "eslint": "^4.13.1",
     "eslint-config-standard": "^11.0.0-beta.0",
     "eslint-plugin-import": "^2.8.0",

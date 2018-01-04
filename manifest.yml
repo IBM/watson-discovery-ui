@@ -1,6 +1,6 @@
 ---
 declared-services:
-  wdui-discovery-service-test:
+  wdui-discovery-service:
     label: discovery
     plan: lite
 applications:
@@ -11,4 +11,4 @@ applications:
   instances: 1
   random-route: true
   services:
-  - wdui-discovery-service-test
+  - wdui-discovery-service

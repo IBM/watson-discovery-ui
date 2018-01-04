@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/IBM/watson-discovery-ui.svg?branch=master)](https://travis-ci.org/IBM/watson-discovery-ui)
-![Bluemix Deployments](https://metrics-tracker.mybluemix.net/stats/527357940ca5e1027fbf945add3b15c4/badge.svg)
+![Bluemix Deployments](https://metrics-tracker.mybluemix.net/stats/1d5f6ef7fb5364be97be249346b673c0/badge.svg)
 
 !!! WORK IN PROGRESS
 
@@ -39,7 +39,7 @@ Here is a rough sketch of the main UI screen, followed by a description of each 
 
 1. Search field and search parameters: Return results based on search criteria. Search parameters will effect how the user will enter values, how they will be displayed, and limit the number of matches.
 2. List Filters: Multiple drop-down lists of filters that are applied to the search resullts. Each drop down list contains entities, categories, concepts and keywords associated with the results. For each drop down filter item, the number of matches will also be displayed. If a user selects a filter item, a new search will be conducted and will update the results panel (#3). Filter items selected will also effect what is shown in the tag cloud (#4).
-3. Search results and pagination menu: Shows a page of result items (e.g. 5 per page) and a pagination menu to allow the user to scroll through pages of result items.
+3. Search results and pagination menu: Shows a page of result items (e.g. 5 per page) and a pagination menu to allow the user to scroll through pages of result items. There will also be a drop-down menu that will allow the user to sort the entries based on date, score, and sentiment value.
 4. Tag cloud filter: Similar to the list filters (#2) but in a different format. One set of filter items (either entities, categories, concepts or keywords) can be displayed at one time. User can select/deselect items in the cloud to turn on/off filters. Applied filters in both filter views (#2 and #4) will always be in sync.
 5. Trend chart: Chart to show the sentiment trend for a specific entity, category, concept, or keyword over time. The data will reflect the current matching result set.
 6. Sentiment chart; Donut chart that shows the total percentages of postive, neutral and negative reviews of selected entities, categories, concepts, or keywords. The data will reflect the current matching result set.
@@ -64,7 +64,7 @@ Here is a rough sketch of the main UI screen, followed by a description of each 
 Use the ``Deploy to IBM Cloud`` button **OR** create the services and run locally.
 
 ## Deploy to IBM Cloud
-[![Deploy to Bluemix](https://metrics-tracker.mybluemix.net/stats/527357940ca5e1027fbf945add3b15c4/button.svg)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-discovery-ui.git)
+[![Deploy to Bluemix](https://metrics-tracker.mybluemix.net/stats/1d5f6ef7fb5364be97be249346b673c0/button.svg)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-discovery-ui.git)
 
 1. Press the above ``Deploy to IBM Cloud`` button and then click on ``Deploy``.
 
@@ -147,6 +147,22 @@ DISCOVERY_COLLECTION_ID=<add_discovery_collection>
 
 # Troubleshooting
 
+* Error: Environment {GUID} is still not active, retry once status is active
+
+  > This is common during the first run. The app tries to start before the Discovery
+environment is fully created. Allow a minute or two to pass. The environment should
+be usable on restart. If you used `Deploy to IBM Cloud` the restart should be automatic.
+
+* Error: Only one free environent is allowed per organization
+
+  > To work with a free trial, a small free Discovery environment is created. If you already have a Discovery environment, this will fail. If you are not using Discovery, check for an old
+service thay you may want to delete. Otherwise use the .env DISCOVERY_ENVIRONMENT_ID to tell
+the app which environment you want it to use. A collection will be created in this environment
+using the default configuration.
+
+* Loading files into Discovery
+* No keywords found
+
 # Privacy Notice
 
 If using the `Deploy to IBM Cloud` button some metrics are tracked, the following information is sent to a [Deployment Tracker](https://github.com/IBM/metrics-tracker-service) service on each deployment:
@@ -166,7 +182,7 @@ This data is collected from the `package.json` file in the sample application an
 
 ## Disabling Deployment Tracking
 
-To disable tracking, simply remove `require("metrics-tracker-client").track();` from the ``app.js`` file in the top level directory.
+To disable tracking, simply remove `require("metrics-tracker-client").track();` from the ``index.js`` file in the ``server`` directory.
 
 # Links
 

@@ -27,6 +27,7 @@ const queryBuilder = require('./query-builder');
 const queryTrendBuilder = require('./query-builder-trending');
 const WatsonDiscoverySetup = require('../lib/watson-discovery-setup');
 const watson = require('watson-developer-cloud');
+const utils = require('../lib/utils');
 
 /**
  * Back end server which handles initializing the Watson Discovery
@@ -187,16 +188,19 @@ function createServer() {
         }
       })
       .then(json => {
-        // add up totals for the sentiment of reviews
-        var totals = getTotals(json);
 
+        // get all the results data in right format
+        var matches = utils.parseData(json);
+        matches = utils.formatData(matches, [], false);
+        var totals = utils.getTotals(matches);
+    
         res.render('index',
           {
+            data: matches,
             entities: json,
             categories: json,
             concepts: json,
             keywords: json,
-            data: json,
             searchQuery,
             numMatches: json.matching_results,
             numPositive: totals.numPositive,
@@ -228,10 +232,13 @@ function createServer() {
       discovery.query(params)
         .then(results =>  {
 
-          // add up totals for the sentiment of reviews
-          var totals = getTotals(results);
+          // get all the results data in right format
+          var matches = utils.parseData(results);
+          matches = utils.formatData(matches, [], false);
+          var totals = utils.getTotals(matches);
     
-          res.render('index', { data: results, 
+          res.render('index', { 
+            data: matches, 
             entities: results,
             categories: results,
             concepts: results,
@@ -257,34 +264,6 @@ function createServer() {
   });
 
   return server;
-}
-
-/**
- * getTotals - add up sentiment types from all result items.
- */
-function getTotals(data) {
-  var totals = {
-    numPositive: 0,
-    numNegative: 0,
-    numNeutral: 0
-  };
-
-  data.results.forEach(function (result) {
-    if (result.enriched_text.sentiment.document.label === 'positive') {
-      totals.numPositive = totals.numPositive + 1;
-    } else if (result.enriched_text.sentiment.document.label === 'negative') {
-      totals.numNegative = totals.numNegative + 1;
-    } else if (result.enriched_text.sentiment.document.label === 'neutral') {
-      totals.numNeutral = totals.numNeutral + 1;
-    }
-  });
-
-  // console.log('numMatches: ' + data.matching_results);
-  // console.log('numPositive: ' + totals.numPositive);
-  // console.log('numNegative: ' + totals.numNegative);
-  // console.log('numNeutral: ' + totals.numNeutral);
-
-  return totals;
 }
 
 module.exports = WatsonDiscoServer;

@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Header, Menu, Dropdown, Divider, Icon } from 'semantic-ui-react';
 import { Line } from 'react-chartjs-2';
-const utils = require('../utils');
+const utils = require('../../lib/utils');
 
 /**
  * This object renders a trending chart object that appears at the bottom

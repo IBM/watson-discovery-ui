@@ -29,7 +29,7 @@ import TagCloudRegion from './TagCloudRegion';
 import TrendChart from './TrendChart';
 import SentimentChart from './SentimentChart';
 import { Grid, Dimmer, Button, Menu, Dropdown, Divider, Loader, Accordion, Icon, Header, Statistic } from 'semantic-ui-react';
-const utils = require('./utils');
+const utils = require('../lib/utils');
 
 /**
  * Main React object that contains all objects on the web page.
@@ -81,7 +81,7 @@ class Main extends React.Component {
       categories: categories && parseCategories(categories),
       concepts: concepts && parseConcepts(concepts),
       keywords: keywords && parseKeywords(keywords),
-      data: data && parseData(data),
+      data: data,   // data should already be formatted
       numMatches: numMatches || 0,
       numPositive: numPositive || 0,
       numNeutral: numNeutral || 0,
@@ -205,13 +205,17 @@ class Main extends React.Component {
    * all subsequent queries to discovery.
    */
   sortOrderChange(event, selection) {
-    const { sortOrder, data } = this.state;
+    const { sortOrder, data, returnPassages } = this.state;
     if (sortOrder != selection.value) {
-      // data.results = this.sortData(selection.value, data.results);
-
       var sortBy = require('sort-by');
       var sortedData = data.results.slice();
-      sortedData.sort(sortBy(selection.value));
+
+      if (returnPassages && selection.value === utils.BY_HIGHEST_QUERY) {
+        sortedData.sort(sortBy('-passageScore', selection.value));
+      } else {
+        sortedData.sort(sortBy(selection.value));
+      }
+
       data.results = sortedData;
 
       this.setState({
@@ -434,26 +438,25 @@ class Main extends React.Component {
         }
       })
       .then(json => {
-        var data = parseData(json);
-        var numPositive = 0;
-        var numNegative = 0;
-        var numNeutral = 0;
+        var data = utils.parseData(json);
+        var passages = [];
 
-        // const util = require('util');
+        if (returnPassages) {
+          passages = parsePassages(json);
+          // console.log('+++ PASSAGES RESULTS +++');
+          // const util = require('util');
+          // console.log(util.inspect(passages.results, false, null));
+        }
+
+        data = utils.formatData(data, passages, sortOrder === utils.BY_HIGHEST_QUERY);
+        
         console.log('+++ DISCO RESULTS +++');
-        // console.log(util.inspect(data, false, null));
+        // const util = require('util');
+        // console.log(util.inspect(data.results, false, null));
         console.log('numMatches: ' + json.matching_results);
       
         // add up totals for the sentiment of reviews
-        data.results.forEach(function (result) {
-          if (result.enriched_text.sentiment.document.label === 'positive') {
-            numPositive = numPositive + 1;
-          } else if (result.enriched_text.sentiment.document.label === 'negative') {
-            numNegative = numNegative + 1;
-          } else if (result.enriched_text.sentiment.document.label === 'neutral') {
-            numNeutral = numNeutral + 1;
-          }
-        });
+        var totals = utils.getTotals(data);
 
         this.setState({ 
           data: data,
@@ -462,10 +465,10 @@ class Main extends React.Component {
           concepts: parseConcepts(json),
           keywords: parseKeywords(json),
           loading: false,
-          numMatches: json.results.length,
-          numPositive: numPositive,
-          numNegative: numNegative,
-          numNeutral: numNeutral,
+          numMatches: json.matching_results,
+          numPositive: totals.numPositive,
+          numNegative: totals.numNegative,
+          numNeutral: totals.numNeutral,
           error: null,
           trendData: null,
           sentimentTerm: utils.SENTIMENT_TERM_ITEM,
@@ -483,7 +486,7 @@ class Main extends React.Component {
         console.error(response);
       });
   }
-
+  
   /**
    * buildFilterStringForType - build the filter string for
    * one set of filter objects.
@@ -920,14 +923,11 @@ class Main extends React.Component {
   }
 }
 
-/**
- * parseData - convert raw search results into collection of matching results.
- */
-const parseData = data => ({
+const parsePassages = data => ({
   rawResponse: Object.assign({}, data),
   // sentiment: data.aggregations[0].results.reduce((accumulator, result) =>
   //   Object.assign(accumulator, { [result.key]: result.matching_results }), {}),
-  results: data.results
+  results: data.passages
 });
 
 /**

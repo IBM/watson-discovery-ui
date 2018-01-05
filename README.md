@@ -104,13 +104,17 @@ and give the data collection a unique name.
   <img width="600" src="doc/source/images/create-collection.png">
 </p>
 
+From the new collection data panel, under `Configuration` click the `Switch` button to create a new configuration file that will include extracting keywords as a function of data enrichment. Give the configuration file a unique name.
+
+![Create config file](doc/source/images/create-keyword-config.gif)
+
+> Note: failure to do this will result in no `keywords` being shown in the app. 
+
+From the new collection data panel, under `Add data to this collection` use `Drag and drop your documents here or browse from computer` to seed the content with the json files extracted from `data/airbnb/`.
+
+![Upload data to collection](doc/source/images/add-docs-to-collection.gif)
+
 > Save the **environment_id** and **collection_id** for your `.env` file in the next step.
-
-IMPORTANT! Before loading any data, create and save a new "Configuration" and add "Keyword" extraction to enrichments.
-
-Under `Add data to this collection` use `Drag and drop your documents here or browse from computer` to seed the content with the json files extracted from `data/airbnb/`.
-
-![Upload data to collection](doc/source/images/upload-data.gif)
 
 ### 4. Configure credentials
 ```
@@ -160,8 +164,13 @@ service thay you may want to delete. Otherwise use the .env DISCOVERY_ENVIRONMEN
 the app which environment you want it to use. A collection will be created in this environment
 using the default configuration.
 
-* Loading files into Discovery
-* No keywords found
+* Error when loading files into Discovery
+
+  > Loading all 2000 document files at one time into Discovery can sometimes lead to "busy" errors. If this occurs, start over and load a small number of files at a time.
+
+* No keywords appear in the app
+
+  > This can be due to not having a proper configuration file assigned to your data collection. See [Step 3](#3-load-the-discovery-files) above.
 
 # Privacy Notice
 

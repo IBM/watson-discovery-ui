@@ -1,8 +1,6 @@
 [![Build Status](https://travis-ci.org/IBM/watson-discovery-ui.svg?branch=master)](https://travis-ci.org/IBM/watson-discovery-ui)
 ![Bluemix Deployments](https://metrics-tracker.mybluemix.net/stats/1d5f6ef7fb5364be97be249346b673c0/badge.svg)
 
-!!! WORK IN PROGRESS
-
 # Develop a fully featured web app built on the Watson Discovery Service
 
 In this Code Pattern, we walk you through a working example of a web application that queries and manipulates data from the Watson Discovery Service. This web app contains multiple UI components that you can use as a starting point for developing your own Watson Discovery Service applications. 

@@ -1,8 +1,6 @@
 [![Build Status](https://travis-ci.org/IBM/watson-discovery-ui.svg?branch=master)](https://travis-ci.org/IBM/watson-discovery-ui)
 ![Bluemix Deployments](https://metrics-tracker.mybluemix.net/stats/1d5f6ef7fb5364be97be249346b673c0/badge.svg)
 
-!!! WORK IN PROGRESS
-
 # Develop a fully featured web app built on the Watson Discovery Service
 
 In this Code Pattern, we walk you through a working example of a web application that queries and manipulates data from the Watson Discovery Service. This web app contains multiple UI components that you can use as a starting point for developing your own Watson Discovery Service applications. 
@@ -64,6 +62,11 @@ Here is a rough sketch of the main UI screen, followed by a description of each 
 Use the ``Deploy to IBM Cloud`` button **OR** create the services and run locally.
 
 ## Deploy to IBM Cloud
+
+  > NOTE: Before pressing the ``Deploy to IBM Cloud`` button, please note the following: One feature of this Discovery web app is the display and processing of `keywords` which are extracted from the data by the Discovery search engine. Currently, `keyword` extraction is not a default behavior of the Discovery service, so if you would like to see them in the deployed app, you must perform a few additional setup steps.
+  > 1. Create a new Discovery service in IBM Cloud and name it `wdui-discovery-service`.
+  > 2. Create a collection inside your new Discovery service. From the data panel, create a new configuration file and name it `keyword-extraction`. Instructions on how to set this up can be found [here](#3-load-the-discovery-files). Since there is no need to do anything further with the new data collection, it can be deleted. 
+
 [![Deploy to Bluemix](https://metrics-tracker.mybluemix.net/stats/1d5f6ef7fb5364be97be249346b673c0/button.svg)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-discovery-ui.git)
 
 1. Press the above ``Deploy to IBM Cloud`` button and then click on ``Deploy``.

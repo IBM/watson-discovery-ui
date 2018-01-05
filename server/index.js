@@ -152,7 +152,11 @@ function createServer() {
 
     params.count = count;
     params.passages = returnPassages;
-    params.sort = sort;
+    if (! sort) {
+      params.sort = utils.BY_HIGHEST_QUERY;
+    } else {
+      params.sort = sort;
+    }
     
     var searchParams = queryBuilder.search(params);
     discovery.query(searchParams)

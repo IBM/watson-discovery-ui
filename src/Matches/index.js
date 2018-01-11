@@ -27,8 +27,20 @@ import { Container, List, Label } from 'semantic-ui-react';
 const Match = props => (
   <List.Item>
     <List.Content>
-      <List.Header>{props.title}</List.Header>
-      { props.text }
+      <List.Header>
+        <List.Description>
+          { props.title1 }
+          <span style={{backgroundColor:'#ffffb3'}}>{ props.title2 }</span>
+          { props.title3 }
+        </List.Description>
+      </List.Header>
+    </List.Content>
+    <List.Content>
+      <List.Description>
+        { props.text1 }
+        <span style={{backgroundColor:'#ffffb3'}}>{ props.text2 }</span>
+        { props.text3 }
+      </List.Description>
     </List.Content>
     <List.Content>
       Score: { props.score }
@@ -44,8 +56,12 @@ const Match = props => (
 
 // type check to ensure we are called correctly
 Match.propTypes = {
-  title: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
+  title1: PropTypes.string.isRequired,
+  title2: PropTypes.string.isRequired,
+  title3: PropTypes.string.isRequired,
+  text1: PropTypes.string.isRequired,
+  text2: PropTypes.string.isRequired,
+  text3: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   score: PropTypes.string.isRequired,
   sentiment: PropTypes.object.isRequired
@@ -59,8 +75,12 @@ const Matches = props => (
           {props.matches.map(item =>
             <Match
               key={ item.id }
-              title={ item.title ? item.title : 'No Title' }
-              text={ item.text ? item.text : 'No Description' }
+              title1={ getTitle(item, 1) }
+              title2={ getTitle(item, 2) }
+              title3={ getTitle(item, 3) }
+              text1={ getText(item, 1) }
+              text2={ getText(item, 2) }
+              text3={ getText(item, 3) }
               score={ getScore(item) }
               date={ item.date }
               sentiment={ getSentiment(item) }
@@ -77,14 +97,62 @@ Matches.propTypes = {
   matches: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
+// format title into 3 parts, so that we can set background color for passages
+const getTitle = (item, step) => {
+  var usePassage = item.hasPassage && item.passageField === 'title';
+  if (step === 1) {
+    if (usePassage) {
+      return item.title.substring(0,item.passageStart);
+    } else {
+      return item.title ? item.title : 'No Title';
+    }
+  } else if (step === 2) {
+    if (usePassage) {
+      return item.title.substring(item.passageStart, item.passageEnd);
+    } else {
+      return '';
+    }
+  } else {
+    if (usePassage) {
+      return item.title.substring(item.passageEnd);
+    } else {
+      return '';
+    }
+  }
+};
+
+// format text into 3 parts, so that we can set background color for passages
+const getText = (item, step) => {
+  var usePassage = item.hasPassage && item.passageField === 'text';
+  if (step === 1) {
+    if (usePassage) {
+      return item.text.substring(0,item.passageStart);
+    } else {
+      return item.text ? item.text : 'No Description';
+    }
+  } else if (step === 2) {
+    if (usePassage) {
+      return item.text.substring(item.passageStart, item.passageEnd);
+    } else {
+      return '';
+    }
+  } else {
+    if (usePassage) {
+      return item.text.substring(item.passageEnd);
+    } else {
+      return '';
+    }
+  }
+};
+
 /**
  * getScore - round up to 4 decimal places.
  */
 const getScore = item => {
   var score = 0.0;
 
-  if (item.result_metadata.score) {
-    score = (item.result_metadata.score).toFixed(4);
+  if (item.score) {
+    score = (item.score).toFixed(4);
   }
   return score;
 };
@@ -94,9 +162,9 @@ const getScore = item => {
  * positive, negative, and neutral sentiment.
  */
 const getSentiment = item => {
-  var score = Number(item.enriched_text.sentiment.document.score).toFixed(2);
+  var score = Number(item.sentimentScore).toFixed(2);
   var color = 'grey';
-  switch (item.enriched_text.sentiment.document.label) {
+  switch (item.sentimentLabel) {
   case 'negative': 
     color='red';
     break;

@@ -24,9 +24,41 @@ exports[`renders correctly 1`] = `
             <div
               className="header"
             >
-              test title
+              <div
+                className="description"
+              >
+                &lt;div className="description"&gt;test title&lt;span style={Object { "backgroundColor": "#ffffb3" }}&gt;&lt;/span&gt;&lt;/div&gt;
+                <span
+                  style={
+                    Object {
+                      "backgroundColor": "#ffffb3",
+                    }
+                  }
+                >
+                  
+                </span>
+                
+              </div>
             </div>
-            I had a great time
+          </div>
+          <div
+            className="content"
+          >
+            <div
+              className="description"
+            >
+              &lt;div className="description"&gt;I had a great time&lt;span style={Object { "backgroundColor": "#ffffb3" }}&gt;&lt;/span&gt;&lt;/div&gt;
+              <span
+                style={
+                  Object {
+                    "backgroundColor": "#ffffb3",
+                  }
+                }
+              >
+                
+              </span>
+              
+            </div>
           </div>
           <div
             className="content"

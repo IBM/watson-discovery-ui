@@ -17,7 +17,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Menu, Icon } from 'semantic-ui-react';
-const utils = require('../utils');
+const utils = require('../../lib/utils');
 const MAX_MENU_ITEMS = 9;
 
 /**

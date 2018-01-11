@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Header, Menu, Dropdown, Divider, Icon } from 'semantic-ui-react';
 import { Doughnut } from 'react-chartjs-2';
-const utils = require('../utils');
+const utils = require('../../lib/utils');
 
 /**
  * This object renders a sentiment graph object that appears at the bottom

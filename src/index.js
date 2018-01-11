@@ -18,7 +18,7 @@ const React = require('react');
 const PropTypes = require('prop-types');
 const DefaultLayout = require('./layouts/default');
 const Main = require('./main');
-const objectWithoutProperties = require('./utils').objectWithoutProperties;
+const objectWithoutProperties = require('../lib/utils').objectWithoutProperties;
 
 class Application extends React.Component {
   render() {

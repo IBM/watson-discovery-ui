@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TagCloud } from 'react-tagcloud';
 import { Menu, Dropdown, Header, Divider, Icon } from 'semantic-ui-react';
-const utils = require('../utils');
+const utils = require('../../lib/utils');
 
 var _gDoUpdate = true;    // determines if we render update or not
 

@@ -197,7 +197,7 @@ function createServer() {
         var matches = utils.parseData(json);
         matches = utils.formatData(matches, []);
         var totals = utils.getTotals(matches);
-        
+
         res.render('index',
           {
             data: matches,
@@ -240,7 +240,7 @@ function createServer() {
           var matches = utils.parseData(results);
           matches = utils.formatData(matches, []);
           var totals = utils.getTotals(matches);
-          
+
           res.render('index', { 
             data: matches, 
             entities: results,

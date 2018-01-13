@@ -195,9 +195,9 @@ function createServer() {
 
         // get all the results data in right format
         var matches = utils.parseData(json);
-        matches = utils.formatData(matches, [], false);
+        matches = utils.formatData(matches, []);
         var totals = utils.getTotals(matches);
-    
+
         res.render('index',
           {
             data: matches,
@@ -206,7 +206,7 @@ function createServer() {
             concepts: json,
             keywords: json,
             searchQuery,
-            numMatches: json.matching_results,
+            numMatches: matches.results.length,
             numPositive: totals.numPositive,
             numNeutral: totals.numNeutral,
             numNegative: totals.numNegative,
@@ -238,16 +238,16 @@ function createServer() {
 
           // get all the results data in right format
           var matches = utils.parseData(results);
-          matches = utils.formatData(matches, [], false);
+          matches = utils.formatData(matches, []);
           var totals = utils.getTotals(matches);
-    
+
           res.render('index', { 
             data: matches, 
             entities: results,
             categories: results,
             concepts: results,
             keywords: results,
-            numMatches: results.matching_results,
+            numMatches: matches.results.length,
             numPositive: totals.numPositive,
             numNeutral: totals.numNeutral,
             numNegative: totals.numNegative

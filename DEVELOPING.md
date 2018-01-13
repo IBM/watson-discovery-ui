@@ -12,6 +12,9 @@ Below is a general overview of the most important directories and files in the p
 ├── data # Contains data files used by this code pattern
 │   └── airbnb
 │       └── *.json # Austin TX Airbnb JSON files
+├── lib # library and utility functions
+│   ├── utils.js # Utility functions/constants used by src and server code
+│   └── watson-discovery-setup.js # Funcions to auto-load data files into Discovery
 ├── public # Public folder contains CSS and JS served on the webpage
 │   ├── css
 │   ├── images
@@ -38,8 +41,7 @@ Below is a general overview of the most important directories and files in the p
 │   ├── SearchField # Component that allows the user to specifiy the search string
 │   ├── SentimentChart # Component that displays a donut chart to visualize sentiment of results
 │   ├── TagCloudRegion # Component that shows a tag cloud of entities/categories/concepts
-│   ├── layouts # Layout for page
-│   │   └── default.js
-│   └── utils.js # Helper file containing utility functions shared in the project
+│   └── layouts # Layout for page
+│       └── default.js
 ├── test # Jest test files
 ```

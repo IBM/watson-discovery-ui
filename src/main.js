@@ -93,7 +93,7 @@ class Main extends React.Component {
       queryType: queryType || utils.QUERY_NATURAL_LANGUAGE,
       returnPassages: returnPassages || false,
       limitResults: limitResults || false,
-      sortOrder: sortOrder || utils.BY_HIGHEST_QUERY,
+      sortOrder: sortOrder || utils.sortKeys[0].sortBy,
       // used by filters
       selectedEntities: selectedEntities || new Set(),
       selectedCategories: selectedCategories || new Set(),
@@ -205,19 +205,25 @@ class Main extends React.Component {
    * all subsequent queries to discovery.
    */
   sortOrderChange(event, selection) {
-    const { sortOrder, data, returnPassages } = this.state;
+    const { sortOrder, data } = this.state;
     if (sortOrder != selection.value) {
       var sortBy = require('sort-by');
       var sortedData = data.results.slice();
 
-      if (returnPassages && selection.value === utils.BY_HIGHEST_QUERY) {
-        sortedData.sort(sortBy('-passageScore', selection.value));
-      } else {
-        sortedData.sort(sortBy(selection.value));
+      // get internal version of the sort key
+      var internalSortKey = '';
+      for (var i=0; i<utils.sortKeys.length; i++) {
+        if (utils.sortKeys[i].sortBy === selection.value) {
+          internalSortKey = utils.sortKeys[i].sortByInt;
+          break;
+        }
       }
 
+      // sort by internal key
+      sortedData.sort(sortBy(internalSortKey));
       data.results = sortedData;
 
+      // save off external key in case we do another query to Discovery
       this.setState({
         data: data,
         sortOrder: selection.value
@@ -448,12 +454,12 @@ class Main extends React.Component {
           // console.log(util.inspect(passages.results, false, null));
         }
 
-        data = utils.formatData(data, passages, sortOrder === utils.BY_HIGHEST_QUERY);
+        data = utils.formatData(data, passages);
         
         console.log('+++ DISCO RESULTS +++');
         // const util = require('util');
         // console.log(util.inspect(data.results, false, null));
-        console.log('numMatches: ' + json.matching_results);
+        console.log('numMatches: ' + data.results.length);
       
         // add up totals for the sentiment of reviews
         var totals = utils.getTotals(data);
@@ -465,7 +471,7 @@ class Main extends React.Component {
           concepts: parseConcepts(json),
           keywords: parseKeywords(json),
           loading: false,
-          numMatches: json.matching_results,
+          numMatches: data.results.length,
           numPositive: totals.numPositive,
           numNegative: totals.numNegative,
           numNeutral: totals.numNeutral,

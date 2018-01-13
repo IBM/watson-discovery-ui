@@ -42,6 +42,8 @@ Here is a rough sketch of the main UI screen, followed by a description of each 
 5. Trend chart: Chart to show the sentiment trend for a specific entity, category, concept, or keyword over time. The data will reflect the current matching result set.
 6. Sentiment chart; Donut chart that shows the total percentages of postive, neutral and negative reviews of selected entities, categories, concepts, or keywords. The data will reflect the current matching result set.
 
+> Note: see [DEVELOPING.md](DEVELOPING.md) for project structure.
+
 ## Included components
 * [Watson Discovery](https://www.ibm.com/watson/developercloud/discovery.html): A cognitive search and content analytics engine for applications to identify patterns, trends, and actionable insights.
 

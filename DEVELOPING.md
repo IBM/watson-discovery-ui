@@ -38,7 +38,7 @@ Below is a general overview of the most important directories and files in the p
 │   ├── KeywordsFilter # Filter Component that contains Keyword items
 │   ├── Matches # Component that display all search results
 │   ├── PaginationMenu # Component the displays a menu to page through search results
-│   ├── SearchField # Component that allows the user to specifiy the search string
+│   ├── SearchField # Component that allows the user to specify the search string
 │   ├── SentimentChart # Component that displays a donut chart to visualize sentiment of results
 │   ├── TagCloudRegion # Component that shows a tag cloud of entities/categories/concepts
 │   └── layouts # Layout for page

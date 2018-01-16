@@ -47,8 +47,9 @@ arrayOfFiles.forEach(function(file) {
   discoveryDocs.push(path.join('./data/airbnb/', file));
 });
 // shorten the list if we are loading - trail version of IBM Cloud 
-// is limited to 256MB application size
-// discoveryDocs = discoveryDocs.slice(0,100);
+// is limited to 256MB application size, so use this if you get
+// out of memory errors.
+//discoveryDocs = discoveryDocs.slice(0,100);
 
 const discovery = watson.discovery({
   // uname/pwd will be pulled in from VCAP_SERVICES or .env
@@ -62,7 +63,7 @@ discovery.query = Promise.promisify(discovery.query);
 const discoverySetup = new WatsonDiscoverySetup(discovery);
 const discoverySetupParams = { 
   default_name: DEFAULT_NAME, 
-  config_name: 'keyword-extraction'   // instead of 'Default Configuration'
+  config_name: 'airbnb-keyword-extraction'   // instead of 'Default Configuration'
 };
 
 const WatsonDiscoServer = new Promise((resolve) => {

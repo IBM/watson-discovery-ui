@@ -152,6 +152,7 @@ function createServer() {
     }
 
     params.count = count;
+    params.passages_count = count;
     params.passages = returnPassages;
     if (! sort) {
       params.sort = utils.BY_HIGHEST_QUERY;
@@ -176,7 +177,7 @@ function createServer() {
     var searchQuery = req.params.searchQuery.replace(/\+/g, ' ');
     const qs = queryString.stringify({ 
       query: searchQuery,
-      count: 2000,
+      count: 1000,
       returnPassages: false,
       queryType: 'natural_language_query'
     });
@@ -230,7 +231,7 @@ function createServer() {
     console.log('Initial Search Query at start-up');
     const params = queryBuilder.search({ 
       natural_language_query: '',
-      count: 2000,
+      count: 1000,
       passages: false
     });
     return new Promise((resolve, reject) => {

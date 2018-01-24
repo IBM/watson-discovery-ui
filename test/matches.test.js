@@ -27,7 +27,9 @@ var match = {
       'text': '<div className="description">I had a great time<span style={Object { "backgroundColor": "#ffffb3" }}></span></div>',
       'date': '2014-11-01',
       'sentimentLabel': 'positive',
-      'sentimentScore': 0.761482
+      'sentimentScore': 0.761482,
+      'passage': { 'showPassage': false },
+      'highlight': { 'showHighlight': false }
     }
   ]
 };

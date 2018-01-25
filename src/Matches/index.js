@@ -99,22 +99,22 @@ Matches.propTypes = {
 
 // format title into 3 parts, so that we can set background color for passages
 const getTitle = (item, step) => {
-  var usePassage = item.hasPassage && item.passageField === 'title';
+  var usePassage = item.passage.showPassage && item.passage.field === 'title';
   if (step === 1) {
     if (usePassage) {
-      return item.title.substring(0,item.passageStart);
+      return item.title.substring(0,item.passage.startIdx);
     } else {
       return item.title ? item.title : 'No Title';
     }
   } else if (step === 2) {
     if (usePassage) {
-      return item.title.substring(item.passageStart, item.passageEnd);
+      return item.title.substring(item.passage.startIdx, item.passage.endIdx);
     } else {
       return '';
     }
   } else {
     if (usePassage) {
-      return item.title.substring(item.passageEnd);
+      return item.title.substring(item.passage.endIdx);
     } else {
       return '';
     }
@@ -122,23 +122,33 @@ const getTitle = (item, step) => {
 };
 
 // format text into 3 parts, so that we can set background color for passages
+// and highlighted words
 const getText = (item, step) => {
-  var usePassage = item.hasPassage && item.passageField === 'text';
+  var useHighlights = false;
+  if (item.passage.showPassage && item.passage.field === 'text') {
+    useHighlights = true;
+    var startIdx = item.passage.startIdx;
+    var endIdx = item.passage.endIdx;
+  } else if (item.highlight.showHighlight) {
+    useHighlights = true;
+    startIdx = item.highlight.startIdx;
+    endIdx = item.highlight.endIdx;
+  }
   if (step === 1) {
-    if (usePassage) {
-      return item.text.substring(0,item.passageStart);
+    if (useHighlights) {
+      return item.text.substring(0,startIdx);
     } else {
       return item.text ? item.text : 'No Description';
     }
   } else if (step === 2) {
-    if (usePassage) {
-      return item.text.substring(item.passageStart, item.passageEnd);
+    if (useHighlights) {
+      return item.text.substring(startIdx, endIdx);
     } else {
       return '';
     }
   } else {
-    if (usePassage) {
-      return item.text.substring(item.passageEnd);
+    if (useHighlights) {
+      return item.text.substring(endIdx);
     } else {
       return '';
     }

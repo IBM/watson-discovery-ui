@@ -26,6 +26,7 @@ describe('Query builder returns params for discovery service', () => {
     expect(queryBuilder.search()).toEqual({
       environment_id: 'environment',
       collection_id: 'collection',
+      highlight: true,
       aggregation: '[term(enriched_text.entities.text).term(enriched_text.sentiment.document.label),' +
       'term(enriched_text.categories.label).term(enriched_text.sentiment.document.label),' +
       'term(enriched_text.concepts.text).term(enriched_text.sentiment.document.label),' +
@@ -43,6 +44,7 @@ describe('Query builder returns params for discovery service', () => {
     })).toEqual({
       environment_id: 'environment',
       collection_id: 'collection',
+      highlight: true,
       aggregation: 
         '[term(enriched_text.entities.text).term(enriched_text.sentiment.document.label),' +
         'term(enriched_text.categories.label).term(enriched_text.sentiment.document.label),' +

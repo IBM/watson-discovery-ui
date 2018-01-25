@@ -27,6 +27,7 @@ module.exports = {
     const params = Object.assign({
       environment_id: this.environment_id,
       collection_id: this.collection_id,
+      highlight: true,
       aggregation:
         '[term(enriched_text.entities.text).term(enriched_text.sentiment.document.label),' +
         'term(enriched_text.categories.label).term(enriched_text.sentiment.document.label),' +

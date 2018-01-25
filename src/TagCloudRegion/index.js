@@ -27,8 +27,8 @@ var _gDoUpdate = true;    // determines if we render update or not
  * of the home page. It contains selectable terms that the user can use
  * to filter the match list. It is essentially like the filter objects, but
  * in a different format. It comes with a drop down menu where the user can
- * select what filter (entities, categories, concepts, or keywords) values
- * to display in the cloud.
+ * select what filter (entities, categories, concepts, keywords, or entity
+ * types) values to display in the cloud.
  */
 export default class TagCloudRegion extends React.Component {
   constructor(...props) {
@@ -39,6 +39,7 @@ export default class TagCloudRegion extends React.Component {
       categories: this.props.categories,
       concepts: this.props.concepts,
       keywords: this.props.keywords,
+      entityTypes: this.props.entityTypes,
       tagCloudType: this.props.tagCloudType
     };
   }
@@ -53,7 +54,8 @@ export default class TagCloudRegion extends React.Component {
       entities,
       categories,
       concepts,
-      keywords
+      keywords,
+      entityTypes
     } = this.state;
 
     // console.log('tagCloudType: ' + tagCloudType);
@@ -64,8 +66,10 @@ export default class TagCloudRegion extends React.Component {
       oldArray = JSON.parse(JSON.stringify(concepts.results));
     } else if (tagCloudType === utils.KEYWORD_FILTER) {
       oldArray = JSON.parse(JSON.stringify(keywords.results));
-    } else if (tagCloudType === utils.ENTITIY_FILTER) {
+    } else if (tagCloudType === utils.ENTITY_FILTER) {
       oldArray = JSON.parse(JSON.stringify(entities.results));
+    } else if (tagCloudType === utils.ENTITY_TYPE_FILTER) {
+      oldArray = JSON.parse(JSON.stringify(entityTypes.results));
     }
 
     // the values are taken from a collection that contains 'number
@@ -132,7 +136,8 @@ export default class TagCloudRegion extends React.Component {
       entities, 
       categories, 
       concepts,
-      keywords 
+      keywords,
+      entityTypes
     } = this.state;
 
     _gDoUpdate = false;
@@ -155,6 +160,11 @@ export default class TagCloudRegion extends React.Component {
 
     if (! this.setsAreEqual(entities.results, nextProps.entities.results)) {
       this.setState({ entities: nextProps.entities });
+      _gDoUpdate = true;
+    }
+
+    if (! this.setsAreEqual(entityTypes.results, nextProps.entityTypes.results)) {
+      this.setState({ entityTypes: nextProps.entityTypes });
       _gDoUpdate = true;
     }
   }
@@ -199,7 +209,7 @@ export default class TagCloudRegion extends React.Component {
             simple
             item
             onChange={ this.cloudTypeChange.bind(this) }
-            defaultValue={ utils.ENTITIY_FILTER }
+            defaultValue={ utils.ENTITY_FILTER }
             options={ utils.filterTypes }
           />
         </Menu>
@@ -224,6 +234,7 @@ TagCloudRegion.propTypes = {
   categories: PropTypes.object,
   concepts: PropTypes.object,
   keywords: PropTypes.object,
+  entityTypes: PropTypes.object,
   tagCloudSelection: PropTypes.string,
   tagCloudType: PropTypes.string,
   onTagItemSelected: PropTypes.func.isRequired,

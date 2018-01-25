@@ -40,6 +40,7 @@ export default class SentimentChart extends React.Component {
       categories: this.props.categories,
       concepts: this.props.concepts,
       keywords: this.props.keywords,
+      entityTypes: this.props.entityTypes,
       chartType: utils.ENTITY_FILTER,
       termValue: utils.SENTIMENT_TERM_ITEM
     };
@@ -102,7 +103,8 @@ export default class SentimentChart extends React.Component {
       entities,
       categories,
       concepts,
-      keywords
+      keywords,
+      entityTypes
     } = this.state;
     
     if (chartType === utils.ENTITY_FILTER) {
@@ -113,6 +115,8 @@ export default class SentimentChart extends React.Component {
       this.getTotals(concepts, termValue);
     } else if (chartType === utils.KEYWORD_FILTER) {
       this.getTotals(keywords, termValue);
+    } else if (chartType === utils.ENTITY_TYPE_FILTER) {
+      this.getTotals(entityTypes, termValue);
     }
 
     // console.log('    totalMatches: ' + this.totals.matches);
@@ -172,7 +176,7 @@ export default class SentimentChart extends React.Component {
    * getTermOptions - get the term items available to be selected by the user.
    */
   getTermOptions() {
-    const { chartType, entities, categories, concepts, keywords } = this.state;
+    const { chartType, entities, categories, concepts, keywords, entityTypes } = this.state;
     var options = [{ key: -1, value: utils.SENTIMENT_TERM_ITEM, text: utils.SENTIMENT_TERM_ITEM }];
     var collection;
 
@@ -185,6 +189,8 @@ export default class SentimentChart extends React.Component {
       collection = concepts.results;
     } else if (chartType === utils.KEYWORD_FILTER) {
       collection = keywords.results;
+    } else if (chartType === utils.ENTITY_TYPE_FILTER) {
+      collection = entityTypes.results;
     }
 
     if (collection) {
@@ -205,6 +211,7 @@ export default class SentimentChart extends React.Component {
     this.setState({ categories: nextProps.categories });
     this.setState({ concepts: nextProps.concepts });
     this.setState({ keywords: nextProps.keywords });
+    this.setState({ entityTypes: nextProps.entityTypes });
     this.setState({ termValue: nextProps.term });
   }
 
@@ -285,6 +292,7 @@ SentimentChart.propTypes = {
   categories: PropTypes.object,
   concepts: PropTypes.object,
   keywords: PropTypes.object,
+  entityTypes: PropTypes.object,
   chartType: PropTypes.string,
   term: PropTypes.string,
   onSentimentTermChanged: PropTypes.func.isRequired,

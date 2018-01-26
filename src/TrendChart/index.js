@@ -43,6 +43,7 @@ export default class TrendChart extends React.Component {
       categories: this.props.categories,
       concepts: this.props.concepts,
       keywords: this.props.keywords,
+      entityTypes: this.props.entityTypes,
       chartType: utils.ENTITY_FILTER,
       termValue: utils.TRENDING_TERM_ITEM
     };
@@ -117,7 +118,7 @@ export default class TrendChart extends React.Component {
    * getTermOptions - get the term items available to be selected by the user.
    */
   getTermOptions() {
-    const { chartType, entities, categories, concepts, keywords } = this.state;
+    const { chartType, entities, categories, concepts, keywords, entityTypes } = this.state;
     var options = [{ key: -1, value: utils.TRENDING_TERM_ITEM, text: utils.TRENDING_TERM_ITEM }];
     var collection;
 
@@ -130,6 +131,8 @@ export default class TrendChart extends React.Component {
       collection = concepts.results;
     } else if (chartType === utils.KEYWORD_FILTER) {
       collection = keywords.results;
+    } else if (chartType === utils.ENTITY_TYPE_FILTER) {
+      collection = entityTypes.results;
     }
 
     if (collection) {
@@ -153,6 +156,7 @@ export default class TrendChart extends React.Component {
     this.setState({ categories: nextProps.categories });
     this.setState({ concepts: nextProps.concepts });
     this.setState({ keywords: nextProps.keywords });
+    this.setState({ entityTypes: nextProps.entityTypes });
     this.setState({ termValue: nextProps.term });
   }
 
@@ -222,6 +226,7 @@ TrendChart.propTypes = {
   categories: PropTypes.object,
   concepts: PropTypes.object,
   keywords: PropTypes.object,
+  entityTypes: PropTypes.object,
   chartType: PropTypes.string,
   termValue: PropTypes.string,
   trendData: PropTypes.object,

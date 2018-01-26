@@ -30,7 +30,8 @@ describe('Query builder returns params for discovery service', () => {
       aggregation: '[term(enriched_text.entities.text).term(enriched_text.sentiment.document.label),' +
       'term(enriched_text.categories.label).term(enriched_text.sentiment.document.label),' +
       'term(enriched_text.concepts.text).term(enriched_text.sentiment.document.label),' +
-      'term(enriched_text.keywords.text).term(enriched_text.sentiment.document.label)]'
+      'term(enriched_text.keywords.text).term(enriched_text.sentiment.document.label),' +
+      'term(enriched_text.entities.type).term(enriched_text.sentiment.document.label)]'
     });
   });
 
@@ -49,7 +50,8 @@ describe('Query builder returns params for discovery service', () => {
         '[term(enriched_text.entities.text).term(enriched_text.sentiment.document.label),' +
         'term(enriched_text.categories.label).term(enriched_text.sentiment.document.label),' +
         'term(enriched_text.concepts.text).term(enriched_text.sentiment.document.label),' +
-        'term(enriched_text.keywords.text).term(enriched_text.sentiment.document.label)]',
+        'term(enriched_text.keywords.text).term(enriched_text.sentiment.document.label),' +
+        'term(enriched_text.entities.type).term(enriched_text.sentiment.document.label)]',
       natural_language_query: 'test',
       filter: 'enriched_text.categories.label::"test"',
       count: 500,

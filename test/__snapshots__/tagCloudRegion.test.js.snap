@@ -41,7 +41,9 @@ exports[`renders correctly 1`] = `
         aria-live="polite"
         className="text"
         role="alert"
-      />
+      >
+        Entities
+      </div>
       <i
         aria-hidden="true"
         className="dropdown icon"
@@ -51,10 +53,10 @@ exports[`renders correctly 1`] = `
         className="menu transition"
       >
         <div
-          aria-checked={false}
+          aria-checked={true}
           aria-disabled={undefined}
           aria-selected={true}
-          className="selected item"
+          className="active selected item"
           onClick={[Function]}
           role="option"
           style={
@@ -124,6 +126,25 @@ exports[`renders correctly 1`] = `
             className="text"
           >
             Keywords
+          </span>
+        </div>
+        <div
+          aria-checked={false}
+          aria-disabled={undefined}
+          aria-selected={false}
+          className="item"
+          onClick={[Function]}
+          role="option"
+          style={
+            Object {
+              "pointerEvents": "all",
+            }
+          }
+        >
+          <span
+            className="text"
+          >
+            Entity Types
           </span>
         </div>
       </div>

@@ -207,6 +207,7 @@ function createServer() {
             categories: json,
             concepts: json,
             keywords: json,
+            entityTypes: json,
             searchQuery,
             numMatches: matches.results.length,
             numPositive: totals.numPositive,
@@ -243,12 +244,17 @@ function createServer() {
           matches = utils.formatData(matches, []);
           var totals = utils.getTotals(matches);
 
+          // const util = require('util');
+          // console.log('++++++++++++ DISCO RESULTS ++++++++++++++++++++');
+          // console.log(util.inspect(results, false, null));
+      
           res.render('index', { 
             data: matches, 
             entities: results,
             categories: results,
             concepts: results,
             keywords: results,
+            entityTypes: results,
             numMatches: matches.results.length,
             numPositive: totals.numPositive,
             numNeutral: totals.numNeutral,
@@ -263,10 +269,6 @@ function createServer() {
         });
     });
     
-    // const util = require('util');
-    // console.log('++++++++++++ DISCO RESULTS ++++++++++++++++++++');
-    // console.log(util.inspect(results, false, null));
-
   });
 
   return server;

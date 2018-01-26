@@ -25,6 +25,7 @@ import EntitiesFilter from './EntitiesFilter';
 import CategoriesFilter from './CategoriesFilter';
 import ConceptsFilter from './ConceptsFilter';
 import KeywordsFilter from './KeywordsFilter';
+import EntityTypesFilter from './EntityTypesFilter';
 import TagCloudRegion from './TagCloudRegion';
 import TrendChart from './TrendChart';
 import SentimentChart from './SentimentChart';
@@ -45,6 +46,7 @@ class Main extends React.Component {
       categories, 
       concepts, 
       keywords,
+      entityTypes,
       data,
       numMatches,
       numPositive,
@@ -62,6 +64,7 @@ class Main extends React.Component {
       selectedCategories,
       selectedConcepts,
       selectedKeywords,
+      selectedEntityTypes,
       // matches panel
       currentPage,
       // tag cloud
@@ -81,6 +84,7 @@ class Main extends React.Component {
       categories: categories && parseCategories(categories),
       concepts: concepts && parseConcepts(concepts),
       keywords: keywords && parseKeywords(keywords),
+      entityTypes: entityTypes && parseEntityTypes(entityTypes),
       data: data,   // data should already be formatted
       numMatches: numMatches || 0,
       numPositive: numPositive || 0,
@@ -99,8 +103,9 @@ class Main extends React.Component {
       selectedCategories: selectedCategories || new Set(),
       selectedConcepts: selectedConcepts || new Set(),
       selectedKeywords: selectedKeywords || new Set(),
+      selectedEntityTypes: selectedEntityTypes || new Set(),
       // tag cloud
-      tagCloudType: tagCloudType || utils.ENTITIY_FILTER,
+      tagCloudType: tagCloudType || utils.ENTITY_FILTER,
       // trending chart
       trendData: trendData || null,
       trendError: trendError,
@@ -249,6 +254,7 @@ class Main extends React.Component {
       categories, selectedCategories, 
       concepts, selectedConcepts,
       keywords, selectedKeywords,
+      entityTypes, selectedEntityTypes,
       searchQuery  } = this.state;
 
     if (cloudType === utils.CATEGORY_FILTER) {
@@ -258,10 +264,10 @@ class Main extends React.Component {
       } else {
         selectedCategories.add(fullName);
       }
-      
       this.setState({
         selectedCategories: selectedCategories
       });
+
     } else if (cloudType == utils.CONCEPT_FILTER) {
       fullName = this.buildFullTagName(selectedTagValue, concepts.results);
       if (selectedConcepts.has(fullName)) {
@@ -269,10 +275,10 @@ class Main extends React.Component {
       } else {
         selectedConcepts.add(fullName);
       }
-
       this.setState({
         selectedConcepts: selectedConcepts
       });
+
     } else if (cloudType == utils.KEYWORD_FILTER) {
       fullName = this.buildFullTagName(selectedTagValue, keywords.results);
       if (selectedKeywords.has(fullName)) {
@@ -280,10 +286,10 @@ class Main extends React.Component {
       } else {
         selectedKeywords.add(fullName);
       }
-
       this.setState({
         selectedKeywords: selectedKeywords
       });
+
     } else if (cloudType == utils.ENTITIY_FILTER) {
       fullName = this.buildFullTagName(selectedTagValue, entities.results);
       if (selectedEntities.has(fullName)) {
@@ -291,9 +297,19 @@ class Main extends React.Component {
       } else {
         selectedEntities.add(fullName);
       }
-      
       this.setState({
         selectedEntities: selectedEntities
+      });
+
+    } else if (cloudType == utils.ENTITY_TYPE_FILTER) {
+      fullName = this.buildFullTagName(selectedTagValue, entityTypes.results);
+      if (selectedEntityTypes.has(fullName)) {
+        selectedEntityTypes.delete(fullName);
+      } else {
+        selectedEntityTypes.add(fullName);
+      }
+      this.setState({
+        selectedEntityTypes: selectedEntityTypes
       });
     }
 
@@ -342,6 +358,8 @@ class Main extends React.Component {
       trendQuery = 'enriched_text.concepts.text::' + term;
     } else if (chartType === utils.KEYWORD_FILTER) {
       trendQuery = 'enriched_text.keywords.text::' + term;
+    } else if (chartType === utils.ENTITY_TYPE_FILTER) {
+      trendQuery = 'enriched_text.entities.type::' + term;
     }
 
     const qs = queryString.stringify({
@@ -395,6 +413,7 @@ class Main extends React.Component {
       selectedCategories, 
       selectedConcepts,
       selectedKeywords,
+      selectedEntityTypes,
       queryType,
       returnPassages,
       limitResults,
@@ -407,6 +426,7 @@ class Main extends React.Component {
       selectedCategories.clear();
       selectedConcepts.clear();
       selectedKeywords.clear();
+      selectedEntityTypes.clear();
     }
 
     // console.log("QUERY2 - selectedCategories: ");
@@ -470,6 +490,7 @@ class Main extends React.Component {
           categories: parseCategories(json),
           concepts: parseConcepts(json),
           keywords: parseKeywords(json),
+          entityTypes: parseEntityTypes(json),
           loading: false,
           numMatches: data.results.length,
           numPositive: totals.numPositive,
@@ -529,7 +550,8 @@ class Main extends React.Component {
       selectedEntities, 
       selectedCategories, 
       selectedConcepts,
-      selectedKeywords
+      selectedKeywords,
+      selectedEntityTypes
     } = this.state;
     var filterString = '';
     
@@ -552,6 +574,11 @@ class Main extends React.Component {
     var keywordString = this.buildFilterStringForType(selectedKeywords,
       'enriched_text.keywords.text::', filterString === '');
     filterString = filterString + keywordString;
+
+    // add any entities type filters, if selected
+    var entityTypesString = this.buildFilterStringForType(selectedEntityTypes,
+      'enriched_text.entities.type::', filterString === '');
+    filterString = filterString + entityTypesString;
 
     return filterString;
   }
@@ -683,12 +710,29 @@ class Main extends React.Component {
   }
 
   /**
+   * getEntityTypeFilter - return entity types filter object to be rendered.
+   */
+  getEntityTypesFilter() {
+    const { entityTypes, selectedEntityTypes } = this.state;
+    if (!entityTypes) {
+      return null;
+    }
+    return (
+      <EntityTypesFilter
+        onFilterItemsChange={this.filtersChanged.bind(this)}
+        entityTypes={entityTypes.results}
+        selectedEntityTypes={selectedEntityTypes}
+      />
+    );
+  }
+
+  /**
    * render - return all the home page object to be rendered.
    */
   render() {
     const { loading, data, error, searchQuery,
-      entities, categories, concepts, keywords,
-      selectedEntities, selectedCategories, selectedConcepts, selectedKeywords,
+      entities, categories, concepts, keywords, entityTypes,
+      selectedEntities, selectedCategories, selectedConcepts, selectedKeywords, selectedEntityTypes,
       numMatches, numPositive, numNeutral, numNegative,
       tagCloudType, trendData, trendLoading, trendError, trendTerm,
       queryType, returnPassages, limitResults, sortOrder,
@@ -708,7 +752,8 @@ class Main extends React.Component {
     if (selectedEntities.size > 0 ||
       selectedCategories.size > 0 ||
       selectedConcepts.size > 0 ||
-      selectedKeywords.size > 0) {
+      selectedKeywords.size > 0 ||
+      selectedEntityTypes.size > 0) {
       filtersOn = true;
     }
     
@@ -804,6 +849,18 @@ class Main extends React.Component {
                 {this.getKeywordsFilter()}
               </Accordion.Content>
             </Accordion>
+            <Accordion styled>
+              <Accordion.Title
+                active={activeFilterIndex == utils.ENTITY_TYPE_DATA_INDEX}
+                index={utils.ENTITY_TYPE_DATA_INDEX}
+                onClick={this.handleAccordionClick.bind(this)}>
+                <Icon name='dropdown' />
+                Entity Types
+              </Accordion.Title>
+              <Accordion.Content active={activeFilterIndex == utils.ENTITY_TYPE_DATA_INDEX}>
+                {this.getEntityTypesFilter()}
+              </Accordion.Content>
+            </Accordion>
             <Divider hidden/>
             <Divider/>
             <Divider hidden/>
@@ -816,6 +873,7 @@ class Main extends React.Component {
                 categories={categories}
                 concepts={concepts}
                 keywords={keywords}
+                entityTypes={entityTypes}
                 tagCloudType={tagCloudType}
                 onTagItemSelected={this.tagItemSelected.bind(this)}
               />
@@ -895,6 +953,7 @@ class Main extends React.Component {
                 categories={categories}
                 concepts={concepts}
                 keywords={keywords}
+                entityTypes={entityTypes}
                 term={sentimentTerm}
                 onSentimentTermChanged={this.sentimentTermChanged.bind(this)}
               />
@@ -916,6 +975,7 @@ class Main extends React.Component {
                   categories={categories}
                   concepts={concepts}
                   keywords={keywords}
+                  entityTypes={entityTypes}
                   term={trendTerm}
                   onGetTrendDataRequest={this.getTrendData.bind(this)}
                 />
@@ -965,7 +1025,15 @@ const parseConcepts = data => ({
  */
 const parseKeywords = data => ({
   rawResponse: Object.assign({}, data),
-  results: data.aggregations[3].results
+  results: data.aggregations[utils.KEYWORD_DATA_INDEX].results
+});
+
+/**
+ * parseEntityTypes - convert raw search results into collection of entity types.
+ */
+const parseEntityTypes = data => ({
+  rawResponse: Object.assign({}, data),
+  results: data.aggregations[utils.ENTITY_TYPE_DATA_INDEX].results
 });
 
 /**
@@ -985,11 +1053,13 @@ Main.propTypes = {
   categories: PropTypes.object,
   concepts: PropTypes.object,
   keywords: PropTypes.object,
+  entityTypes: PropTypes.object,
   searchQuery: PropTypes.string,
   selectedEntities: PropTypes.object,
   selectedCategories: PropTypes.object,
   selectedConcepts: PropTypes.object,
   selectedKeywords: PropTypes.object,
+  selectedEntityTypes: PropTypes.object,
   numMatches: PropTypes.number,
   numPositive: PropTypes.number,
   numNeutral: PropTypes.number,

@@ -57,7 +57,7 @@ Here is a rough sketch of the main UI screen, followed by a description of each 
 
 # Watch the Video
 
-!!!! COMING
+[![](http://img.youtube.com/vi/5EEmQwcjUa4/0.jpg)](https://youtu.be/5EEmQwcjUa4)
 
 # Steps
 
@@ -160,10 +160,7 @@ be usable on restart. If you used `Deploy to IBM Cloud` the restart should be au
 
 * Error: Only one free environent is allowed per organization
 
-  > To work with a free trial, a small free Discovery environment is created. If you already have a Discovery environment, this will fail. If you are not using Discovery, check for an old
-service thay you may want to delete. Otherwise use the .env DISCOVERY_ENVIRONMENT_ID to tell
-the app which environment you want it to use. A collection will be created in this environment
-using the default configuration.
+  > To work with a free trial, a small free Discovery environment is created. If you already have a Discovery environment, this will fail. If you are not using Discovery, check for an old service thay you may want to delete. Otherwise use the .env DISCOVERY_ENVIRONMENT_ID to tell the app which environment you want it to use. A collection will be created in this environment using the default configuration.
 
 * Error when loading files into Discovery
 
@@ -196,7 +193,7 @@ To disable tracking, simply remove `require("metrics-tracker-client").track();` 
 
 # Links
 
-* [Demo on Youtube](https://????): Watch the video.
+* [Demo on Youtube](https://www.youtube.com/watch?v=5EEmQwcjUa4): Watch the video
 * [Watson Node.js SDK](https://github.com/watson-developer-cloud/node-sdk): Download the Watson Node SDK.
 
 # Learn more

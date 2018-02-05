@@ -8,8 +8,6 @@ applications:
   name: watson-discovery-ui
   buildpack: sdk-for-nodejs
   memory: 256M
-  env:
-    OPTIMIZE_MEMORY: true
   instances: 1
   random-route: true
   services:

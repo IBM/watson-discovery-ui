@@ -29,17 +29,13 @@ const Match = props => (
     <List.Content>
       <List.Header>
         <List.Description>
-          { props.title1 }
-          <span style={{backgroundColor:'#ffffb3'}}>{ props.title2 }</span>
-          { props.title3 }
+          <span dangerouslySetInnerHTML={{__html: props.title}}></span>
         </List.Description>
       </List.Header>
     </List.Content>
     <List.Content>
       <List.Description>
-        { props.text1 }
-        <span style={{backgroundColor:'#ffffb3'}}>{ props.text2 }</span>
-        { props.text3 }
+        <span dangerouslySetInnerHTML={{__html: props.text}}></span>
       </List.Description>
     </List.Content>
     <List.Content>
@@ -56,12 +52,8 @@ const Match = props => (
 
 // type check to ensure we are called correctly
 Match.propTypes = {
-  title1: PropTypes.string.isRequired,
-  title2: PropTypes.string.isRequired,
-  title3: PropTypes.string.isRequired,
-  text1: PropTypes.string.isRequired,
-  text2: PropTypes.string.isRequired,
-  text3: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   score: PropTypes.string.isRequired,
   sentiment: PropTypes.object.isRequired
@@ -75,12 +67,9 @@ const Matches = props => (
           {props.matches.map(item =>
             <Match
               key={ item.id }
-              title1={ getTitle(item, 1) }
-              title2={ getTitle(item, 2) }
-              title3={ getTitle(item, 3) }
-              text1={ getText(item, 1) }
-              text2={ getText(item, 2) }
-              text3={ getText(item, 3) }
+              title={ getTitle(item) }
+              text={ getText(item) }
+              highlightText={ item.highlightText }
               score={ getScore(item) }
               date={ item.date }
               sentiment={ getSentiment(item) }
@@ -98,60 +87,39 @@ Matches.propTypes = {
 };
 
 // format title into 3 parts, so that we can set background color for passages
-const getTitle = (item, step) => {
-  var usePassage = item.passage.showPassage && item.passage.field === 'title';
-  if (step === 1) {
-    if (usePassage) {
-      return item.title.substring(0,item.passage.startIdx);
-    } else {
-      return item.title ? item.title : 'No Title';
-    }
-  } else if (step === 2) {
-    if (usePassage) {
-      return item.title.substring(item.passage.startIdx, item.passage.endIdx);
-    } else {
-      return '';
-    }
+const getTitle = (item) => {
+  if (item.highlight.showHighlight && item.highlight.field === 'title') {
+    var str = '<style>hilite {background:#ffffb3;}</style>';
+    item.highlight.indexes.forEach(function(element) {
+      str = str + item.title.substring(0, element.startIdx) +
+        '<hilite>' +
+        item.title.substring(element.startIdx, element.endIdx) +
+        '</hilite>' +
+        item.title.substring(element.endIdx);
+    });
+    return str;
   } else {
-    if (usePassage) {
-      return item.title.substring(item.passage.endIdx);
-    } else {
-      return '';
-    }
+    return item.title ? item.title : 'No Title';
   }
 };
 
 // format text into 3 parts, so that we can set background color for passages
 // and highlighted words
-const getText = (item, step) => {
-  var useHighlights = false;
-  if (item.passage.showPassage && item.passage.field === 'text') {
-    useHighlights = true;
-    var startIdx = item.passage.startIdx;
-    var endIdx = item.passage.endIdx;
-  } else if (item.highlight.showHighlight) {
-    useHighlights = true;
-    startIdx = item.highlight.startIdx;
-    endIdx = item.highlight.endIdx;
-  }
-  if (step === 1) {
-    if (useHighlights) {
-      return item.text.substring(0,startIdx);
-    } else {
-      return item.text ? item.text : 'No Description';
-    }
-  } else if (step === 2) {
-    if (useHighlights) {
-      return item.text.substring(startIdx, endIdx);
-    } else {
-      return '';
-    }
+const getText = (item) => {
+  if (item.highlight.showHighlight && item.highlight.field === 'text') {
+    var str = '<style>hilite {background:#ffffb3;}</style>';
+    var currIdx = 0;
+    item.highlight.indexes.forEach(function(element) {
+      str = str + item.text.substring(currIdx, element.startIdx) +
+        '<hilite>' +
+        item.text.substring(element.startIdx, element.endIdx) +
+        '</hilite>';
+      currIdx = element.endIdx;
+    });
+    str = str + item.text.substring(currIdx);
+    return str;
   } else {
-    if (useHighlights) {
-      return item.text.substring(endIdx);
-    } else {
-      return '';
-    }
+    return item.text ? item.text : 'No Description';
   }
 };
 

@@ -27,17 +27,13 @@ exports[`renders correctly 1`] = `
               <div
                 className="description"
               >
-                &lt;div className="description"&gt;test title&lt;span style={Object { "backgroundColor": "#ffffb3" }}&gt;&lt;/span&gt;&lt;/div&gt;
                 <span
-                  style={
+                  dangerouslySetInnerHTML={
                     Object {
-                      "backgroundColor": "#ffffb3",
+                      "__html": "<div className=\\"description\\">test title<span style={Object { \\"backgroundColor\\": \\"#ffffb3\\" }}></span></div>",
                     }
                   }
-                >
-                  
-                </span>
-                
+                />
               </div>
             </div>
           </div>
@@ -47,17 +43,13 @@ exports[`renders correctly 1`] = `
             <div
               className="description"
             >
-              &lt;div className="description"&gt;I had a great time&lt;span style={Object { "backgroundColor": "#ffffb3" }}&gt;&lt;/span&gt;&lt;/div&gt;
               <span
-                style={
+                dangerouslySetInnerHTML={
                   Object {
-                    "backgroundColor": "#ffffb3",
+                    "__html": "<div className=\\"description\\">I had a great time<span style={Object { \\"backgroundColor\\": \\"#ffffb3\\" }}></span></div>",
                   }
                 }
-              >
-                
-              </span>
-              
+              />
             </div>
           </div>
           <div

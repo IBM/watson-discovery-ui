@@ -1,0 +1,49 @@
+{
+  "appIconURL": "blueprint/appicon.svg",
+  "description": "The main benefit of using the Watson Discovery Service is its powerful analytics engine that provides cognitive enrichments and insights into your data. This app provides examples of how to showcase these enrichments through the use of filters, lists and graphs.",
+  "email": "cloud@us.ibm.com",
+  "generatorOptions": {
+    "generator-git-starterkit-credentials-builder": {
+      "scope": "@arf",
+      "version": "0.x.x"
+    },
+    "generator-ibm-cloud-enablement": {
+      "options": {
+        "port": "3000"
+      },
+      "version": "0.8.x"
+    },
+    "generator-ibm-service-enablement": {
+      "version": "0.6.4"
+    },
+    "generator-starterkit-content-downloader": {
+      "scope": "@arf",
+      "version": "0.x.x"
+    }
+  },
+  "generators": {
+    "node": [
+      "generator-starterkit-content-downloader",
+      "generator-ibm-cloud-enablement",
+      "generator-ibm-service-enablement",
+      "generator-git-starterkit-credentials-builder"
+    ]
+  },
+  "name": "Develop a fully featured web app built on the Watson Discovery Service",
+  "previewURLs": [],
+  "requiredCapabilities": [
+    "discovery"
+  ],
+  "requiredCapabilitiesURLs": {
+    "discovery": "https://console.bluemix.net/catalog/services/discovery"
+  },
+  "servicePlans": {
+    "discovery": "lite"
+  },
+  "tags": [
+    "cli",
+    "devex"
+  ],
+  "thumbnailURL": "blueprint/thumbnail.svg",
+  "type": "WEB"
+}

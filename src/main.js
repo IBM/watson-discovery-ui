@@ -442,11 +442,12 @@ class Main extends React.Component {
 
     scrollToMain();
     history.pushState({}, {}, `/${searchQuery.replace(/ /g, '+')}`);
+    const filterString = this.buildFilterStringForQuery();
 
     // build query string, with filters and optional params
     const qs = queryString.stringify({
       query: searchQuery,
-      filters: this.buildFilterString(),
+      filters: filterString,
       count: (limitResults == true ? 100 : 1000),
       sort: sortOrder,
       returnPassages: returnPassages,
@@ -474,7 +475,7 @@ class Main extends React.Component {
           // console.log(util.inspect(passages.results, false, null));
         }
 
-        data = utils.formatData(data, passages);
+        data = utils.formatData(data, passages, filterString);
         
         console.log('+++ DISCO RESULTS +++');
         // const util = require('util');
@@ -515,10 +516,10 @@ class Main extends React.Component {
   }
   
   /**
-   * buildFilterStringForType - build the filter string for
+   * buildFilterStringForFacet - build the filter string for
    * one set of filter objects.
    */
-  buildFilterStringForType(collection, keyName, firstOne) {
+  buildFilterStringForFacet(collection, keyName, firstOne) {
     var str = '';
     var firstValue = firstOne; 
     if (collection.size > 0) {
@@ -545,7 +546,7 @@ class Main extends React.Component {
    * buildFilterString - convert all selected filters into a string
    * to be added to the search query sent to the discovery service
    */
-  buildFilterString() {
+  buildFilterStringForQuery() {
     var { 
       selectedEntities, 
       selectedCategories, 
@@ -556,27 +557,27 @@ class Main extends React.Component {
     var filterString = '';
     
     // add any entities filters, if selected
-    var entitiesString = this.buildFilterStringForType(selectedEntities,
+    var entitiesString = this.buildFilterStringForFacet(selectedEntities,
       'enriched_text.entities.text::', true);
     filterString = filterString + entitiesString;
       
     // add any category filters, if selected
-    var categoryString = this.buildFilterStringForType(selectedCategories,
+    var categoryString = this.buildFilterStringForFacet(selectedCategories,
       'enriched_text.categories.label::', filterString === '');
     filterString = filterString + categoryString;
 
     // add any concept filters, if selected
-    var conceptString = this.buildFilterStringForType(selectedConcepts,
+    var conceptString = this.buildFilterStringForFacet(selectedConcepts,
       'enriched_text.concepts.text::', filterString === '');
     filterString = filterString + conceptString;
 
     // add any keyword filters, if selected
-    var keywordString = this.buildFilterStringForType(selectedKeywords,
+    var keywordString = this.buildFilterStringForFacet(selectedKeywords,
       'enriched_text.keywords.text::', filterString === '');
     filterString = filterString + keywordString;
 
     // add any entities type filters, if selected
-    var entityTypesString = this.buildFilterStringForType(selectedEntityTypes,
+    var entityTypesString = this.buildFilterStringForFacet(selectedEntityTypes,
       'enriched_text.entities.type::', filterString === '');
     filterString = filterString + entityTypesString;
 
@@ -608,15 +609,19 @@ class Main extends React.Component {
    */
   getMatches() {
     const { data, currentPage } = this.state;
+
     if (!data) {
       return null;
     }
 
+    // get one page of matches
     var page = parseInt(currentPage);
     var startIdx = (page - 1) * utils.ITEMS_PER_PAGE;
+    var pageOfMatches = data.results.slice(startIdx,startIdx+utils.ITEMS_PER_PAGE);
+
     return (
       <Matches 
-        matches={data.results.slice(startIdx,startIdx+utils.ITEMS_PER_PAGE)}
+        matches={ pageOfMatches }
       />
     );
   }

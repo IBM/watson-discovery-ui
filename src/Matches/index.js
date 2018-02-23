@@ -86,7 +86,7 @@ Matches.propTypes = {
   matches: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
-// format title into 3 parts, so that we can set background color for passages
+// format title, setting backgroud color for all highlighted words
 const getTitle = (item) => {
   if (item.highlight.showHighlight && item.highlight.field === 'title') {
     var str = '<style>hilite {background:#ffffb3;}</style>';
@@ -103,8 +103,7 @@ const getTitle = (item) => {
   }
 };
 
-// format text into 3 parts, so that we can set background color for passages
-// and highlighted words
+// format text, setting background color for all highlighted words
 const getText = (item) => {
   if (item.highlight.showHighlight && item.highlight.field === 'text') {
     var str = '<style>hilite {background:#ffffb3;}</style>';

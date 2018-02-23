@@ -364,7 +364,7 @@ class Main extends React.Component {
 
     const qs = queryString.stringify({
       query: trendQuery,
-      filters: this.buildFilterString(),
+      filters: this.buildFilterStringForQuery(),
       count: (limitResults == true ? 100 : 1000)
     });
 
@@ -543,7 +543,7 @@ class Main extends React.Component {
   }
 
   /**
-   * buildFilterString - convert all selected filters into a string
+   * buildFilterStringForQuery - convert all selected filters into a string
    * to be added to the search query sent to the discovery service
    */
   buildFilterStringForQuery() {

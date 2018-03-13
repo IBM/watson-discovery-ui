@@ -1,6 +1,6 @@
 {
   "appIconURL": "blueprint/appicon.svg",
-  "description": "The main benefit of using the Watson Discovery Service is its powerful analytics engine that provides cognitive enrichments and insights into your data. This app provides examples of how to showcase these enrichments through the use of filters, lists and graphs.",
+  "description": "Develop a web app to extract and visualize enriched data using Node.js and Watson Discovery",
   "email": "cloud@us.ibm.com",
   "generatorOptions": {
     "generator-git-starterkit-credentials-builder": {
@@ -29,7 +29,7 @@
       "generator-git-starterkit-credentials-builder"
     ]
   },
-  "name": "Develop a fully featured web app built on the Watson Discovery Service",
+  "name": "Create an app to perform intelligent searches on data",
   "previewURLs": [],
   "requiredCapabilities": [
     "discovery"

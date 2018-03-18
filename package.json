@@ -51,7 +51,7 @@
   },
   "babel": {
     "presets": [
-      "es2015",
+      "env",
       "react"
     ],
     "ignore": "node_modules"

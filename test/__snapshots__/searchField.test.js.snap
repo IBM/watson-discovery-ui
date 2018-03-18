@@ -45,7 +45,9 @@ exports[`renders correctly 1`] = `
         <input
           checked={false}
           className="hidden"
+          id={undefined}
           name={undefined}
+          onClick={[Function]}
           readOnly={true}
           tabIndex={0}
           type="checkbox"
@@ -70,7 +72,9 @@ exports[`renders correctly 1`] = `
         <input
           checked={false}
           className="hidden"
+          id={undefined}
           name={undefined}
+          onClick={[Function]}
           readOnly={true}
           tabIndex={0}
           type="checkbox"
@@ -95,7 +99,9 @@ exports[`renders correctly 1`] = `
         <input
           checked={true}
           className="hidden"
+          id={undefined}
           name={undefined}
+          onClick={[Function]}
           readOnly={true}
           tabIndex={0}
           type="checkbox"

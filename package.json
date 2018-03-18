@@ -52,6 +52,7 @@
   },
   "babel": {
     "presets": [
+      "env",
       "react"
     ],
     "ignore": "node_modules"

@@ -65,7 +65,7 @@ Use the ``Deploy to IBM Cloud`` button **OR** create the services and run locall
 
 ## Deploy to IBM Cloud
 
-[![Deploy to Bluemix](https://metrics-tracker.mybluemix.net/stats/1d5f6ef7fb5364be97be249346b673c0/button.svg)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-discovery-ui.git)
+[![Deploy to Bluemix](https://metrics-tracker.mybluemix.net/stats/1d5f6ef7fb5364be97be249346b673c0/button.svg)](https://bluemix.net/deploy?repository=https://github.com/rhagarty/watson-discovery-ui.git)
 
 1. Press the above ``Deploy to IBM Cloud`` button and then click on ``Deploy``.
 

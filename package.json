@@ -57,8 +57,9 @@
     "ignore": "node_modules"
   },
   "devDependencies": {
-    "enzyme": "^3.2.0",
+    "babel-preset-es2015": "^6.24.1",
     "dezalgo": "~1.0",
+    "enzyme": "^3.2.0",
     "eslint": "^4.13.1",
     "eslint-config-standard": "^11.0.0-beta.0",
     "eslint-plugin-import": "^2.8.0",

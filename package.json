@@ -18,6 +18,7 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
+    "babel-preset-env": "^1.6.1",
     "babelify": "^8.0.0",
     "bluebird": "^3.5.0",
     "botkit": "^0.6.7",
@@ -51,7 +52,7 @@
   },
   "babel": {
     "presets": [
-      "es2015",
+      "env",
       "react"
     ],
     "ignore": "node_modules"

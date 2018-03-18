@@ -18,6 +18,7 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
+    "babel-preset-env": "^1.6.1",
     "babelify": "^8.0.0",
     "bluebird": "^3.5.0",
     "botkit": "^0.6.7",
@@ -51,14 +52,14 @@
   },
   "babel": {
     "presets": [
-      "es2015",
+      "env",
       "react"
     ],
     "ignore": "node_modules"
   },
   "devDependencies": {
-    "enzyme": "^3.2.0",
     "dezalgo": "~1.0",
+    "enzyme": "^3.2.0",
     "eslint": "^4.13.1",
     "eslint-config-standard": "^11.0.0-beta.0",
     "eslint-plugin-import": "^2.8.0",

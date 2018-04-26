@@ -30,7 +30,6 @@
     "express-react-views": "^0.10.2",
     "g": "^2.0.1",
     "help": "^3.0.2",
-    "metrics-tracker-client": "*",
     "moment": "^2.19.4",
     "npm-check-updates": "^2.13.0",
     "parse5": "^4.0.0",

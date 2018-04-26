@@ -34,8 +34,6 @@ const utils = require('../lib/utils');
  * service, and setting up route methods to handle client requests.
  */
 
-require('metrics-tracker-client').track();
-
 var environment_id;
 var collection_id;
 const DEFAULT_NAME = 'airbnb-austin-data';

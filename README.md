@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.org/IBM/watson-discovery-ui.svg?branch=master)](https://travis-ci.org/IBM/watson-discovery-ui)
-![Bluemix Deployments](https://metrics-tracker.mybluemix.net/stats/1d5f6ef7fb5364be97be249346b673c0/badge.svg)
 
 # Develop a fully featured web app built on the Watson Discovery Service
 
@@ -65,8 +64,8 @@ Use the ``Deploy to IBM Cloud`` button **OR** create the services and run locall
 
 ## Deploy to IBM Cloud
 
-[![Deploy to Bluemix](https://metrics-tracker.mybluemix.net/stats/1d5f6ef7fb5364be97be249346b673c0/button.svg)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-discovery-ui.git)
-
+[![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-discovery-ui.git)
+ 
 1. Press the above ``Deploy to IBM Cloud`` button and then click on ``Deploy``.
 
 2. In Toolchains, click on Delivery Pipeline to watch while the app is deployed. Once deployed, the app can be viewed by clicking 'View app'.
@@ -169,27 +168,6 @@ be usable on restart. If you used `Deploy to IBM Cloud` the restart should be au
 * No keywords appear in the app
 
   > This can be due to not having a proper configuration file assigned to your data collection. See [Step 3](#3-load-the-discovery-files) above.
-
-# Privacy Notice
-
-If using the `Deploy to IBM Cloud` button some metrics are tracked, the following information is sent to a [Deployment Tracker](https://github.com/IBM/metrics-tracker-service) service on each deployment:
-
-* Node.js package version
-* Node.js repository URL
-* Application Name (`application_name`)
-* Application GUID (`application_id`)
-* Application instance index number (`instance_index`)
-* Space ID (`space_id`)
-* Application Version (`application_version`)
-* Application URIs (`application_uris`)
-* Labels of bound services
-* Number of instances for each bound service and associated plan information
-
-This data is collected from the `package.json` file in the sample application and the ``VCAP_APPLICATION`` and ``VCAP_SERVICES`` environment variables in IBM Cloud and other Cloud Foundry platforms. This data is used by IBM to track metrics around deployments of sample applications to IBM Cloud to measure the usefulness of our examples, so that we can continuously improve the content we offer to you. Only deployments of sample applications that include code to ping the Deployment Tracker service will be tracked.
-
-## Disabling Deployment Tracking
-
-To disable tracking, simply remove `require("metrics-tracker-client").track();` from the ``index.js`` file in the ``server`` directory.
 
 # Links
 

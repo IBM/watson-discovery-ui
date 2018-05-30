@@ -80,7 +80,7 @@ export default class TagCloudRegion extends React.Component {
     for (idx = 0; idx < oldArray.length; idx++) {
       var obj = oldArray[idx];
       obj.value = obj.key; // + ' (' + obj.matching_results + ')';
-      obj.count = idx;
+      obj.count = obj.matching_results;
       delete(obj.key);
       delete(obj.matching_results);
       newArray.push(obj); 

@@ -26,7 +26,7 @@ const queryString = require('query-string');
 const queryBuilder = require('./query-builder');
 const queryTrendBuilder = require('./query-builder-trending');
 const WatsonDiscoverySetup = require('../lib/watson-discovery-setup');
-const watson = require('watson-developer-cloud');
+const DiscoveryV1 = require('watson-developer-cloud/discovery/v1');
 const utils = require('../lib/utils');
 
 /**
@@ -49,10 +49,8 @@ arrayOfFiles.forEach(function(file) {
 // out of memory errors.
 //discoveryDocs = discoveryDocs.slice(0,100);
 
-const discovery = watson.discovery({
-  // uname/pwd will be pulled in from VCAP_SERVICES or .env
-  version: 'v1',
-  version_date: '2017-11-07'
+const discovery = new DiscoveryV1({
+  version: '2018-03-05'
 });
 
 // make 'query' a promise function

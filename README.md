@@ -1,4 +1,4 @@
-*Read this in other languages: [中国](README-cn.md).*
+*Read this in other languages: [中国](README-cn.md), [日本](README-ja.md).*
 
 [![Build Status](https://travis-ci.org/IBM/watson-discovery-ui.svg?branch=master)](https://travis-ci.org/IBM/watson-discovery-ui)
 
@@ -127,18 +127,20 @@ Edit the `.env` file with the necessary settings.
 #### `env.sample:`
 
 ```
-# Replace the credentials here with your own.
-# Rename this file to .env before starting the app.
+# Copy this file to .env and replace the credentials with
+# your own before starting the app.
 
 # Watson Discovery
-DISCOVERY_USERNAME=<add_discovery_username>
-DISCOVERY_PASSWORD=<add_discovery_password>
-DISCOVERY_ENVIRONMENT_ID=<add_discovery_environment>
-DISCOVERY_COLLECTION_ID=<add_discovery_collection>
+DISCOVERY_URL=<add_discovery_url>
+DISCOVERY_ENVIRONMENT_ID=<add_discovery_environment_id>
+DISCOVERY_COLLECTION_ID=<add_discovery_collection_id>
+## Un-comment and use either username+password or IAM apikey.
+# DISCOVERY_IAM_APIKEY=<add_discovery_iam_apikey>
+# DISCOVERY_USERNAME=<add_discovery_username>
+# DISCOVERY_PASSWORD=<add_discovery_password>
 
 # Run locally on a non-default port (default is 3000)
 # PORT=3000
-
 ```
 
 ### 5. Run the application

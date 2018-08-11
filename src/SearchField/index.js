@@ -83,7 +83,7 @@ export default class SearchField extends React.Component {
       <Grid className='search-field-grid'>
         <Grid.Column width={12} verticalAlign='middle' textAlign='center'>
           <Header as='h1' textAlign='center'>
-            Airbnb Review Data for Ausin, TX
+            Airbnb Review Data for Austin, TX
           </Header>
           <Input
             className='searchinput'

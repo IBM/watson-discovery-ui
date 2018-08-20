@@ -32,7 +32,6 @@
     "help": "^3.0.2",
     "moment": "^2.19.4",
     "npm-check-updates": "^2.14.2",
-    "parse5": "^4.0.0",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.1",
     "react": "^15.5.0",

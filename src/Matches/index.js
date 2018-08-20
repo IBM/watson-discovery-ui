@@ -108,14 +108,19 @@ const getText = (item) => {
   if (item.highlight.showHighlight && item.highlight.field === 'text') {
     var str = '<style>hilite {background:#ffffb3;}</style>';
     var currIdx = 0;
-    item.highlight.indexes.forEach(function(element) {
-      str = str + item.text.substring(currIdx, element.startIdx) +
-        '<hilite>' +
-        item.text.substring(element.startIdx, element.endIdx) +
-        '</hilite>';
-      currIdx = element.endIdx;
-    });
-    str = str + item.text.substring(currIdx);
+
+    if (item.highlight.fullText) {
+      str = str + item.highlight.fullText;
+    } else {
+      item.highlight.indexes.forEach(function(element) {
+        str = str + item.text.substring(currIdx, element.startIdx) +
+          '<hilite>' +
+          item.text.substring(element.startIdx, element.endIdx) +
+          '</hilite>';
+        currIdx = element.endIdx;
+      });
+      str = str + item.text.substring(currIdx);
+    }
     return str;
   } else {
     return item.text ? item.text : 'No Description';

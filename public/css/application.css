@@ -670,3 +670,14 @@ div.ui.mini.statistics {
 div.ui.compact.sort-dropdown.menu {
   float: right;
 }
+
+button.ui.button.review-button {
+  padding-top: 1px;
+  padding-right: 5px;
+  padding-left: 5px;
+  padding-bottom: 1px;
+  margin-left: 5px;
+  background-color: white;
+  color: #0000EE;
+  font-size: 13px;
+}

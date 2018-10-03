@@ -120,6 +120,34 @@ class Main extends React.Component {
   }
 
   /**
+   * updateDocMetrics - (callback function)
+   * User has entered a new search string to query on.
+   * This results in making a new qeury to the disco service.
+   * Keep track of the current term value so that main stays
+   * in sync with the trending chart component.
+   *
+   * NOTE: This function is also called at startup to
+   * display a default graph.
+   */
+  updateDocMetrics(data) {
+    var { sessionToken, documentId } = data;
+
+    const qs = queryString.stringify({
+      sessionToken: sessionToken,
+      documentId: documentId
+    });
+
+    fetch(`/api/createEvent?${qs}`)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw response;
+        }
+      });
+  }
+
+  /**
    * handleAccordionClick - (callback function)
    * User has selected one of the 
    * filter boxes to expand and show values for.
@@ -485,7 +513,7 @@ class Main extends React.Component {
         // add up totals for the sentiment of reviews
         var totals = utils.getTotals(data);
 
-        this.setState({ 
+        this.setState({
           data: data,
           entities: parseEntities(json),
           categories: parseCategories(json),
@@ -622,6 +650,7 @@ class Main extends React.Component {
     return (
       <Matches 
         matches={ pageOfMatches }
+        onGetFullReviewRequest={this.updateDocMetrics.bind(this)}
       />
     );
   }

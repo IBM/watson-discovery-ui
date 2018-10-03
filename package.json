@@ -43,7 +43,7 @@
     "sort-by": "^1.2.0",
     "uglifyify": "^4.0.5",
     "vcap_services": "^0.4.0",
-    "watson-developer-cloud": "^3.7.1"
+    "watson-developer-cloud": "^3.11.1"
   },
   "engines": {
     "node": "8.4.0"

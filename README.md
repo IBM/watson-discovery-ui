@@ -153,6 +153,10 @@ DISCOVERY_COLLECTION_ID=<add_discovery_collection_id>
  
 ![](doc/source/images/sample-output.png)
 
+Note that each review will be truncated to 200 characters or less. A `more...` button will be provided for each review, and when clicked, the full review title and text will be displayed in a pop-up modal window, as shown below:
+
+![](doc/source/images/review-popup.png)
+
 # Troubleshooting
 
 * Error: Environment {GUID} is still not active, retry once status is active

@@ -25,6 +25,7 @@ const Promise = require('bluebird');
 const queryString = require('query-string');
 const queryBuilder = require('./query-builder');
 const queryTrendBuilder = require('./query-builder-trending');
+const discoEvents = require('./disco-events');
 const WatsonDiscoverySetup = require('../lib/watson-discovery-setup');
 const DiscoveryV1 = require('watson-developer-cloud/discovery/v1');
 const utils = require('../lib/utils');
@@ -47,14 +48,15 @@ arrayOfFiles.forEach(function(file) {
 // shorten the list if we are loading - trail version of IBM Cloud 
 // is limited to 256MB application size, so use this if you get
 // out of memory errors.
-//discoveryDocs = discoveryDocs.slice(0,100);
+discoveryDocs = discoveryDocs.slice(0,100);
 
 const discovery = new DiscoveryV1({
-  version: '2018-03-05'
+  version: '2018-04-20'
 });
 
-// make 'query' a promise function
+// make our discovery queries promise functions
 discovery.query = Promise.promisify(discovery.query);
+discovery.createEvent = Promise.promisify(discovery.createEvent);
 
 const discoverySetup = new WatsonDiscoverySetup(discovery);
 const discoverySetupParams = { 
@@ -83,6 +85,8 @@ const WatsonDiscoServer = new Promise((resolve) => {
       queryBuilder.setCollectionId(collection_id);
       queryTrendBuilder.setEnvironmentId(environment_id);
       queryTrendBuilder.setCollectionId(collection_id);
+      discoEvents.setEnvironmentId(environment_id);
+      discoEvents.setCollectionId(collection_id);
 
       collectionParams.documents = discoveryDocs;
       console.log('Begin loading ' + discoveryDocs.length + 
@@ -100,12 +104,30 @@ const WatsonDiscoServer = new Promise((resolve) => {
 function createServer() {
   const server = require('./express');
 
+  server.get('/api/createEvent', (req, res) => {
+    const { sessionToken, documentId } = req.query;
+
+    // console.log('IN api/metrics');
+
+    var discoEventsParams = discoEvents.createEvent(documentId, sessionToken);
+
+    discovery.createEvent(discoEventsParams)
+      .then(response => res.json(response))
+      .catch(error => {
+        if (error.message === 'Number of free queries per month exceeded') {
+          res.status(429).json(error);
+        } else {
+          res.status(error.code).json(error);
+        }
+      });
+  });
+
   // handles search request from search bar
   server.get('/api/trending', (req, res) => {
     const { query, filters, count } = req.query;
 
     console.log('In /api/trending: query = ' + query);
-    
+
     // build params for the trending search request
     var params = {};
     params.query = query;

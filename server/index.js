@@ -48,7 +48,7 @@ arrayOfFiles.forEach(function(file) {
 // shorten the list if we are loading - trail version of IBM Cloud 
 // is limited to 256MB application size, so use this if you get
 // out of memory errors.
-discoveryDocs = discoveryDocs.slice(0,100);
+// discoveryDocs = discoveryDocs.slice(0,100);
 
 const discovery = new DiscoveryV1({
   version: '2018-04-20'

@@ -77,6 +77,8 @@ Use the ``Deploy to IBM Cloud`` button **OR** create the services and run locall
 3. To see the app and services created and configured for this journey, use the IBM Cloud dashboard. The app is named `watson-discovery-ui` with a unique suffix. The following services are created and easily identified by the `wdui-` prefix:
     * wdui-discovery-service
 
+> NOTE: To save on memory when running in the IBM Cloud, only 300 of the available 1000 reviews will be loaded into the Watson Discovery service.
+
 ## Run locally
 > NOTE: These steps are only needed when running locally instead of using the ``Deploy to IBM Cloud`` button.
 

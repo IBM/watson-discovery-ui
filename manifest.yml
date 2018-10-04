@@ -12,3 +12,5 @@ applications:
   random-route: false
   services:
   - wdui-discovery-service
+env:
+  OPTIMIZE_MEMORY: true

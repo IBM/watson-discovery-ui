@@ -45,6 +45,14 @@ Here is a rough sketch of the main UI screen, followed by a description of each 
 
 > Note: see [DEVELOPING.md](DEVELOPING.md) for project structure.
 
+## Watson Discovery Continuous Relevancy Training
+
+This feature provides the ability of the Discovery service to learn from user behavior. By clicking on the "read more" button attached to each review, the user can inform Discovery that a particular review is more relevant than other non-clicked reviews. Discovery can than use that information to improve the ranking of results for future queries.
+
+For more information about this feature, read about it [here](https://console.bluemix.net/docs/services/discovery/continuous-training.html#crt).
+
+> NOTE: This feature is only available with the "advanced" Watson Discovery service plan. This code pattern assumes the "lite" or "free" plan, so this feature is not enabled by default. For those users with the ability to create a paid Discovery plan, please link to the [`standard-plan`](https://github.com/IBM/watson-discovery-ui/tree/advanced-disco-plan) branch associated with this repo. The instructions and the `Deploy to IBM Cloud` button on that branch will initiate the creation of an "advanced" Discovery service.
+
 ## Included components
 * [Watson Discovery](https://www.ibm.com/watson/developercloud/discovery.html): A cognitive search and content analytics engine for applications to identify patterns, trends, and actionable insights.
 
@@ -158,6 +166,8 @@ DISCOVERY_COLLECTION_ID=<add_discovery_collection_id>
 Note that each review will be truncated to 200 characters or less. A `more...` button will be provided for each review, and when clicked, the full review title and text will be displayed in a pop-up modal window, as shown below:
 
 ![](doc/source/images/review-popup.png)
+
+If the `more...` button is clicked, the review data will be passed back to Discovery so that it can be logged as a relevant review for the query. Refer to the [Watson Discovery Continuous Relevancy Training](#watson-discovery-continuous-relevancy-training) section above for more information on this feature.
 
 # Troubleshooting
 

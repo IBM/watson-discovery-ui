@@ -111,7 +111,7 @@ git clone https://github.com/IBM/watson-discovery-ui
 
 Create the following services:
 
-* [**Watson Discovery**](https://console.ng.bluemix.net/catalog/services/discovery)
+* [**Watson Discovery**](https://cloud.ibm.com/catalog/services/discovery)
 
 ### 3. Load the Discovery files
 

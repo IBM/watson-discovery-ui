@@ -28,3 +28,5 @@ rules:
     - always
   no-console:
     - warn
+  react/no-deprecated:
+    - warn

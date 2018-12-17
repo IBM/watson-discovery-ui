@@ -17,11 +17,9 @@ exports[`renders correctly 1`] = `
     >
       <input
         defaultValue="test"
-        disabled={undefined}
         onChange={[Function]}
         onKeyPress={[Function]}
         placeholder="Enter search string..."
-        tabIndex={undefined}
         type="text"
       />
       <i
@@ -41,21 +39,16 @@ exports[`renders correctly 1`] = `
         onChange={[Function]}
         onClick={[Function]}
         onMouseDown={[Function]}
+        onMouseUp={[Function]}
       >
         <input
           checked={false}
           className="hidden"
-          id={undefined}
-          name={undefined}
-          onClick={[Function]}
           readOnly={true}
           tabIndex={0}
           type="checkbox"
-          value={undefined}
         />
-        <label
-          htmlFor={undefined}
-        >
+        <label>
           Natural Language Query
         </label>
       </div>
@@ -68,21 +61,16 @@ exports[`renders correctly 1`] = `
         onChange={[Function]}
         onClick={[Function]}
         onMouseDown={[Function]}
+        onMouseUp={[Function]}
       >
         <input
           checked={false}
           className="hidden"
-          id={undefined}
-          name={undefined}
-          onClick={[Function]}
           readOnly={true}
           tabIndex={0}
           type="checkbox"
-          value={undefined}
         />
-        <label
-          htmlFor={undefined}
-        >
+        <label>
           Passage Search
         </label>
       </div>
@@ -95,21 +83,16 @@ exports[`renders correctly 1`] = `
         onChange={[Function]}
         onClick={[Function]}
         onMouseDown={[Function]}
+        onMouseUp={[Function]}
       >
         <input
           checked={true}
           className="hidden"
-          id={undefined}
-          name={undefined}
-          onClick={[Function]}
           readOnly={true}
           tabIndex={0}
           type="checkbox"
-          value={undefined}
         />
-        <label
-          htmlFor={undefined}
-        >
+        <label>
           Limit to 100 Results
         </label>
       </div>

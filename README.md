@@ -4,7 +4,7 @@
 
 # Develop a fully featured web app built on the Watson Discovery Service
 
-In this Code Pattern, we walk you through a working example of a web application that queries and manipulates data from the Watson Discovery Service. This web app contains multiple UI components that you can use as a starting point for developing your own Watson Discovery Service applications. 
+In this code pattern, we walk you through a working example of a web application that queries and manipulates data from the Watson Discovery Service. This web app contains multiple UI components that you can use as a starting point for developing your own Watson Discovery Service applications. 
 
 The main benefit of using the Watson Discovery Service is its powerful analytics engine that provides cognitive enrichments and insights into your data. This app provides examples of how to showcase these enrichments through the use of filters, lists and graphs. The key enrichments that we will focus on are:
 
@@ -14,16 +14,16 @@ The main benefit of using the Watson Discovery Service is its powerful analytics
 * Keywords - important topics typically used to index or search the data.
 * Sentiment - the overall positive or negative sentiment of each document.
 
-For this Code Pattern, we will be using data that contains reviews of Airbnb properties located in the Austin, TX area. 
+For this code pattern, we will be using data that contains reviews of Airbnb properties located in the Austin, TX area. 
 
-When the reader has completed this Code Pattern, they will understand how to:
+When the reader has completed this code pattern, they will understand how to:
 
 * Load and enrich data in the Watson Discovery Service.
 * Query and manipulate data in the Watson Discovery Service.
 * Create UI components to represent enriched data created by the Watson Discovery Service.
 * Build a complete web app that utilizes popular JavaScript technologies to feature Watson Discovery Service data and enrichments.
 
-!["Architecture Diagram"](doc/source/images/architecture.png)
+![architecture](doc/source/images/architecture.png)
 
 ## Flow
 
@@ -36,7 +36,7 @@ When the reader has completed this Code Pattern, they will understand how to:
 
 Here is a rough sketch of the main UI screen, followed by a description of each UI component and their assoicated actions:
 
-!["UI Panel Sketch"](doc/source/images/ui-panel.png)
+![ui_panel_sketch](doc/source/images/ui-panel.png)
 
 1. Search field and search parameters: Return results based on search criteria. Search parameters will effect how the user will enter values, how they will be displayed, and limit the number of matches.
 1. List Filters: Multiple drop-down lists of filters that are applied to the search resullts. Each drop down list contains entities, categories, concepts and keywords associated with the results. For each drop down filter item, the number of matches will also be displayed. If a user selects a filter item, a new search will be conducted and will update the results panel (#3). Filter items selected will also effect what is shown in the tag cloud (#4).
@@ -70,7 +70,7 @@ For more information about this feature, read about it [here](https://console.bl
 
 # Watch the Video
 
-[!["Video"](http://img.youtube.com/vi/5EEmQwcjUa4/0.jpg)](https://youtu.be/5EEmQwcjUa4)
+[![video](http://img.youtube.com/vi/5EEmQwcjUa4/0.jpg)](https://youtu.be/5EEmQwcjUa4)
 
 # Steps
 
@@ -84,7 +84,7 @@ Use the ``Deploy to IBM Cloud`` button **OR** create the services and run locall
 
 2. In Toolchains, click on Delivery Pipeline to watch while the app is deployed. Once deployed, the app can be viewed by clicking 'View app'.
 
-!["Pipeline"](doc/source/images/toolchain-pipeline.png)
+![pipeline](doc/source/images/toolchain-pipeline.png)
 
 3. To see the app and services created and configured for this journey, use the IBM Cloud dashboard. The app is named `watson-discovery-ui` with a unique suffix. The following services are created and easily identified by the `wdui-` prefix:
     * wdui-discovery-service
@@ -124,13 +124,13 @@ and give the data collection a unique name.
 
 From the new collection data panel, under `Configuration` click the `Switch` button to create a new configuration file that will include extracting keywords as a function of data enrichment. Give the configuration file a unique name.
 
-!["Create Config File"](doc/source/images/create-keyword-config.gif)
+![create_config_file](doc/source/images/create-keyword-config.gif)
 
 > Note: failure to do this will result in no `keywords` being shown in the app. 
 
 From the new collection data panel, under `Add data to this collection` use `Drag and drop your documents here or browse from computer` to seed the content with the json files extracted from `data/airbnb/`.
 
-!["Upload Data to Collection"](doc/source/images/add-docs-to-collection.gif)
+![upload_data_into_collection](doc/source/images/add-docs-to-collection.gif)
 
 > Save the **environment_id** and **collection_id** for your `.env` file in the next step.
 
@@ -170,11 +170,11 @@ DISCOVERY_COLLECTION_ID=<add_discovery_collection_id>
 
 # Sample UI layout
 
-!["Sample Output"](doc/source/images/sample-output.png)
+![sample_output](doc/source/images/sample-output.png)
 
 Note that each review will be truncated to 200 characters or less. A `more...` button will be provided for each review, and when clicked, the full review title and text will be displayed in a pop-up modal window, as shown below:
 
-!["Full Review"](doc/source/images/review-popup.png)
+![full_review](doc/source/images/review-popup.png)
 
 If the `more...` button is clicked, the review data will be passed back to Discovery so that it can be logged as a relevant review for the query. Refer to the [Watson Discovery Continuous Relevancy Training](#watson-discovery-continuous-relevancy-training) section above for more information on this feature.
 
@@ -205,7 +205,7 @@ be usable on restart. If you used `Deploy to IBM Cloud` the restart should be au
 
 # Learn more
 
-* **Artificial Intelligence Code Patterns**: Enjoyed this Code Pattern? Check out our other [AI Code Patterns](https://developer.ibm.com/technologies/artificial-intelligence/).
+* **Artificial Intelligence Code Patterns**: Enjoyed this Code Pattern? Check out our other [AI Code Patterns](https://developer.ibm.com/technologies/artificial-intelligence/)
 * **AI and Data Code Pattern Playlist**: Bookmark our [playlist](https://www.youtube.com/playlist?list=PLzUbsvIyrNfknNewObx5N7uGZ5FKH0Fde) with all of our Code Pattern videos
 * **With Watson**: Want to take your Watson app to the next level? Looking to utilize Watson Brand assets? [Join the With Watson program](https://www.ibm.com/watson/with-watson/) to leverage exclusive brand, marketing, and tech resources to amplify and accelerate your Watson embedded commercial solution.
 

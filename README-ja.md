@@ -69,7 +69,7 @@ Watson Discovery Service を利用する最大の利点は、コグニティブ�
 
 ## IBM Cloudへのデプロイ
 
-[![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-discovery-ui.git)
+[![Deploy to IBM Cloud](https://cloud.ibm.com/deploy/button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/IBM/watson-discovery-ui.git)
 
 1. 上の `Deploy to IBM Cloud` ボタンを押し、`Deploy` をクリックします。
 
@@ -101,7 +101,7 @@ $ git clone https://github.com/IBM/watson-discovery-ui
 
 以下のサービスを作成する:
 
-* [**Watson Discovery**](https://console.ng.bluemix.net/catalog/services/discovery)
+* [**Watson Discovery**](https://cloud.ibm.com/catalog/services/discovery)
 
 <a name="3-load-the-discovery-files"></a>
 ### 3. Discoveryファイルをロードする

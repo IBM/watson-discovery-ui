@@ -66,7 +66,7 @@
 
 ## 部署到 IBM Cloud
 
-[![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-discovery-ui.git)
+[![Deploy to IBM Cloud](https://cloud.ibm.com/deploy/button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/IBM/watson-discovery-ui.git)
 
 1.按下上面的 ``Deploy to IBM Cloud`` 按钮，然后单击 ``Deploy``。
 
@@ -95,7 +95,7 @@ $ git clone https://github.com/IBM/watson-discovery-ui
 
 创建以下服务：
 
-* [**Watson Discovery**](https://console.ng.bluemix.net/catalog/services/discovery)
+* [**Watson Discovery**](https://cloud.ibm.com/catalog/services/discovery)
 
 ### 3.加载 Discovery 文件
 

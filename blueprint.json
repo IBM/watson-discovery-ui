@@ -35,7 +35,7 @@
     "discovery"
   ],
   "requiredCapabilitiesURLs": {
-    "discovery": "https://console.bluemix.net/catalog/services/discovery"
+    "discovery": "https://cloud.ibm.com/catalog/services/discovery"
   },
   "servicePlans": {
     "discovery": "lite"

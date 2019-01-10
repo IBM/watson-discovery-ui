@@ -1,6 +1,6 @@
 *Read this in other languages: [中国](README-cn.md), [日本](README-ja.md).*
 
-[![Build Status](https://travis-ci.org/IBM/watson-discovery-ui.svg?branch=master)](https://travis-ci.org/IBM/watson-discovery-ui)
+[![Build Status](https://api.travis-ci.org/IBM/watson-discovery-ui.svg?branch=master)](https://travis-ci.org/IBM/watson-discovery-ui)
 
 # Develop a fully featured web app built on the Watson Discovery Service
 
@@ -62,15 +62,15 @@ For more information about this feature, read about it [here](https://cloud.ibm.
 ## Featured technologies
 
 * [Node.js](https://nodejs.org/): An open-source JavaScript run-time environment for executing server-side JavaScript code.
-* [React](https://facebook.github.io/react/): A JavaScript library for building User Interfaces.
+* [React](https://reactjs.org/): A JavaScript library for building User Interfaces.
 * [Express](https://expressjs.com) - A popular and minimalistic web framework for creating an API and Web server.
-* [Semantic UI React](https://react.semantic-ui.com/introduction): React integration of Semantic UI components. 
-* [Chart.js](http://www.chartjs.org/): JavaScript charting package.
-* [Jest](https://facebook.github.io/jest/): A JavaScript test framework.
+* [Semantic UI React](https://react.semantic-ui.com/): React integration of Semantic UI components. 
+* [Chart.js](https://www.chartjs.org/): JavaScript charting package.
+* [Jest](https://jestjs.io/): A JavaScript test framework.
 
 # Watch the Video
 
-[![video](http://img.youtube.com/vi/5EEmQwcjUa4/0.jpg)](https://youtu.be/5EEmQwcjUa4)
+[![video](https://img.youtube.com/vi/5EEmQwcjUa4/0.jpg)](https://youtu.be/5EEmQwcjUa4)
 
 # Steps
 
@@ -78,7 +78,7 @@ Use the ``Deploy to IBM Cloud`` button **OR** create the services and run locall
 
 ## Deploy to IBM Cloud
 
-[![Deploy to IBM Cloud](https://cloud.ibm.com/deploy/button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/IBM/watson-discovery-ui.git)
+[![Deploy to IBM Cloud](https://cloud.ibm.com/devops/setup/deploy/button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/IBM/watson-discovery-ui.git)
 
 1. Press the above ``Deploy to IBM Cloud`` button and then click on ``Deploy``.
 
@@ -211,6 +211,6 @@ be usable on restart. If you used `Deploy to IBM Cloud` the restart should be au
 
 # License
 
-This code pattern is licensed under the Apache Software License, Version 2.  Separate third party code objects invoked within this code pattern are licensed by their respective providers pursuant to their own separate licenses. Contributions are subject to the [Developer Certificate of Origin, Version 1.1 (DCO)](https://developercertificate.org/) and the [Apache Software License, Version 2](http://www.apache.org/licenses/LICENSE-2.0.txt).
+This code pattern is licensed under the Apache Software License, Version 2.  Separate third party code objects invoked within this code pattern are licensed by their respective providers pursuant to their own separate licenses. Contributions are subject to the [Developer Certificate of Origin, Version 1.1 (DCO)](https://developercertificate.org/) and the [Apache Software License, Version 2](https://www.apache.org/licenses/LICENSE-2.0.txt).
 
-[Apache Software License (ASL) FAQ](http://www.apache.org/foundation/license-faq.html#WhatDoesItMEAN)
+[Apache Software License (ASL) FAQ](https://www.apache.org/foundation/license-faq.html#WhatDoesItMEAN)

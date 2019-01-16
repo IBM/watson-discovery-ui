@@ -1,4 +1,4 @@
-*他の言語で読む: [English](README.md), [中国語](README-cn.md).*
+*他の言語で読む: [English](README.md).*
 
 [![Build Status](https://travis-ci.org/IBM/watson-discovery-ui.svg?branch=master)](https://travis-ci.org/IBM/watson-discovery-ui)
 

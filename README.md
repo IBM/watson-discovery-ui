@@ -116,25 +116,27 @@ Create the following services:
 ### 3. Load the Discovery files
 
 Launch the **Watson Discovery** tool. Create a **new data collection**
-and give the data collection a unique name.
+by selecting the **Update your own data** option. Give the data collection a unique name.
 
-<p align="center">
-  <img width="600" src="doc/source/images/create-collection.png">
-</p>
+![create-collection](doc/source/images/create-collection.png)
 
-From the new collection data panel, under `Configuration` click the `Switch` button to create a new configuration file that will include extracting keywords as a function of data enrichment. Give the configuration file a unique name.
+When prompted to get started by **uploading your data**, select and upload the first 2 json documents located in your local `data/airbnb` directory. Once uploaded, you can then use the `Configure data` option to add the `Keyword Extraction` enrichment, as show here:
 
-![create_config_file](doc/source/images/create-keyword-config.gif)
+![upload_data_into_collection](doc/source/images/add-keyword-enrichment.gif)
 
-> Note: failure to do this will result in no `keywords` being shown in the app. 
+> Note: failure to do this will result in no `keywords` being shown in the app.
 
-From the new collection data panel, under `Add data to this collection` use `Drag and drop your documents here or browse from computer` to seed the content with the json files extracted from `data/airbnb/`.
+Once the enrichments are selected, use the `Apply changes to collection` button to upload the remaining json files found in `data/airbnb`. **Warning** - this make take several minutes to complete.
 
-![upload_data_into_collection](doc/source/images/add-docs-to-collection.gif)
-
-> Save the **environment_id** and **collection_id** for your `.env` file in the next step.
+> There may be a limit to the number of files you can upload, based on your IBM Cloud account permissions.
 
 ### 4. Configure credentials
+
+The credentials for you collection can be found by clicking the dropdown button located at the top right of the panel. Use these values to populate your `.env` file in the next step.
+
+<p align="center">
+  <img width="400" src="doc/source/images/get-creds.png">
+</p>
 
 ```bash
 cp env.sample .env

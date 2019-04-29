@@ -27,7 +27,7 @@ const queryBuilder = require('./query-builder');
 const queryTrendBuilder = require('./query-builder-trending');
 const discoEvents = require('./disco-events');
 const WatsonDiscoverySetup = require('../lib/watson-discovery-setup');
-const DiscoveryV1 = require('watson-developer-cloud/discovery/v1');
+const DiscoveryV1 = require('ibm-watson/discovery/v1');
 const utils = require('../lib/utils');
 
 /**
@@ -51,7 +51,7 @@ arrayOfFiles.forEach(function(file) {
 discoveryDocs = discoveryDocs.slice(0,300);
 
 const discovery = new DiscoveryV1({
-  version: '2018-04-20'
+  version: '2019-03-25'
 });
 
 // make our discovery queries promise functions

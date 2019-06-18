@@ -91,6 +91,7 @@ Use the ``Deploy to IBM Cloud`` button **OR** create the services and run locall
 
 > NOTE: To save on memory when running in the IBM Cloud, only 300 of the available 1000 reviews will be loaded into the Watson Discovery service.
 
+If errors occur, refer to the [Troubleshooting](#troubleshooting) section of this document.
 ## Run locally
 
 > NOTE: These steps are only needed when running locally instead of using the ``Deploy to IBM Cloud`` button.
@@ -199,6 +200,12 @@ be usable on restart. If you used `Deploy to IBM Cloud` the restart should be au
 * No keywords appear in the app
 
   > This can be due to not having a proper configuration file assigned to your data collection. See [Step 3](#3-load-the-discovery-files) above.
+
+* When using the `Deploy to IBM Cloud` button, you get a failure during the `Deploy Stage`, as shown in this log message:
+
+  ![deploy-error](doc/source/images/deploy-error.png)
+
+  > This can occur if the discovery service is not yet provisioned (you can check the resourse list in the `IBM Cloud` dashboard to verify). If so, wait until the service is marked as `Provisioned`, and then hit the `Redeploy` button at the top of the `Deply Stage` panel. After successfully deploying and connecting to the discovery service, check the logs of the running deployed app to check it's progress as it loads the json files into the discovery collection.
 
 # Links
 

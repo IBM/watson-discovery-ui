@@ -72,104 +72,13 @@ For more information about this feature, read about it [here](https://cloud.ibm.
 
 [![video](https://img.youtube.com/vi/5EEmQwcjUa4/0.jpg)](https://youtu.be/5EEmQwcjUa4)
 
-# Steps
+## Deployment options
 
-Use the ``Deploy to IBM Cloud`` button **OR** create the services and run locally.
+Click on one of the options below for instructions on deploying the app.
 
-## Deploy to IBM Cloud
-
-[![Deploy to IBM Cloud](https://cloud.ibm.com/devops/setup/deploy/button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/IBM/watson-discovery-ui.git)
-
-1. Press the above ``Deploy to IBM Cloud`` button and then click on ``Deploy``.
-
-2. In Toolchains, click on Delivery Pipeline to watch while the app is deployed. Once deployed, the app can be viewed by clicking 'View app'.
-
-![pipeline](doc/source/images/toolchain-pipeline.png)
-
-3. To see the app and services created and configured for this journey, use the IBM Cloud dashboard. The app is named `watson-discovery-ui` with a unique suffix. The following services are created and easily identified by the `wdui-` prefix:
-    * wdui-discovery-service
-
-> NOTE: To save on memory when running in the IBM Cloud, only 300 of the available 1000 reviews will be loaded into the Watson Discovery service.
-
-If errors occur, refer to the [Troubleshooting](#troubleshooting) section of this document.
-## Run locally
-
-> NOTE: These steps are only needed when running locally instead of using the ``Deploy to IBM Cloud`` button.
-
-1. [Clone the repo](#1-clone-the-repo)
-1. [Create IBM Cloud services](#2-create-ibm-cloud-services)
-1. [Load the Discovery files](#3-load-the-discovery-files)
-1. [Configure credentials](#4-configure-credentials)
-1. [Run the application](#5-run-the-application)
-
-### 1. Clone the repo
-
-```bash
-git clone https://github.com/IBM/watson-discovery-ui
-```
-
-### 2. Create IBM Cloud services
-
-Create the following services:
-
-* [**Watson Discovery**](https://cloud.ibm.com/catalog/services/discovery)
-
-### 3. Load the Discovery files
-
-Launch the **Watson Discovery** tool. Create a **new data collection**
-by selecting the **Update your own data** option. Give the data collection a unique name.
-
-![create-collection](doc/source/images/create-collection.png)
-
-When prompted to get started by **uploading your data**, select and upload the first 2 json documents located in your local `data/airbnb` directory. Once uploaded, you can then use the `Configure data` option to add the `Keyword Extraction` enrichment, as show here:
-
-![upload_data_into_collection](doc/source/images/add-keyword-enrichment.gif)
-
-> Note: failure to do this will result in no `keywords` being shown in the app.
-
-Once the enrichments are selected, use the `Apply changes to collection` button to upload the remaining json files found in `data/airbnb`. **Warning** - this make take several minutes to complete.
-
-> There may be a limit to the number of files you can upload, based on your IBM Cloud account permissions.
-
-### 4. Configure credentials
-
-The credentials for you collection can be found by clicking the dropdown button located at the top right of the panel. Use these values to populate your `.env` file in the next step.
-
-<p align="center">
-  <img width="400" src="doc/source/images/get-creds.png">
-</p>
-
-```bash
-cp env.sample .env
-```
-
-Edit the `.env` file with the necessary settings.
-
-#### `env.sample:`
-
-```bash
-# Copy this file to .env and replace the credentials with
-# your own before starting the app.
-
-# Watson Discovery
-DISCOVERY_URL=<add_discovery_url>
-DISCOVERY_ENVIRONMENT_ID=<add_discovery_environment_id>
-DISCOVERY_COLLECTION_ID=<add_discovery_collection_id>
-## Un-comment and use either username+password or IAM apikey.
-# DISCOVERY_IAM_APIKEY=<add_discovery_iam_apikey>
-# DISCOVERY_USERNAME=<add_discovery_username>
-# DISCOVERY_PASSWORD=<add_discovery_password>
-
-# Run locally on a non-default port (default is 3000)
-# PORT=3000
-```
-
-### 5. Run the application
-
-1. Install [Node.js](https://nodejs.org/en/) runtime or NPM.
-1. Start the app by running `npm install`, followed by `npm start`.
-1. Access the UI by pointing your browser at `localhost:3000`.
-> Note: server host can be changed as required in app.js and `PORT` can be set in `.env`.
+|   |   |   |
+| - | - | - |
+| [![public](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/cf.png)](doc/source/cf.md) | [![openshift](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/openshift.png)](doc/source/openshift.md) | [![local](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/local.png)](doc/source/local.md) |
 
 # Sample UI layout
 

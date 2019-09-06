@@ -1,6 +1,6 @@
-# Run on RedHat OpenShift
+# Run on Red Hat OpenShift
 
-This document shows how to run the `watson-discovery-ui` application in a container running on RedHat OpenShift.
+This document shows how to run the `watson-discovery-ui` application in a container running on Red Hat OpenShift.
 
 ## Prerequisites
 

@@ -98,4 +98,4 @@ The application will be available in your browser at `http://localhost:3000`.
 
 > Note: server host can be changed as required in app.js and **PORT** can be set in `.env`.
 
-[![return](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/return.png)](https://github.com/IBM/watson-discovery-news#deployment-options)
+[![return](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/return.png)](https://github.com/IBM/watson-discovery-ui#deployment-options)

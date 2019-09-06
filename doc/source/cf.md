@@ -18,16 +18,16 @@ This document shows how to run the `watson-discovery-ui` application using Cloud
 
 ![deploy](images/deploy.png)
 
-2. Create an **IBM Cloud API key** by pressing the **Create** button located next to the API key field. Once generated, select the appropriate **Region**, **Organization** and **Space**, then click **Create** at the top of the panel to start the deployment process.
+2. Create an `IBM Cloud API key` by pressing the **Create** button located next to the API key field. Once generated, select the appropriate `Region`, `Organization` and `Space`, then click **Create** at the top of the panel to start the deployment process.
 
 3. From the Toolchains view, click on the Delivery Pipeline to watch while the app is deployed. Here you'll be able to see logs about the deployment.
 
 ![toolchain-pipeline](images/toolchain-pipeline.png)
 
-3. To see the app and services that were created use the [IBM Cloud dashboard](https://cloud.ibm.com). The app is named `watson-discovery-ui` with a unique suffix. The following services are created  and easily identified by the `wdui-` prefix:
+4. To see the app and services that were created use the [IBM Cloud dashboard](https://cloud.ibm.com). The app is named `watson-discovery-ui` with a unique suffix. The following services are created  and easily identified by the `wdui-` prefix:
 
     * wdui-discovery-service
 
 > NOTE: To save on memory when running in the IBM Cloud, only 300 of the available 1000 reviews will be loaded into the Watson Discovery service. If you choose to manually add the additional reviews to your Discovery collection after the app has been deployed, you will need to stop and re-start the app to view them.
 
-[![return](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/return.png)](https://github.com/IBM/watson-discovery-uis#deployment-options)
+[![return](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/return.png)](https://github.com/IBM/watson-discovery-ui#deployment-options)

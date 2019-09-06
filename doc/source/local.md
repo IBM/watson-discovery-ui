@@ -22,9 +22,9 @@ To create your Watson Discovery service:
 
   1. Click **Create resource** on your IBM Cloud dashboard.
 
-  2. Search the catalog for **Discovery**.
+  2. Search the catalog for `discovery`.
 
-  3. Click **Discovery** to launch the create panel.
+  3. Click the **Discovery** tile to launch the create panel.
 
 ![create-service](https://raw.githubusercontent.com/IBM/pattern-utils/master/watson-discovery/discover-service-create.png)
 
@@ -32,8 +32,7 @@ From the panel, enter a unique name, a region and resource group, and a plan typ
 
 ## 3. Load Discovery files and configure collection
 
-Launch the **Watson Discovery** tool. Create a **new data collection**
-by selecting the **Update your own data** option. Give the data collection a unique name.
+Launch the **Watson Discovery** tool. Create a new data collection by selecting the **Update your own data** option. Give the data collection a unique name.
 
 ![create-collection](images/create-collection.png)
 
@@ -57,11 +56,11 @@ Next, you'll need to add the Watson Discovery credentials to the .env file.
 cp env.sample .env
 ```
 
-2. Locate the service credentials listed on the home page of your Discovery service and copy the **API Key** and **URL** values.
+2. Locate the service credentials listed on the home page of your Discovery service and copy the `API Key` and `URL` values.
 
 ![get-creds](https://raw.githubusercontent.com/IBM/pattern-utils/master/watson-discovery/get-creds.png)
 
-3. From your Discovery service collection page, locate the credentials for your collection by clicking the dropdown button located at the top right. Copy the **Collection ID** and **Environment ID** values.
+3. From your Discovery service collection page, locate the credentials for your collection by clicking the dropdown button located at the top right. Copy the `Collection ID` and `Environment ID` values.
 
 <p align="center">
   <img width="400" src="images/get-creds.png">
@@ -96,6 +95,6 @@ npm start
 
 The application will be available in your browser at `http://localhost:3000`.
 
-> Note: server host can be changed as required in app.js and **PORT** can be set in `.env`.
+> Note: server host can be changed as required in app.js and `PORT` can be set in the `.env` file.
 
 [![return](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/return.png)](https://github.com/IBM/watson-discovery-ui#deployment-options)

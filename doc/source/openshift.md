@@ -42,9 +42,9 @@ To create your Watson Discovery service:
 
   1. Click **Create resource** on your IBM Cloud dashboard.
 
-  2. Search the catalog for **Discovery**.
+  2. Search the catalog for `discovery`.
 
-  3. Click **Discovery** to launch the create panel.
+  3. Click the **Discovery** tile to launch the create panel.
 
 ![create-service](https://raw.githubusercontent.com/IBM/pattern-utils/master/watson-discovery/discover-service-create.png)
 
@@ -52,8 +52,7 @@ From the panel, enter a unique name, a region and resource group, and a plan typ
 
 ## 4. Load Discovery files and configure collection
 
-Launch the **Watson Discovery** tool. Create a **new data collection**
-by selecting the **Update your own data** option. Give the data collection a unique name.
+Launch the **Watson Discovery** tool. Create a new data collection by selecting the **Update your own data** option. Give the data collection a unique name.
 
 ![create-collection](images/create-collection.png)
 
@@ -71,11 +70,11 @@ Once the enrichments are selected, use the **Apply changes to collection** butto
 
 You will need to export the key/value pairs from [env.sample](../../env.sample) as a config map.
 
-1. Locate the service credentials listed on the home page of your Discovery service and copy the **API Key** and **URL** values.
+1. Locate the service credentials listed on the home page of your Discovery service and copy the `API Key` and `URL` values.
 
 ![get-creds](https://raw.githubusercontent.com/IBM/pattern-utils/master/watson-discovery/get-creds.png)
 
-2. From your Discovery service collection page, locate the credentials for your collection by clicking the dropdown button located at the top right. Copy the **Collection ID** and **Environment ID** values.
+2. From your Discovery service collection page, locate the credentials for your collection by clicking the dropdown button located at the top right. Copy the `Collection ID` and `Environment ID` values.
 
 <p align="center">
   <img width="400" src="images/get-creds.png">
@@ -89,7 +88,7 @@ You will need to export the key/value pairs from [env.sample](../../env.sample) 
 
     * Click **Add item** and then add a key for **PORT** with the value **8080**.
 
-    * Repeat this process to add a key/value for both **DISCVERY_ENVIRONMENT_ID** and **DISCOVERY_COLLECTION_ID**.
+    * Repeat this process to add a key/value for both **DISCOVERY_ENVIRONMENT_ID** and **DISCOVERY_COLLECTION_ID**.
 
     * Go to the **Applications** tab, choose **Deployments** and the **Environment** tab. Under **Environment From** / **Config Map/Secret**, choose the config map you just created [1]. Save the config [2]. The app will re-deploy automatically, or click **Deploy** to re-deploy manually [3]. To see the variables in the Config Map that will be exported in the app environment, click **View Details**.
 

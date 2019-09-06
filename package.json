@@ -9,7 +9,7 @@
     "url": "https://github.com/IBM/watson-discovery-ui.git"
   },
   "scripts": {
-    "start": "node --max_old_space_size=256 app.js",
+    "start": "node --max_old_space_size=512 app.js",
     "start:watch": "nodemon app.js",
     "bootstrap": "cp env.sample .env",
     "test -u": "jest -u",

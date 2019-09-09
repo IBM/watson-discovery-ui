@@ -23,7 +23,11 @@ git clone https://github.com/IBM/watson-discovery-ui
 
 ## 2. Create OpenShift project
 
-* In your OpneShift cluster, open your project or click on **+ Create Project** to create one.
+* In your OpenShift **Cluster Console**, open your project or click on **+ Create Project** to create one.
+* Click over the to **Application Console**, then select your project.
+
+![console-options](https://raw.githubusercontent.com/IBM/pattern-utils/master/openshift/openshift-console-options.png)
+
 * In the **Overview** tab, click on **Browse Catalog**.
 
 ![Browse Catalog](https://raw.githubusercontent.com/IBM/pattern-utils/master/openshift/openshift-browse-catalog.png)
@@ -90,7 +94,7 @@ You will need to export the key/value pairs from [env.sample](../../env.sample) 
 
     * Repeat this process to add a key/value for both **DISCOVERY_ENVIRONMENT_ID** and **DISCOVERY_COLLECTION_ID**.
 
-    * Go to the **Applications** tab, choose **Deployments** and the **Environment** tab. Under **Environment From** / **Config Map/Secret**, choose the config map you just created [1]. Save the config [2]. The app will re-deploy automatically, or click **Deploy** to re-deploy manually [3]. To see the variables in the Config Map that will be exported in the app environment, click **View Details**.
+    * Go to the **Applications** tab, choose **Deployments**, and select your application. From your application panel, select the **Environment** tab. Under **Environment From** / **Config Map/Secret**, choose the config map you just created [1]. Save the config [2]. The app will re-deploy automatically, or click **Deploy** to re-deploy manually [3]. To see the variables in the Config Map that will be exported in the app environment, click **View Details**.
 
       ![add config map to app](https://raw.githubusercontent.com/IBM/pattern-utils/master/openshift/openshift-add-config-map-to-app.png)
 

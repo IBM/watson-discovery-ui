@@ -109,7 +109,7 @@ Go to the `Applications` tab, choose `Deployments` to view the status of your ap
 
 ## 6. Run the application
 
-* From the OpenShift or OKD UI, under `Applications` -> `Routes` you will see your app. Click on the `Hostname`to see your Watson Discovery News app in action.
+* From the OpenShift or OKD UI, under `Applications` -> `Routes` you will see your app. Click on the `Hostname`to see your Watson Discovery UI app in action.
 * Save this URL.
 
 [![return](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/return.png)](https://github.com/IBM/watson-discovery-ui#deployment-options)

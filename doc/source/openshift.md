@@ -9,9 +9,9 @@ You will need a running OpenShift cluster, or OKD cluster. You can provision [Op
 ## Steps
 
 1. [Clone the repo](#1-clone-the-repo)
-1. [Create OpenShift project](#2-create-openshift-project)
-1. [Create your Watson Discovery service](#3-create-your-watson-discovery-service)
-1. [Load Discovery files and configure collection](#4-load-discovery-files-and-configure-collection)
+1. [Create your Watson Discovery service](#2-create-your-watson-discovery-service)
+1. [Load Discovery files and configure collection](#3-load-discovery-files-and-configure-collection)
+1. [Create an OpenShift project](#4-create-an-openshift-project)
 1. [Create the config map](#5-create-the-config-map)
 1. [Run the application](#6-run-the-application)
 
@@ -21,26 +21,7 @@ You will need a running OpenShift cluster, or OKD cluster. You can provision [Op
 git clone https://github.com/IBM/watson-discovery-ui
 ```
 
-## 2. Create OpenShift project
-
-* In your OpenShift **Cluster Console**, open your project or click on **+ Create Project** to create one.
-* Click over the to **Application Console**, then select your project.
-
-![console-options](https://raw.githubusercontent.com/IBM/pattern-utils/master/openshift/openshift-console-options.png)
-
-* In the **Overview** tab, click on **Browse Catalog**.
-
-![Browse Catalog](https://raw.githubusercontent.com/IBM/pattern-utils/master/openshift/openshift-browse-catalog.png)
-
-* Choose the **Node.js** app container and click **Next**.
-
-![Choose Node.js](https://raw.githubusercontent.com/IBM/pattern-utils/master/openshift/openshift-choose-nodejs.png)
-
-* Give your app a name and add `https://github.com/IBM/watson-discovery-ui` for the github repo, then click **Create**.
-
-![Add github repo](https://raw.githubusercontent.com/IBM/pattern-utils/master/openshift/openshift-add-github-repo.png)
-
-## 3. Create your Watson Discovery service
+## 2. Create your Watson Discovery service
 
 To create your Watson Discovery service:
 
@@ -54,7 +35,7 @@ To create your Watson Discovery service:
 
 From the panel, enter a unique name, a region and resource group, and a plan type (select the default **lite** plan). Click **Create** to create and enable your service.
 
-## 4. Load Discovery files and configure collection
+## 3. Load Discovery files and configure collection
 
 Launch the **Watson Discovery** tool. Create a new data collection by selecting the **Update your own data** option. Give the data collection a unique name.
 
@@ -70,36 +51,65 @@ Once the enrichments are selected, use the **Apply changes to collection** butto
 
 > There may be a limit to the number of files you can upload, based on your IBM Cloud account permissions.
 
+## 4. Create an OpenShift project
+
+* Using the OpenShift web console, select the `Application Console` view.
+
+  ![console-options](https://raw.githubusercontent.com/IBM/pattern-utils/master/openshift/openshift-app-console-option.png)
+
+* Use the `+Create Project` button to create a new project, then click on your project to open it.
+
+* In the `Overview` tab, click on `Browse Catalog`.
+
+  ![Browse Catalog](https://raw.githubusercontent.com/IBM/pattern-utils/master/openshift/openshift-browse-catalog.png)
+
+* Choose the `Node.js` app container and click `Next`.
+
+  ![Choose Node.js](https://raw.githubusercontent.com/IBM/pattern-utils/master/openshift/openshift-choose-nodejs.png)
+
+* Give your app a name and add `https://github.com/IBM/watson-discovery-ui` for the github repo, then click `Create`.
+
+  ![Add github repo](https://raw.githubusercontent.com/IBM/pattern-utils/master/openshift/openshift-add-github-repo.png)
+
 ## 5. Create the config map
 
-You will need to export the key/value pairs from [env.sample](../../env.sample) as a config map.
+To complete the config map instructions below, you will need to gather some key values from your Discovery service.
 
-1. Locate the service credentials listed on the home page of your Discovery service and copy the `API Key` and `URL` values.
+* You can find your service credentials on the home page of your Discovery service. This includes your `API Key` and service `URL` values:
 
-![get-creds](https://raw.githubusercontent.com/IBM/pattern-utils/master/watson-discovery/get-creds.png)
+  ![get-creds](https://raw.githubusercontent.com/IBM/pattern-utils/master/watson-discovery/get-creds.png)
 
-2. From your Discovery service collection page, locate the credentials for your collection by clicking the dropdown button located at the top right. Copy the `Collection ID` and `Environment ID` values.
+* From your Discovery service collection page, you can find the credentials for your collection by clicking the dropdown button located at the top right. Included will be the `Collection ID` and `Environment ID` values.
 
 <p align="center">
   <img width="400" src="images/get-creds.png">
 </p>
 
-3. Back in the OpenShift or OKD UI, click on the **Resources** tab and choose **Config Maps** and then **Create Config Map**.
+Now that we know where to find these value, let's move on to creating the config map.
 
-    * Add a key for **DISCOVERY_IAM_APIKEY** and paste in the key value as **value**:
+Click on the `Resources` tab and choose `Config Maps` and then click the `Create Config Map` button:
 
-      ![add config map](https://raw.githubusercontent.com/IBM/pattern-utils/master/openshift/openshift-generic-config-map.png)
+  ![add config map](https://raw.githubusercontent.com/IBM/pattern-utils/master/openshift/openshift-generic-config-map.png)
 
-    * Click **Add item** and then add a key for **PORT** with the value **8080**.
+Use the `Create Config Map` panel to add our application parameters.
 
-    * Repeat this process to add a key/value for both **DISCOVERY_ENVIRONMENT_ID** and **DISCOVERY_COLLECTION_ID**.
+* Provide a `Name` for the config map.
+* Add a key named `DISCOVERY_IAM_APIKEY` and paste in the API Key under `Enter a value...`.
+* Click `Add Item` and add a key named `DISCOVERY_URL` and paste in the URL under `Enter a value...`..
+* Click `Add Item` and add a key named `PORT`, enter 8080 under `Enter a value...`.
+* Click `Add Item` and add a key named `DISCOVERY_ENVIRONMENT_ID` and paste in the value under `Enter a value...`..
+* Click `Add Item` and add a key named `DISCOVERY_COLLECTION_ID` and paste in the value under `Enter a value...`..
+* Hit the `Create` button.
+* Click on your new Config Map's name.
+* Click the `Add to Application` button.
+* Select your application from the pulldown.
+* Click `Save`.
 
-    * Go to the **Applications** tab, choose **Deployments**, and select your application. From your application panel, select the **Environment** tab. Under **Environment From** / **Config Map/Secret**, choose the config map you just created [1]. Save the config [2]. The app will re-deploy automatically, or click **Deploy** to re-deploy manually [3]. To see the variables in the Config Map that will be exported in the app environment, click **View Details**.
-
-      ![add config map to app](https://raw.githubusercontent.com/IBM/pattern-utils/master/openshift/openshift-add-config-map-to-app.png)
+Go to the `Applications` tab, choose `Deployments` to view the status of your application.
 
 ## 6. Run the application
 
-* From the OpenShift or OKD UI, under **Applications** -> **Routes** you will see your app. Click on the **Hostname** to see your Watson Discovery UI app in action.
+* From the OpenShift or OKD UI, under `Applications` -> `Routes` you will see your app. Click on the `Hostname`to see your Watson Discovery News app in action.
+* Save this URL.
 
 [![return](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/return.png)](https://github.com/IBM/watson-discovery-ui#deployment-options)

@@ -2,7 +2,7 @@
 
 This document shows how to run the `watson-discovery-ui` application using Cloud Foundry on IBM Cloud.
 
-> **NOTE**: This app cannot be deployed to IBM Cloud with Cloud Foundry **if** you are using a free trial IBM Cloud account. This type of account is classified as a `Lite` accoount, and has a limit of 256 MB of instantaneous runtime memory available for your Cloud Foundry apps. The `watson-discovery-uis` app requires 512 MB.
+> **NOTE**: This app cannot be deployed to IBM Cloud with Cloud Foundry **if** you are using a free trial IBM Cloud account. This type of account is classified as a `Lite` accoount, and has a limit of 256 MB of instantaneous runtime memory available for your Cloud Foundry apps. The `watson-discovery-ui` app requires 512 MB.
 >
 > If you're using a Lite account, you can get more memory by upgrading to a billable account (limit is 2 GB). From the IBM Cloud console, go to **Manage** > **Account**, and select `Account settings`. For more information about Lite account features, see [Lite account](https://cloud.ibm.com/docs/account?topic=account-accounts#liteaccount).
 

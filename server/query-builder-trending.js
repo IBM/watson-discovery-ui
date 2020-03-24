@@ -25,8 +25,8 @@ module.exports = {
   },
   search(queryOpts) {
     const params = Object.assign({
-      environment_id: this.environment_id,
-      collection_id: this.collection_id,
+      environmentId: this.environment_id,
+      collectionId: this.collection_id,
       aggregation: 'timeslice(date,1month).average(enriched_text.sentiment.document.score)'
     }, queryOpts);
 

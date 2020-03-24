@@ -29,7 +29,8 @@ export default class Matches extends React.Component {
     super(...props);
 
     this.state = {
-      matches: this.props.matches || null
+      matches: this.props.matches || null,
+      sessionToken: this.props.sessionToken || ''
     };
   }
 
@@ -154,8 +155,11 @@ export default class Matches extends React.Component {
    */
   buttonClicked(item) {
     // let our parent know
+    const { sessionToken } = this.state;
+
     this.props.onGetFullReviewRequest({
-      sessionToken: item.sessionToken,
+      // params required for Discovery call to generate "user clicked" event
+      sessionToken: sessionToken,
       documentId: item.id
     });
   }
@@ -202,5 +206,6 @@ export default class Matches extends React.Component {
 // type check to ensure we are called correctly
 Matches.propTypes = {
   matches: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onGetFullReviewRequest: PropTypes.func.isRequired
+  onGetFullReviewRequest: PropTypes.func.isRequired,
+  sessionToken: PropTypes.string.isRequired
 };

@@ -74,7 +74,9 @@ class Main extends React.Component {
       trendError,
       trendTerm,
       // sentiment chart
-      sentimentTerm
+      sentimentTerm,
+      // token for usage metrics
+      sessionToken
     } = this.props;
 
     // change in state fires re-render of components
@@ -116,6 +118,7 @@ class Main extends React.Component {
       // misc panel
       currentPage: currentPage || '1',  // which page of matches are we showing
       activeFilterIndex: 0,             // which filter index is expanded/active
+      sessionToken: sessionToken || ''
     };
   }
 
@@ -406,11 +409,10 @@ class Main extends React.Component {
         }
       })
       .then(json => {
-        // const util = require('util');
         console.log('+++ DISCO TREND RESULTS +++');
-        // console.log(util.inspect(json.aggregations[0].results, false, null));
-        console.log('numMatches: ' + json.matching_results);
-      
+        // console.log(JSON.stringify(json.result.aggregations[0].results, null, 2));
+        console.log('numMatches: ' + json.result.matching_results);
+
         this.setState({ 
           trendData: json,
           trendLoading: false,
@@ -494,6 +496,7 @@ class Main extends React.Component {
       })
       .then(json => {
         var data = utils.parseData(json);
+        const sessionToken = data.sessionToken;
         var passages = [];
 
         if (returnPassages) {
@@ -528,7 +531,8 @@ class Main extends React.Component {
           error: null,
           trendData: null,
           sentimentTerm: utils.SENTIMENT_TERM_ITEM,
-          trendTerm: utils.TRENDING_TERM_ITEM
+          trendTerm: utils.TRENDING_TERM_ITEM,
+          sessionToken: sessionToken
         });
         scrollToMain();
       })
@@ -636,7 +640,7 @@ class Main extends React.Component {
    * getMatches - return collection matches to be rendered.
    */
   getMatches() {
-    const { data, currentPage } = this.state;
+    const { data, currentPage, sessionToken } = this.state;
 
     if (!data) {
       return null;
@@ -650,6 +654,7 @@ class Main extends React.Component {
     return (
       <Matches 
         matches={ pageOfMatches }
+        sessionToken= { sessionToken }
         onGetFullReviewRequest={this.updateDocMetrics.bind(this)}
       />
     );
@@ -1027,7 +1032,7 @@ const parsePassages = data => ({
   rawResponse: Object.assign({}, data),
   // sentiment: data.aggregations[0].results.reduce((accumulator, result) =>
   //   Object.assign(accumulator, { [result.key]: result.matching_results }), {}),
-  results: data.passages
+  results: data.result.passages
 });
 
 /**
@@ -1035,7 +1040,7 @@ const parsePassages = data => ({
  */
 const parseEntities = data => ({
   rawResponse: Object.assign({}, data),
-  results: data.aggregations[utils.ENTITY_DATA_INDEX].results
+  results: data.result.aggregations[utils.ENTITY_DATA_INDEX].results
 });
 
 /**
@@ -1043,7 +1048,7 @@ const parseEntities = data => ({
  */
 const parseCategories = data => ({
   rawResponse: Object.assign({}, data),
-  results: data.aggregations[utils.CATEGORY_DATA_INDEX].results
+  results: data.result.aggregations[utils.CATEGORY_DATA_INDEX].results
 });
 
 /**
@@ -1051,7 +1056,7 @@ const parseCategories = data => ({
  */
 const parseConcepts = data => ({
   rawResponse: Object.assign({}, data),
-  results: data.aggregations[utils.CONCEPT_DATA_INDEX].results
+  results: data.result.aggregations[utils.CONCEPT_DATA_INDEX].results
 });
 
 /**
@@ -1059,7 +1064,7 @@ const parseConcepts = data => ({
  */
 const parseKeywords = data => ({
   rawResponse: Object.assign({}, data),
-  results: data.aggregations[utils.KEYWORD_DATA_INDEX].results
+  results: data.result.aggregations[utils.KEYWORD_DATA_INDEX].results
 });
 
 /**
@@ -1067,7 +1072,7 @@ const parseKeywords = data => ({
  */
 const parseEntityTypes = data => ({
   rawResponse: Object.assign({}, data),
-  results: data.aggregations[utils.ENTITY_TYPE_DATA_INDEX].results
+  results: data.result.aggregations[utils.ENTITY_TYPE_DATA_INDEX].results
 });
 
 /**
@@ -1108,6 +1113,7 @@ Main.propTypes = {
   trendError: PropTypes.object,
   trendTerm: PropTypes.string,
   sentimentTerm: PropTypes.string,
+  sessionToken: PropTypes.string,
   error: PropTypes.object
 };
 

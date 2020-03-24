@@ -33,7 +33,7 @@
     "express": "^4.16.4",
     "express-browserify": "^1.0.3",
     "express-react-views": "^0.11.0",
-    "ibm-watson": "4.0.2",
+    "ibm-watson": "5.2.0",
     "isomorphic-fetch": "^2.2.1",
     "prop-types": "^15.6.2",
     "query-string": "^6.2.0",

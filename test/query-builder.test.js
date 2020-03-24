@@ -24,8 +24,8 @@ beforeEach(() => {
 describe('Query builder returns params for discovery service', () => {
   test('when opts are NOT passed', () => {
     expect(queryBuilder.search()).toEqual({
-      environment_id: 'environment',
-      collection_id: 'collection',
+      environmentId: 'environment',
+      collectionId: 'collection',
       highlight: true,
       aggregation: '[term(enriched_text.entities.text).term(enriched_text.sentiment.document.label),' +
       'term(enriched_text.categories.label).term(enriched_text.sentiment.document.label),' +
@@ -39,12 +39,12 @@ describe('Query builder returns params for discovery service', () => {
     expect(queryBuilder.search({
       filter: 'enriched_text.categories.label::"test"',
       count: 500,
-      natural_language_query: 'test',
+      naturalLanguageQuery: 'test',
       passages: false,
       sort: 'enriched_text.sentiment.document.score'
     })).toEqual({
-      environment_id: 'environment',
-      collection_id: 'collection',
+      environmentId: 'environment',
+      collectionId: 'collection',
       highlight: true,
       aggregation: 
         '[term(enriched_text.entities.text).term(enriched_text.sentiment.document.label),' +
@@ -52,7 +52,7 @@ describe('Query builder returns params for discovery service', () => {
         'term(enriched_text.concepts.text).term(enriched_text.sentiment.document.label),' +
         'term(enriched_text.keywords.text).term(enriched_text.sentiment.document.label),' +
         'term(enriched_text.entities.type).term(enriched_text.sentiment.document.label)]',
-      natural_language_query: 'test',
+      naturalLanguageQuery: 'test',
       filter: 'enriched_text.categories.label::"test"',
       count: 500,
       passages: false,

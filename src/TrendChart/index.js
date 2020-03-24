@@ -76,8 +76,8 @@ export default class TrendChart extends React.Component {
     var labels = [];
     var scores = [];
     
-    if (trendData && trendData.matching_results) {
-      trendData.aggregations[0].results.forEach(function(result) {
+    if (trendData && trendData.result.matching_results) {
+      trendData.result.aggregations[0].results.forEach(function(result) {
         if (result.aggregations[0].value) {
           labels.push(result.key_as_string.substring(0,10));
           scores.push(Number((result.aggregations[0].value).toFixed(2)));

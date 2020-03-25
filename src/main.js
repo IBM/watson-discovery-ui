@@ -287,7 +287,6 @@ class Main extends React.Component {
       keywords, selectedKeywords,
       entityTypes, selectedEntityTypes,
       searchQuery  } = this.state;
-
     if (cloudType === utils.CATEGORY_FILTER) {
       var fullName = this.buildFullTagName(selectedTagValue, categories.results);
       if (selectedCategories.has(fullName)) {
@@ -321,13 +320,15 @@ class Main extends React.Component {
         selectedKeywords: selectedKeywords
       });
 
-    } else if (cloudType == utils.ENTITIY_FILTER) {
+    } else if (cloudType == utils.ENTITY_FILTER) {
       fullName = this.buildFullTagName(selectedTagValue, entities.results);
+      console.log('fullName: ' + fullName);
       if (selectedEntities.has(fullName)) {
         selectedEntities.delete(fullName);
       } else {
         selectedEntities.add(fullName);
       }
+      console.log('selected entities: ' + JSON.stringify(selectedEntities, null, 2));
       this.setState({
         selectedEntities: selectedEntities
       });
@@ -372,8 +373,8 @@ class Main extends React.Component {
           trendTerm: term
         });
       return;
-    } 
-    
+    }
+
     this.setState({
       trendLoading: true,
       trendTerm: term
@@ -381,7 +382,8 @@ class Main extends React.Component {
 
     // build query string, with based on filter type
     var trendQuery = '';
-    if (chartType === utils.ENTITIY_FILTER) {
+
+    if (chartType === utils.ENTITY_FILTER) {
       trendQuery = 'enriched_text.entities.text::' + term;
     } else if (chartType === utils.CATEGORY_FILTER) {
       trendQuery = 'enriched_text.categories.label::' + term;
@@ -795,7 +797,7 @@ class Main extends React.Component {
       selectedEntityTypes.size > 0) {
       filtersOn = true;
     }
-    
+
     return (
       <Grid celled className='search-grid'>
 

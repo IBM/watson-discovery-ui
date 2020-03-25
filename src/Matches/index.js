@@ -168,8 +168,14 @@ export default class Matches extends React.Component {
   // are propagated down to our component. In this case, some other
   // search or filter event has occured which has changed the list of
   // items we are graphing, OR the graph data has arrived.
-  componentWillReceiveProps(nextProps) {
-    this.setState({ matches: nextProps.matches });
+  static getDerivedStateFromProps(props, state) {
+    if (props.matches !== state.matches) {
+      return {
+        matches: props.matches
+      };
+    }
+    // no change in state
+    return null;
   }
 
   /**

@@ -39,6 +39,7 @@ class CategoriesFilter extends FilterContainer {
    */
   getSelectedCollection() {
     const { selectedCategories } = this.state;
+    //console.log('SELECTED CATEGORIES size: ' + selectedCategories.size);
     return selectedCategories;
   }
 
@@ -63,10 +64,18 @@ class CategoriesFilter extends FilterContainer {
   // are propagated down to our component. In this case, some other
   // search or filter event has occured which has changed the list of 
   // cateories, or which categories are selected.
-  componentWillReceiveProps(nextProps) {
-    this.setState({ categories: nextProps.categories });
-    this.setState({ selectedCategories: nextProps.selectedCategories });
+  static getDerivedStateFromProps(props, state) {
+    if (props.categories !== state.categories ||
+      props.selectedCategories !== state.selectedCategories) {
+      return {
+        categories: props.categories,
+        selectedCategories: props.selectedCategories
+      };
+    }
+    // no change in state
+    return null;
   }
+
 }
 
 // type check to ensure we are called correctly

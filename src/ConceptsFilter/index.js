@@ -63,10 +63,18 @@ class ConceptsFilter extends FilterContainer {
   // are propagated down to our component. In this case, some other
   // search or filter event has occured which has changed the list of 
   // concepts, or which concepts are selected.
-  componentWillReceiveProps(nextProps) {
-    this.setState({ concepts: nextProps.concepts });
-    this.setState({ selectedConcepts: nextProps.selectedConcepts });
+  static getDerivedStateFromProps(props, state) {
+    if (props.concepts !== state.concepts ||
+        props.selectedConcepts !== state.selectedConcepts) {
+      return {
+        concepts: props.concepts,
+        selectedConcepts: props.selectedConcepts
+      };
+    }
+    // no change in state
+    return null;
   }
+
 }
 
 // type check to ensure we are called correctly

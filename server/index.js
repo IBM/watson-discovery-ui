@@ -21,7 +21,6 @@ require('dotenv').config({
 });
 
 require('isomorphic-fetch');
-const Promise = require('bluebird');
 const queryString = require('query-string');
 const queryBuilder = require('./query-builder');
 const queryTrendBuilder = require('./query-builder-trending');
@@ -53,10 +52,6 @@ discoveryDocs = discoveryDocs.slice(0,300);
 const discovery = new DiscoveryV1({
   version: '2019-03-25'
 });
-
-// make our discovery queries promise functions
-discovery.query = Promise.promisify(discovery.query);
-discovery.createEvent = Promise.promisify(discovery.createEvent);
 
 const discoverySetup = new WatsonDiscoverySetup(discovery);
 const discoverySetupParams = { 

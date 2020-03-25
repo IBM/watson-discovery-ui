@@ -26,6 +26,7 @@ it('renders correctly', () => {
         categories={{Object}}
         concepts={{Object}}
         keywords={{Object}}
+        entityTypes={{Object}}
         tagCloudType={'test'}
         onTagItemSelected={Function}
       />)

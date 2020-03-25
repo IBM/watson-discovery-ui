@@ -24,8 +24,8 @@ beforeEach(() => {
 describe('Trending query builder returns params for discovery service', () => {
   test('when opts are NOT passed', () => {
     expect(queryBuilderTrending.search()).toEqual({
-      environment_id: 'environment',
-      collection_id: 'collection',
+      environmentId: 'environment',
+      collectionId: 'collection',
       aggregation: 'timeslice(date,1month).average(enriched_text.sentiment.document.score)'
     });
   });
@@ -36,8 +36,8 @@ describe('Trending query builder returns params for discovery service', () => {
       count: 500,
       query: 'enriched_text.categories.label::"test"',
     })).toEqual({
-      environment_id: 'environment',
-      collection_id: 'collection',
+      environmentId: 'environment',
+      collectionId: 'collection',
       aggregation: 'timeslice(date,1month).average(enriched_text.sentiment.document.score)',
       query: 'enriched_text.categories.label::"test"',
       filter: 'enriched_text.categories.label::"test"',

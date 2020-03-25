@@ -29,7 +29,8 @@ export default class Matches extends React.Component {
     super(...props);
 
     this.state = {
-      matches: this.props.matches || null
+      matches: this.props.matches || null,
+      sessionToken: this.props.sessionToken || ''
     };
   }
 
@@ -154,8 +155,11 @@ export default class Matches extends React.Component {
    */
   buttonClicked(item) {
     // let our parent know
+    const { sessionToken } = this.state;
+
     this.props.onGetFullReviewRequest({
-      sessionToken: item.sessionToken,
+      // params required for Discovery call to generate "user clicked" event
+      sessionToken: sessionToken,
       documentId: item.id
     });
   }
@@ -164,8 +168,14 @@ export default class Matches extends React.Component {
   // are propagated down to our component. In this case, some other
   // search or filter event has occured which has changed the list of
   // items we are graphing, OR the graph data has arrived.
-  componentWillReceiveProps(nextProps) {
-    this.setState({ matches: nextProps.matches });
+  static getDerivedStateFromProps(props, state) {
+    if (props.matches !== state.matches) {
+      return {
+        matches: props.matches
+      };
+    }
+    // no change in state
+    return null;
   }
 
   /**
@@ -202,5 +212,6 @@ export default class Matches extends React.Component {
 // type check to ensure we are called correctly
 Matches.propTypes = {
   matches: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onGetFullReviewRequest: PropTypes.func.isRequired
+  onGetFullReviewRequest: PropTypes.func.isRequired,
+  sessionToken: PropTypes.string.isRequired
 };

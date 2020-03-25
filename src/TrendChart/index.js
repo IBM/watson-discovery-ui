@@ -76,8 +76,8 @@ export default class TrendChart extends React.Component {
     var labels = [];
     var scores = [];
     
-    if (trendData && trendData.matching_results) {
-      trendData.aggregations[0].results.forEach(function(result) {
+    if (trendData && trendData.result.matching_results) {
+      trendData.result.aggregations[0].results.forEach(function(result) {
         if (result.aggregations[0].value) {
           labels.push(result.key_as_string.substring(0,10));
           scores.push(Number((result.aggregations[0].value).toFixed(2)));
@@ -148,16 +148,30 @@ export default class TrendChart extends React.Component {
   // are propagated down to our component. In this case, some other
   // search or filter event has occured which has changed the list of 
   // items we are graphing, OR the graph data has arrived.
-  componentWillReceiveProps(nextProps) {
-    this.setState({ trendData: nextProps.trendData });
-    this.setState({ trendLoading: nextProps.trendLoading });
-    this.setState({ trendError: nextProps.trendError });
-    this.setState({ entities: nextProps.entities });
-    this.setState({ categories: nextProps.categories });
-    this.setState({ concepts: nextProps.concepts });
-    this.setState({ keywords: nextProps.keywords });
-    this.setState({ entityTypes: nextProps.entityTypes });
-    this.setState({ termValue: nextProps.term });
+  static getDerivedStateFromProps(props, state) {
+    if (props.trendData !== state.trendData ||
+        props.trendLoading !== state.trendLoading ||
+        props.trendError !== state.trendError ||
+        props.entities !== state.entities ||
+        props.categories !== state.categories ||
+        props.concepts !== state.concepts ||
+        props.keywords !== state.keywords ||
+        props.entityTypes !== state.entityTypes ||
+        props.term !== state.termValue) {
+      return {
+        trendData: props.trendData,
+        trendLoading: props.trendLoading,
+        trendError: props.trendError,
+        entities: props.entities,
+        categories: props.categories,
+        concepts: props.concepts,
+        keywords: props.keywords,
+        entityTypes: props.entityTypes,
+        termValue: props.term
+      };
+    }
+    // no change in state
+    return null;
   }
 
   /**

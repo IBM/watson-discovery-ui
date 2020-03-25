@@ -66,12 +66,16 @@ class FilterContainer extends React.Component {
    * currently selected items. Note that the list contains the label
    * name along with a count, like 'foo (14)'. If it was originally
    * selected when it had that count, the count may change due to other
-   * filters being applied. In this case, we need to now the 'foo (14)'
+   * filters being applied. In this case, we need to know the 'foo (14)'
    * is the same as 'foo (3)'. 
    * Return true if the label was found and removed from the list.
    */
   removeLabelIfExists(selectedItems, label) {
     // handle easy cases first, like no selected items or perfect match found
+    if (!selectedItems) {
+      return false;
+    }
+
     if (selectedItems.size < 1) {
       return false;
     }
@@ -124,14 +128,16 @@ class FilterContainer extends React.Component {
     const itemStr = item.key;
     var isChecked = false;
 
-    selectedItems.forEach(function(value) {
-      var idx = value.lastIndexOf(' (');
-      var newValue = value.substr(0, idx);
-      // console.log("compare arrayVal: " + newValue + " vs CB item: " + itemStr);
-      if (newValue === itemStr) {
-        isChecked = true;
-      }
-    });
+    if (selectedItems) {
+      selectedItems.forEach(function(value) {
+        var idx = value.lastIndexOf(' (');
+        var newValue = value.substr(0, idx);
+        // console.log("compare arrayVal: " + newValue + " vs CB item: " + itemStr);
+        if (newValue === itemStr) {
+          isChecked = true;
+        }
+      });
+    }
     return isChecked;
   }
 
@@ -181,8 +187,7 @@ class FilterContainer extends React.Component {
 
 // type check to ensure we are called correctly
 FilterContainer.propTypes = {
-  onFilterItemsChange: PropTypes.func.isRequired,
-  selectedEntities: PropTypes.object
+  onFilterItemsChange: PropTypes.func.isRequired
 };
 
 // export so we are visible to parent

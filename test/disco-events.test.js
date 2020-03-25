@@ -28,7 +28,8 @@ describe('Disco Events builder returns params for discovery create event service
       data: {
         environment_id: 'environment',
         collection_id: 'collection',
-        result_type: 'document'
+        document_id: undefined,
+        session_token: undefined
       }
     });
   });
@@ -42,7 +43,6 @@ describe('Disco Events builder returns params for discovery create event service
       data: {
         environment_id: 'environment',
         collection_id: 'collection',
-        result_type: 'document',
         document_id: '1111111111111',
         session_token: '222222222222'
       }

@@ -63,10 +63,18 @@ class EntityTypesFilter extends FilterContainer {
   // are propagated down to our component. In this case, some other
   // search or filter event has occured which has changed the list of 
   // entities, or which entities are selected.
-  componentWillReceiveProps(nextProps) {
-    this.setState({ entityTypes: nextProps.entityTypes });
-    this.setState({ selectedEntityTypes: nextProps.selectedEntityTypes });
+  static getDerivedStateFromProps(props, state) {
+    if (props.entityTypes !== state.entityTypes ||
+        props.selectedEntityTypes !== state.selectedEntityTypes) {
+      return {
+        entityTypes: props.entityTypes,
+        selectedEntityTypes: props.selectedEntityTypes
+      };
+    }
+    // no change in state
+    return null;
   }
+
 }
 
 // type check to ensure we are called correctly

@@ -131,44 +131,28 @@ export default class TagCloudRegion extends React.Component {
   // are propagated down to our component. In this case, some other
   // search or filter event has occurred which has changed the list 
   // items we are showing.
-  componentWillReceiveProps(nextProps) {
-    const { 
-      entities, 
-      categories, 
-      concepts,
-      keywords,
-      entityTypes
-    } = this.state;
-
+  static getDerivedStateFromProps(props, state) {
     _gDoUpdate = false;
     
     // to avoid unnecessary updates, check if data has actually changed
-    if (! this.setsAreEqual(categories.results, nextProps.categories.results)) {
-      this.setState({ categories: nextProps.categories });
+    if (props.categories.results !== state.categories.results ||
+        props.concepts.results !== state.concepts.results ||
+        props.keywords.results !== state.keywords.results ||
+        props.entities.results !== state.entities.results ||
+        props.entityTypes.results !== state.entityTypes.results) {
       _gDoUpdate = true;
+      return {
+        categories: props.categories,
+        concepts: props.concepts,
+        keywords: props.keywords,
+        entities: props.entities,
+        entityTypes: props.entityTypes
+      };
     }
 
-    if (! this.setsAreEqual(concepts.results, nextProps.concepts.results)) {
-      this.setState({ concepts: nextProps.concepts });
-      _gDoUpdate = true;
-    }
-
-    if (! this.setsAreEqual(keywords.results, nextProps.keywords.results)) {
-      this.setState({ keywords: nextProps.keywords });
-      _gDoUpdate = true;
-    }
-
-    if (! this.setsAreEqual(entities.results, nextProps.entities.results)) {
-      this.setState({ entities: nextProps.entities });
-      _gDoUpdate = true;
-    }
-
-    if (! this.setsAreEqual(entityTypes.results, nextProps.entityTypes.results)) {
-      this.setState({ entityTypes: nextProps.entityTypes });
-      _gDoUpdate = true;
-    }
+    // no change in state
+    return null;
   }
-
 
   // Only do update if something has changed
   // NOTE: we need to do this for this specific component because it

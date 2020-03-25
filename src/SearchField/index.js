@@ -67,10 +67,18 @@ export default class SearchField extends React.Component {
   // are propagated down to our component. In this case, we have passed
   // the checkbox changes to our parent to manage, so we just wait
   // for the changes to our state to get propogated down to us.
-  componentWillReceiveProps(nextProps) {
-    this.setState({ queryType: nextProps.queryType });
-    this.setState({ returnPassages: nextProps.returnPassages });
-    this.setState({ limitResults: nextProps.limitResults });
+  static getDerivedStateFromProps(props, state) {
+    if (props.queryType !== state.queryType ||
+        props.returnPassages !== state.returnPassages ||
+        props.limitResults !== state.limitResults) {
+      return {
+        queryType: props.queryType,
+        returnPassages: props.returnPassages,
+        limitResults: props.limitResults
+      };
+    }
+    // no change in state
+    return null;
   }
 
   /**

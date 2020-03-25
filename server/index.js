@@ -21,7 +21,6 @@ require('dotenv').config({
 });
 
 require('isomorphic-fetch');
-const Promise = require('bluebird');
 const queryString = require('query-string');
 const queryBuilder = require('./query-builder');
 const queryTrendBuilder = require('./query-builder-trending');
@@ -54,10 +53,6 @@ const discovery = new DiscoveryV1({
   version: '2019-03-25'
 });
 
-// make our discovery queries promise functions
-discovery.query = Promise.promisify(discovery.query);
-discovery.createEvent = Promise.promisify(discovery.createEvent);
-
 const discoverySetup = new WatsonDiscoverySetup(discovery);
 const discoverySetupParams = { 
   default_name: DEFAULT_NAME, 
@@ -77,8 +72,8 @@ const WatsonDiscoServer = new Promise((resolve) => {
       // will point to the actual credentials, whether the user
       // entered them in .env for an existing collection, or if
       // we had to create them from scratch.
-      environment_id = collectionParams.environment_id;
-      collection_id = collectionParams.collection_id;
+      environment_id = collectionParams.environmentId;
+      collection_id = collectionParams.collectionId;
       console.log('environment_id: ' + environment_id);
       console.log('collection_id: ' + collection_id);
       queryBuilder.setEnvironmentId(environment_id);
@@ -106,7 +101,7 @@ function createServer() {
 
   server.get('/api/createEvent', (req, res) => {
     const { sessionToken, documentId } = req.query;
-
+    console.log('sessionToken: ' + sessionToken);
     // console.log('IN api/metrics');
 
     var discoEventsParams = discoEvents.createEvent(documentId, sessionToken);
@@ -159,7 +154,7 @@ function createServer() {
 
     // add query and the type of query
     if (queryType == 'natural_language_query') {
-      params.natural_language_query = query;
+      params.naturalLanguageQuery = query;
     } else {
       params.query = query;
     }
@@ -170,7 +165,7 @@ function createServer() {
     }
 
     params.count = count;
-    params.passages_count = count;
+    params.passagesCount = count;
     params.passages = returnPassages;
     if (! sort) {
       params.sort = utils.BY_HIGHEST_QUERY;
@@ -231,6 +226,7 @@ function createServer() {
             numPositive: totals.numPositive,
             numNeutral: totals.numNeutral,
             numNegative: totals.numNegative,
+            sessionToken: json.result.session_token,
             error: null
           }
         );
@@ -249,7 +245,7 @@ function createServer() {
     // this is the inital query to the discovery service
     console.log('Initial Search Query at start-up');
     const params = queryBuilder.search({ 
-      natural_language_query: '',
+      naturalLanguageQuery: '',
       count: 1000,
       passages: false
     });
@@ -262,9 +258,8 @@ function createServer() {
           matches = utils.formatData(matches, []);
           var totals = utils.getTotals(matches);
 
-          // const util = require('util');
           // console.log('++++++++++++ DISCO RESULTS ++++++++++++++++++++');
-          // console.log(util.inspect(results, false, null));
+          // console.log(JSON.stringify(results, null, 2));
       
           res.render('index', { 
             data: matches, 
@@ -276,7 +271,8 @@ function createServer() {
             numMatches: matches.results.length,
             numPositive: totals.numPositive,
             numNeutral: totals.numNeutral,
-            numNegative: totals.numNegative
+            numNegative: totals.numNegative,
+            sessionToken: results.result.session_token
           });
     
           resolve(results);

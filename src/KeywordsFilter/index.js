@@ -63,10 +63,18 @@ class KeywordsFilter extends FilterContainer {
   // are propagated down to our component. In this case, some other
   // search or filter event has occured which has changed the list of 
   // keywords, or which keywords are selected.
-  componentWillReceiveProps(nextProps) {
-    this.setState({ keywords: nextProps.keywords });
-    this.setState({ selectedKeywords: nextProps.selectedKeywords });
+  static getDerivedStateFromProps(props, state) {
+    if (props.keywords !== state.keywords ||
+        props.selectedKeywords !== state.selectedKeywords) {
+      return {
+        keywords: props.keywords,
+        selectedKeywords: props.selectedKeywords
+      };
+    }
+    // no change in state
+    return null;
   }
+
 }
 
 // type check to ensure we are called correctly

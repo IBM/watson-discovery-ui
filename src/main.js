@@ -74,7 +74,9 @@ class Main extends React.Component {
       trendError,
       trendTerm,
       // sentiment chart
-      sentimentTerm
+      sentimentTerm,
+      // token for usage metrics
+      sessionToken
     } = this.props;
 
     // change in state fires re-render of components
@@ -116,6 +118,7 @@ class Main extends React.Component {
       // misc panel
       currentPage: currentPage || '1',  // which page of matches are we showing
       activeFilterIndex: 0,             // which filter index is expanded/active
+      sessionToken: sessionToken || ''
     };
   }
 
@@ -284,7 +287,6 @@ class Main extends React.Component {
       keywords, selectedKeywords,
       entityTypes, selectedEntityTypes,
       searchQuery  } = this.state;
-
     if (cloudType === utils.CATEGORY_FILTER) {
       var fullName = this.buildFullTagName(selectedTagValue, categories.results);
       if (selectedCategories.has(fullName)) {
@@ -318,13 +320,15 @@ class Main extends React.Component {
         selectedKeywords: selectedKeywords
       });
 
-    } else if (cloudType == utils.ENTITIY_FILTER) {
+    } else if (cloudType == utils.ENTITY_FILTER) {
       fullName = this.buildFullTagName(selectedTagValue, entities.results);
+      console.log('fullName: ' + fullName);
       if (selectedEntities.has(fullName)) {
         selectedEntities.delete(fullName);
       } else {
         selectedEntities.add(fullName);
       }
+      console.log('selected entities: ' + JSON.stringify(selectedEntities, null, 2));
       this.setState({
         selectedEntities: selectedEntities
       });
@@ -369,8 +373,8 @@ class Main extends React.Component {
           trendTerm: term
         });
       return;
-    } 
-    
+    }
+
     this.setState({
       trendLoading: true,
       trendTerm: term
@@ -378,7 +382,8 @@ class Main extends React.Component {
 
     // build query string, with based on filter type
     var trendQuery = '';
-    if (chartType === utils.ENTITIY_FILTER) {
+
+    if (chartType === utils.ENTITY_FILTER) {
       trendQuery = 'enriched_text.entities.text::' + term;
     } else if (chartType === utils.CATEGORY_FILTER) {
       trendQuery = 'enriched_text.categories.label::' + term;
@@ -406,11 +411,10 @@ class Main extends React.Component {
         }
       })
       .then(json => {
-        // const util = require('util');
         console.log('+++ DISCO TREND RESULTS +++');
-        // console.log(util.inspect(json.aggregations[0].results, false, null));
-        console.log('numMatches: ' + json.matching_results);
-      
+        // console.log(JSON.stringify(json.result.aggregations[0].results, null, 2));
+        console.log('numMatches: ' + json.result.matching_results);
+
         this.setState({ 
           trendData: json,
           trendLoading: false,
@@ -494,6 +498,7 @@ class Main extends React.Component {
       })
       .then(json => {
         var data = utils.parseData(json);
+        const sessionToken = data.sessionToken;
         var passages = [];
 
         if (returnPassages) {
@@ -528,7 +533,8 @@ class Main extends React.Component {
           error: null,
           trendData: null,
           sentimentTerm: utils.SENTIMENT_TERM_ITEM,
-          trendTerm: utils.TRENDING_TERM_ITEM
+          trendTerm: utils.TRENDING_TERM_ITEM,
+          sessionToken: sessionToken
         });
         scrollToMain();
       })
@@ -636,7 +642,7 @@ class Main extends React.Component {
    * getMatches - return collection matches to be rendered.
    */
   getMatches() {
-    const { data, currentPage } = this.state;
+    const { data, currentPage, sessionToken } = this.state;
 
     if (!data) {
       return null;
@@ -650,6 +656,7 @@ class Main extends React.Component {
     return (
       <Matches 
         matches={ pageOfMatches }
+        sessionToken= { sessionToken }
         onGetFullReviewRequest={this.updateDocMetrics.bind(this)}
       />
     );
@@ -790,7 +797,7 @@ class Main extends React.Component {
       selectedEntityTypes.size > 0) {
       filtersOn = true;
     }
-    
+
     return (
       <Grid celled className='search-grid'>
 
@@ -1027,7 +1034,7 @@ const parsePassages = data => ({
   rawResponse: Object.assign({}, data),
   // sentiment: data.aggregations[0].results.reduce((accumulator, result) =>
   //   Object.assign(accumulator, { [result.key]: result.matching_results }), {}),
-  results: data.passages
+  results: data.result.passages
 });
 
 /**
@@ -1035,7 +1042,7 @@ const parsePassages = data => ({
  */
 const parseEntities = data => ({
   rawResponse: Object.assign({}, data),
-  results: data.aggregations[utils.ENTITY_DATA_INDEX].results
+  results: data.result.aggregations[utils.ENTITY_DATA_INDEX].results
 });
 
 /**
@@ -1043,7 +1050,7 @@ const parseEntities = data => ({
  */
 const parseCategories = data => ({
   rawResponse: Object.assign({}, data),
-  results: data.aggregations[utils.CATEGORY_DATA_INDEX].results
+  results: data.result.aggregations[utils.CATEGORY_DATA_INDEX].results
 });
 
 /**
@@ -1051,7 +1058,7 @@ const parseCategories = data => ({
  */
 const parseConcepts = data => ({
   rawResponse: Object.assign({}, data),
-  results: data.aggregations[utils.CONCEPT_DATA_INDEX].results
+  results: data.result.aggregations[utils.CONCEPT_DATA_INDEX].results
 });
 
 /**
@@ -1059,7 +1066,7 @@ const parseConcepts = data => ({
  */
 const parseKeywords = data => ({
   rawResponse: Object.assign({}, data),
-  results: data.aggregations[utils.KEYWORD_DATA_INDEX].results
+  results: data.result.aggregations[utils.KEYWORD_DATA_INDEX].results
 });
 
 /**
@@ -1067,7 +1074,7 @@ const parseKeywords = data => ({
  */
 const parseEntityTypes = data => ({
   rawResponse: Object.assign({}, data),
-  results: data.aggregations[utils.ENTITY_TYPE_DATA_INDEX].results
+  results: data.result.aggregations[utils.ENTITY_TYPE_DATA_INDEX].results
 });
 
 /**
@@ -1108,6 +1115,7 @@ Main.propTypes = {
   trendError: PropTypes.object,
   trendTerm: PropTypes.string,
   sentimentTerm: PropTypes.string,
+  sessionToken: PropTypes.string,
   error: PropTypes.object
 };
 

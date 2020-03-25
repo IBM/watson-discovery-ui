@@ -187,9 +187,7 @@ class FilterContainer extends React.Component {
 
 // type check to ensure we are called correctly
 FilterContainer.propTypes = {
-  onFilterItemsChange: PropTypes.func.isRequired,
-  // selectedEntities: PropTypes.object,
-  // selectedCategories: PropTypes.object,
+  onFilterItemsChange: PropTypes.func.isRequired
 };
 
 // export so we are visible to parent

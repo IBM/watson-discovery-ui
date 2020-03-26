@@ -60,6 +60,7 @@ exports[`renders correctly 1`] = `
       <i
         aria-hidden="true"
         className="chevron circle right icon"
+        onClick={[Function]}
       />
     </a>
   </div>

@@ -25,6 +25,7 @@ exports[`renders correctly 1`] = `
       <i
         aria-hidden="true"
         className="search icon"
+        onClick={[Function]}
       />
     </div>
   </div>

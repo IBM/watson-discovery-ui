@@ -94,7 +94,7 @@ Click on the `Resources` tab and choose `Config Maps` and then click the `Create
 Use the `Create Config Map` panel to add our application parameters.
 
 * Provide a `Name` for the config map.
-* Add a key named `DISCOVERY_IAM_APIKEY` and paste in the API Key under `Enter a value...`.
+* Add a key named `DISCOVERY_APIKEY` and paste in the API Key under `Enter a value...`.
 * Click `Add Item` and add a key named `DISCOVERY_URL` and paste in the URL under `Enter a value...`..
 * Click `Add Item` and add a key named `PORT`, enter 8080 under `Enter a value...`.
 * Click `Add Item` and add a key named `DISCOVERY_ENVIRONMENT_ID` and paste in the value under `Enter a value...`..

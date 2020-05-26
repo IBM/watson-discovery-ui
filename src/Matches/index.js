@@ -77,6 +77,12 @@ export default class Matches extends React.Component {
     }
   }
 
+  getFile(item) {
+    //console.log('FILE = ' + '<a href="' + item.date + '"</a>');
+    // return '<a href="https://ibm.ent.box.com/s/x1jevh2i1dsb4bs104353nneybrl514k/file/658558108778" target="_blank">' + item.date + '</a>';
+    return '<a href="file:///Users/rhagarty/Downloads/US43941918.pdf" target="_blank">' + item.date + '</a>';
+  }
+
   /**
    * getScore - round up to 4 decimal places.
    */
@@ -192,13 +198,10 @@ export default class Matches extends React.Component {
               {matches.map(item =>
                 <MatchItem
                   key={ item.id }
-                  title={ this.getTitle(item) }
                   text={ this.getText(item, item.textBlurb) }
                   moreButton= { this.getMoreButton(item) }
                   highlightText={ item.highlightText }
-                  score={ this.getScore(item) }
-                  date={ item.date }
-                  sentiment={ this.getSentiment(item) }
+                  date={ this.getFile(item) }
                 />)
               }
             </List>

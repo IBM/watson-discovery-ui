@@ -211,8 +211,10 @@ function createServer() {
         // get all the results data in right format
         var matches = utils.parseData(json);
         matches = utils.formatData(matches, []);
-        var totals = utils.getTotals(matches);
 
+        // console.log('++++++++++++ DISCO RESULTS 3 ++++++++++++++++++++');
+        // console.log(JSON.stringify(json.result.results, null, 2));
+      
         res.render('index',
           {
             data: matches,
@@ -223,9 +225,6 @@ function createServer() {
             entityTypes: json,
             searchQuery,
             numMatches: matches.results.length,
-            numPositive: totals.numPositive,
-            numNeutral: totals.numNeutral,
-            numNegative: totals.numNegative,
             sessionToken: json.result.session_token,
             error: null
           }
@@ -256,9 +255,8 @@ function createServer() {
           // get all the results data in right format
           var matches = utils.parseData(results);
           matches = utils.formatData(matches, []);
-          var totals = utils.getTotals(matches);
 
-          // console.log('++++++++++++ DISCO RESULTS ++++++++++++++++++++');
+          // console.log('++++++++++++ DISCO RESULTS 2 ++++++++++++++++++++');
           // console.log(JSON.stringify(results, null, 2));
       
           res.render('index', { 
@@ -269,9 +267,6 @@ function createServer() {
             keywords: results,
             entityTypes: results,
             numMatches: matches.results.length,
-            numPositive: totals.numPositive,
-            numNeutral: totals.numNeutral,
-            numNegative: totals.numNegative,
             sessionToken: results.result.session_token
           });
     

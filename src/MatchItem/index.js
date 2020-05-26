@@ -34,17 +34,10 @@ const MatchItem = props => (
     <List.Content>
       <List.Description>
         <span dangerouslySetInnerHTML={{__html: props.text}}></span>
-        { props.moreButton }
       </List.Description>
     </List.Content>
     <List.Content>
-      Score: { props.score }
-    </List.Content>
-    <List.Content>
-      Date: { props.date }
-    </List.Content>
-    <List.Content>
-      Sentiment: { props.sentiment }
+      Filename: <span dangerouslySetInnerHTML={{__html: props.date}}></span>
     </List.Content>
   </List.Item>
 );
@@ -54,9 +47,7 @@ MatchItem.propTypes = {
   title: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   moreButton: PropTypes.object.isRequired,
-  date: PropTypes.string.isRequired,
-  score: PropTypes.string.isRequired,
-  sentiment: PropTypes.object.isRequired
+  date: PropTypes.string.isRequired
 };
 
 // export so we are visible to parent

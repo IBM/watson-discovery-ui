@@ -563,6 +563,14 @@ body {
   display: block;
 }
 
+.matches--list {
+  margin-top: 15px;
+}
+
+.item {
+  margin-bottom: 10px;
+}
+
 @media (min-width: 560px) {
   .widget {
     padding: 1rem 2rem;

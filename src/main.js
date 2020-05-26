@@ -26,10 +26,7 @@ import CategoriesFilter from './CategoriesFilter';
 import ConceptsFilter from './ConceptsFilter';
 import KeywordsFilter from './KeywordsFilter';
 import EntityTypesFilter from './EntityTypesFilter';
-import TagCloudRegion from './TagCloudRegion';
-import TrendChart from './TrendChart';
-import SentimentChart from './SentimentChart';
-import { Grid, Dimmer, Button, Menu, Dropdown, Divider, Loader, Accordion, Icon, Header, Statistic } from 'semantic-ui-react';
+import { Grid, Dimmer, Button, Menu, Dropdown, Divider, Loader, Accordion, Icon, Header } from 'semantic-ui-react';
 const utils = require('../lib/utils');
 
 /**
@@ -49,9 +46,6 @@ class Main extends React.Component {
       entityTypes,
       data,
       numMatches,
-      numPositive,
-      numNeutral,
-      numNegative,
       error,
       // query params
       searchQuery,
@@ -67,14 +61,6 @@ class Main extends React.Component {
       selectedEntityTypes,
       // matches panel
       currentPage,
-      // tag cloud
-      tagCloudType,
-      // trending chart
-      trendData,
-      trendError,
-      trendTerm,
-      // sentiment chart
-      sentimentTerm,
       // token for usage metrics
       sessionToken
     } = this.props;
@@ -89,9 +75,6 @@ class Main extends React.Component {
       entityTypes: entityTypes && parseEntityTypes(entityTypes),
       data: data,   // data should already be formatted
       numMatches: numMatches || 0,
-      numPositive: numPositive || 0,
-      numNeutral: numNeutral || 0,
-      numNegative: numNegative || 0,
       loading: false,
       error: error,
       // query params
@@ -106,15 +89,6 @@ class Main extends React.Component {
       selectedConcepts: selectedConcepts || new Set(),
       selectedKeywords: selectedKeywords || new Set(),
       selectedEntityTypes: selectedEntityTypes || new Set(),
-      // tag cloud
-      tagCloudType: tagCloudType || utils.ENTITY_FILTER,
-      // trending chart
-      trendData: trendData || null,
-      trendError: trendError,
-      trendTerm: trendTerm || utils.TRENDING_TERM_ITEM,
-      trendLoading: false,
-      // sentiment chart
-      sentimentTerm: sentimentTerm || utils.SENTIMENT_TERM_ITEM,
       // misc panel
       currentPage: currentPage || '1',  // which page of matches are we showing
       activeFilterIndex: 0,             // which filter index is expanded/active
@@ -225,16 +199,6 @@ class Main extends React.Component {
   }
 
   /**
-   * sentimentTermChanged - (callback function)
-   * User has selected a new term to use in the sentiment
-   * chart. Keep track of this so that main stays in sync.
-   */
-  sentimentTermChanged(data) {
-    const { term } = data;
-    this.setState({ sentimentTerm: term });
-  }
-
-  /**
    * sortOrderChange - (callback function)
    * User has changed how to sort the matches (defaut
    * is by highest score first). Save the value for
@@ -267,173 +231,6 @@ class Main extends React.Component {
     }
   }
 
-  /**
-   * tagItemSelected - (callback function)
-   * User has selected an item from the tag cloud object
-   * to filter on. This results in making a new qeury to the 
-   * disco service.
-   */
-  tagItemSelected(tag) {
-    var { selectedTagValue, cloudType } = tag;
-    console.log('tagValue [FROM TAG CLOUD]: ' + selectedTagValue);
-
-    // manually add this item to the list of selected items
-    // based on filter type. This is needed so that both the 
-    // tag cloud and the filter objects stay in sync (both 
-    // reflect what items have been selected).
-    const { entities, selectedEntities, 
-      categories, selectedCategories, 
-      concepts, selectedConcepts,
-      keywords, selectedKeywords,
-      entityTypes, selectedEntityTypes,
-      searchQuery  } = this.state;
-    if (cloudType === utils.CATEGORY_FILTER) {
-      var fullName = this.buildFullTagName(selectedTagValue, categories.results);
-      if (selectedCategories.has(fullName)) {
-        selectedCategories.delete(fullName);
-      } else {
-        selectedCategories.add(fullName);
-      }
-      this.setState({
-        selectedCategories: selectedCategories
-      });
-
-    } else if (cloudType == utils.CONCEPT_FILTER) {
-      fullName = this.buildFullTagName(selectedTagValue, concepts.results);
-      if (selectedConcepts.has(fullName)) {
-        selectedConcepts.delete(fullName);
-      } else {
-        selectedConcepts.add(fullName);
-      }
-      this.setState({
-        selectedConcepts: selectedConcepts
-      });
-
-    } else if (cloudType == utils.KEYWORD_FILTER) {
-      fullName = this.buildFullTagName(selectedTagValue, keywords.results);
-      if (selectedKeywords.has(fullName)) {
-        selectedKeywords.delete(fullName);
-      } else {
-        selectedKeywords.add(fullName);
-      }
-      this.setState({
-        selectedKeywords: selectedKeywords
-      });
-
-    } else if (cloudType == utils.ENTITY_FILTER) {
-      fullName = this.buildFullTagName(selectedTagValue, entities.results);
-      console.log('fullName: ' + fullName);
-      if (selectedEntities.has(fullName)) {
-        selectedEntities.delete(fullName);
-      } else {
-        selectedEntities.add(fullName);
-      }
-      console.log('selected entities: ' + JSON.stringify(selectedEntities, null, 2));
-      this.setState({
-        selectedEntities: selectedEntities
-      });
-
-    } else if (cloudType == utils.ENTITY_TYPE_FILTER) {
-      fullName = this.buildFullTagName(selectedTagValue, entityTypes.results);
-      if (selectedEntityTypes.has(fullName)) {
-        selectedEntityTypes.delete(fullName);
-      } else {
-        selectedEntityTypes.add(fullName);
-      }
-      this.setState({
-        selectedEntityTypes: selectedEntityTypes
-      });
-    }
-
-    // execute new search w/ filters
-    this.fetchData(searchQuery, false);
-  }
-
-  /**
-   * getTrendData - (callback function)
-   * User has entered a new search string to query on. 
-   * This results in making a new qeury to the disco service.
-   * Keep track of the current term value so that main stays
-   * in sync with the trending chart component.
-   * 
-   * NOTE: This function is also called at startup to 
-   * display a default graph.
-   */
-  getTrendData(data) {
-    var { limitResults } = this.state;
-    var { chartType, term } = data;
-
-    // we don't have any data to show for "all" items, so just clear chart
-    if (term === utils.TRENDING_TERM_ITEM) {
-      this.setState(
-        { 
-          trendData: null,
-          trendLoading: false,
-          trendError: null,
-          trendTerm: term
-        });
-      return;
-    }
-
-    this.setState({
-      trendLoading: true,
-      trendTerm: term
-    });
-
-    // build query string, with based on filter type
-    var trendQuery = '';
-
-    if (chartType === utils.ENTITY_FILTER) {
-      trendQuery = 'enriched_text.entities.text::' + term;
-    } else if (chartType === utils.CATEGORY_FILTER) {
-      trendQuery = 'enriched_text.categories.label::' + term;
-    } else if (chartType === utils.CONCEPT_FILTER) {
-      trendQuery = 'enriched_text.concepts.text::' + term;
-    } else if (chartType === utils.KEYWORD_FILTER) {
-      trendQuery = 'enriched_text.keywords.text::' + term;
-    } else if (chartType === utils.ENTITY_TYPE_FILTER) {
-      trendQuery = 'enriched_text.entities.type::' + term;
-    }
-
-    const qs = queryString.stringify({
-      query: trendQuery,
-      filters: this.buildFilterStringForQuery(),
-      count: (limitResults == true ? 100 : 1000)
-    });
-
-    // send request
-    fetch(`/api/trending?${qs}`)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw response;
-        }
-      })
-      .then(json => {
-        console.log('+++ DISCO TREND RESULTS +++');
-        // console.log(JSON.stringify(json.result.aggregations[0].results, null, 2));
-        console.log('numMatches: ' + json.result.matching_results);
-
-        this.setState({ 
-          trendData: json,
-          trendLoading: false,
-          trendError: null,
-          trendTerm: term
-        });
-      })
-      .catch(response => {
-        this.setState({
-          trendError: (response.status === 429) ? 'Number of free queries per month exceeded' : 'Error fetching results',
-          trendLoading: false,
-          trendData: null,
-          trendTerm: utils.TRENDING_TERM_ITEM
-        });
-        // eslint-disable-next-line no-console
-        console.error(response);
-      });
-  }
-  
   /**
    * fetchData - build the query that will be passed to the 
    * discovery service.
@@ -510,14 +307,10 @@ class Main extends React.Component {
 
         data = utils.formatData(data, passages, filterString);
         
-        console.log('+++ DISCO RESULTS +++');
-        // const util = require('util');
-        // console.log(util.inspect(data.results, false, null));
-        console.log('numMatches: ' + data.results.length);
+        // console.log('+++ DISCO RESULTS 1 +++');
+        // console.log(JSON.stringify(data.results, 2, null));
+        // console.log('numMatches: ' + data.results.length);
       
-        // add up totals for the sentiment of reviews
-        var totals = utils.getTotals(data);
-
         this.setState({
           data: data,
           entities: parseEntities(json),
@@ -527,13 +320,7 @@ class Main extends React.Component {
           entityTypes: parseEntityTypes(json),
           loading: false,
           numMatches: data.results.length,
-          numPositive: totals.numPositive,
-          numNegative: totals.numNegative,
-          numNeutral: totals.numNeutral,
           error: null,
-          trendData: null,
-          sentimentTerm: utils.SENTIMENT_TERM_ITEM,
-          trendTerm: utils.TRENDING_TERM_ITEM,
           sessionToken: sessionToken
         });
         scrollToMain();
@@ -616,26 +403,6 @@ class Main extends React.Component {
     filterString = filterString + entityTypesString;
 
     return filterString;
-  }
-
-  /**
-   * buildFullTagName - this matches the selected tag cloud item with
-   * the item in the filter collection. This is needed to keep them in 
-   * sync with each other. This takes care of the issue where the tag
-   * cloud item is formatted differently than the collection item (the
-   * collection item name has a count appended to it).
-   */
-  buildFullTagName(tag, collection) {
-    // find the tag in collection
-    for (var i=0; i<collection.length; i++) {
-      console.log('compare tag: ' + tag + ' with: ' + collection[i].key);
-      if (collection[i].key === tag) {
-        // return the full tag so we can match the entries
-        // listed in the filters (which also show num of matches)
-        return collection[i].key + ' (' + collection[i].matching_results + ')';
-      }
-    }
-    return tag;
   }
 
   /**
@@ -774,20 +541,10 @@ class Main extends React.Component {
     const { loading, data, error, searchQuery,
       entities, categories, concepts, keywords, entityTypes,
       selectedEntities, selectedCategories, selectedConcepts, selectedKeywords, selectedEntityTypes,
-      numMatches, numPositive, numNeutral, numNegative,
-      tagCloudType, trendData, trendLoading, trendError, trendTerm,
-      queryType, returnPassages, limitResults, sortOrder,
-      sentimentTerm } = this.state;
+      queryType, returnPassages, limitResults, sortOrder } = this.state;
 
     // used for filter accordions
     const { activeFilterIndex } = this.state;
-
-    const stat_items = [
-      { key: 'matches', label: 'REVIEWS', value: numMatches },
-      { key: 'positive', label: 'POSITIVE', value: numPositive },
-      { key: 'neutral', label: 'NEUTRAL', value: numNeutral },
-      { key: 'negative', label: 'NEGATIVE', value: numNegative }
-    ];
 
     var filtersOn = false;
     if (selectedEntities.size > 0 ||
@@ -906,25 +663,11 @@ class Main extends React.Component {
             <Divider/>
             <Divider hidden/>
 
-            {/* Tag Cloud Region */}
-    
-            <Grid.Row>
-              <TagCloudRegion
-                entities={entities}
-                categories={categories}
-                concepts={concepts}
-                keywords={keywords}
-                entityTypes={entityTypes}
-                tagCloudType={tagCloudType}
-                onTagItemSelected={this.tagItemSelected.bind(this)}
-              />
-            </Grid.Row>
-            
           </Grid.Column>
 
           {/* Results */}
 
-          <Grid.Column width={7}>
+          <Grid.Column width={13}>
             <Grid.Row>
               {loading ? (
                 <div className="results">
@@ -942,22 +685,9 @@ class Main extends React.Component {
                         <Header as='h2' block inverted textAlign='left'>
                           <Icon name='grid layout' />
                           <Header.Content>
-                            Matches
+                            Results
                           </Header.Content>
                         </Header>
-                        <Statistic.Group
-                          size='mini'
-                          items={ stat_items }
-                        />
-                        <Menu compact className="sort-dropdown">
-                          <Icon name='sort' size='large' bordered inverted />
-                          <Dropdown 
-                            item
-                            onChange={ this.sortOrderChange.bind(this) }
-                            value={ sortOrder }
-                            options={ utils.sortTypes }
-                          />
-                        </Menu>
                       </div>
                       <div>
                         {this.getMatches()}
@@ -984,46 +714,6 @@ class Main extends React.Component {
             </Grid.Row>
           </Grid.Column>
 
-          <Grid.Column width={6}>
-
-            {/* Sentiment Chart Region */}
-
-            <Grid.Row className='rrr'>
-              <SentimentChart
-                entities={entities}
-                categories={categories}
-                concepts={concepts}
-                keywords={keywords}
-                entityTypes={entityTypes}
-                term={sentimentTerm}
-                onSentimentTermChanged={this.sentimentTermChanged.bind(this)}
-              />
-            </Grid.Row>
-
-            <Divider hidden/>
-            <Divider/>
-            <Divider hidden/>
-
-            {/* Trend Chart Region */}
-
-            <Grid.Row className='ttt'>
-              <div className="trend-chart">
-                <TrendChart
-                  trendData={trendData}
-                  trendLoading={trendLoading}
-                  trendError={trendError}
-                  entities={entities}
-                  categories={categories}
-                  concepts={concepts}
-                  keywords={keywords}
-                  entityTypes={entityTypes}
-                  term={trendTerm}
-                  onGetTrendDataRequest={this.getTrendData.bind(this)}
-                />
-              </div>
-            </Grid.Row>
-
-          </Grid.Column>
         </Grid.Row>
       </Grid>
     );
@@ -1102,19 +792,11 @@ Main.propTypes = {
   selectedKeywords: PropTypes.object,
   selectedEntityTypes: PropTypes.object,
   numMatches: PropTypes.number,
-  numPositive: PropTypes.number,
-  numNeutral: PropTypes.number,
-  numNegative: PropTypes.number,
-  tagCloudType: PropTypes.string,
   currentPage: PropTypes.string,
   queryType: PropTypes.string,
   returnPassages: PropTypes.bool,
   limitResults: PropTypes.bool,
   sortOrder: PropTypes.string,
-  trendData: PropTypes.object,
-  trendError: PropTypes.object,
-  trendTerm: PropTypes.string,
-  sentimentTerm: PropTypes.string,
   sessionToken: PropTypes.string,
   error: PropTypes.object
 };

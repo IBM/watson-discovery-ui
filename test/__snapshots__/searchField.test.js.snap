@@ -10,7 +10,7 @@ exports[`renders correctly 1`] = `
     <h1
       className="ui center aligned header"
     >
-      Airbnb Review Data for Austin, TX
+      Bluemine reports
     </h1>
     <div
       className="ui icon input searchinput"

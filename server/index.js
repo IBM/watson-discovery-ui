@@ -188,9 +188,9 @@ function createServer() {
   // handles search string appened to url
   server.get('/:searchQuery', function(req, res){
     var searchQuery = req.params.searchQuery.replace(/\+/g, ' ');
-    const qs = queryString.stringify({ 
+    const qs = queryString.stringify({
       query: searchQuery,
-      count: 1000,
+      count: 100,
       returnPassages: false,
       queryType: 'natural_language_query'
     });
@@ -244,9 +244,9 @@ function createServer() {
 
     // this is the inital query to the discovery service
     console.log('Initial Search Query at start-up');
-    const params = queryBuilder.search({ 
+    const params = queryBuilder.search({
       naturalLanguageQuery: '',
-      count: 1000,
+      count: 100,
       passages: false
     });
     return new Promise((resolve, reject) => {

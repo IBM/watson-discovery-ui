@@ -398,7 +398,7 @@ class Main extends React.Component {
     const qs = queryString.stringify({
       query: trendQuery,
       filters: this.buildFilterStringForQuery(),
-      count: (limitResults == true ? 100 : 1000)
+      count: (limitResults == true ? 100 : 500)
     });
 
     // send request
@@ -480,10 +480,10 @@ class Main extends React.Component {
     const qs = queryString.stringify({
       query: searchQuery,
       filters: filterString,
-      count: (limitResults == true ? 100 : 1000),
+      count: (limitResults == true ? 100 : 500),
       sort: sortOrder,
       returnPassages: returnPassages,
-      queryType: (queryType === utils.QUERY_NATURAL_LANGUAGE ? 
+      queryType: (queryType === utils.QUERY_NATURAL_LANGUAGE ?
         'natural_language_query' : 'query:'),
     });
 

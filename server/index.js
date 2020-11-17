@@ -27,7 +27,9 @@ const queryTrendBuilder = require('./query-builder-trending');
 const discoEvents = require('./disco-events');
 const WatsonDiscoverySetup = require('../lib/watson-discovery-setup');
 const DiscoveryV1 = require('ibm-watson/discovery/v1');
+const multer = require('multer');
 const utils = require('../lib/utils');
+const upload = multer({ dest: '/tmp' });
 
 /**
  * Back end server which handles initializing the Watson Discovery
@@ -44,6 +46,7 @@ var arrayOfFiles = fs.readdirSync('./data/airbnb/');
 arrayOfFiles.forEach(function(file) {
   discoveryDocs.push(path.join('./data/airbnb/', file));
 });
+
 // shorten the list if we are loading - trail version of IBM Cloud 
 // is limited to 256MB application size, so use this if you get
 // out of memory errors.
@@ -278,6 +281,12 @@ function createServer() {
         });
     });
     
+  });
+
+  server.post('/file-upload', upload.any(), function(req, res) {
+    for (let i = 0; i < req.files.length; i += 1) {
+      console.log(`File ${req.files[i].originalname} uploaded to ${req.files[i].path}`);
+    }
   });
 
   return server;

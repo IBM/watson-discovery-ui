@@ -26,6 +26,9 @@ import CategoriesFilter from './CategoriesFilter';
 import ConceptsFilter from './ConceptsFilter';
 import KeywordsFilter from './KeywordsFilter';
 import EntityTypesFilter from './EntityTypesFilter';
+import FileUploader from './FileUploader';
+import Dropzone from 'react-dropzone';
+
 import { Grid, Dimmer, Button, Menu, Dropdown, Divider, Loader, Accordion, Icon, Header } from 'semantic-ui-react';
 const utils = require('../lib/utils');
 
@@ -662,6 +665,21 @@ class Main extends React.Component {
             <Divider hidden/>
             <Divider/>
             <Divider hidden/>
+
+            <Grid.Row>
+              {/* <FileUploader
+              /> */}
+
+              <Dropzone onDrop={this.onDrop}>
+                {({getRootProps, getInputProps}) => (
+                  <div {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    Click me to upload a file!
+                  </div>
+                )}
+              </Dropzone>
+              
+            </Grid.Row>
 
           </Grid.Column>
 

@@ -240,10 +240,25 @@ class Main extends React.Component {
    * is by highest score first). Save the value for
    * all subsequent queries to discovery.
    */
+
+  sortBy(property) {
+    var sortOrder = 1;
+    if (property[0] === '-') {
+      sortOrder = -1;
+      property = property.substr(1);
+    }
+    return function (a,b) {
+      /* next line works with strings and numbers, 
+       * and you may want to customize it to your needs
+       */
+      var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+      return result * sortOrder;
+    };
+  }
+
   sortOrderChange(event, selection) {
     const { sortOrder, data } = this.state;
     if (sortOrder != selection.value) {
-      var sortBy = require('sort-by');
       var sortedData = data.results.slice();
 
       // get internal version of the sort key
@@ -256,7 +271,7 @@ class Main extends React.Component {
       }
 
       // sort by internal key
-      sortedData.sort(sortBy(internalSortKey));
+      sortedData.sort(this.sortBy(internalSortKey));
       data.results = sortedData;
 
       // save off external key in case we do another query to Discovery

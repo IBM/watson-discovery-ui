@@ -4,6 +4,8 @@
 
 # Develop a fully featured web app built on the Watson Discovery Service
 
+**Note:** This code pattern uses Watson Discovery V1, and will not work with Discovery V2. However, you can still use it to learn the Discovery features. Future plans include updating the code pattern to work with Discovery V2.
+
 In this code pattern, we walk you through a working example of a web application that queries and manipulates data from the Watson Discovery Service. This web app contains multiple UI components that you can use as a starting point for developing your own Watson Discovery Service applications. 
 
 The main benefit of using the Watson Discovery Service is its powerful analytics engine that provides cognitive enrichments and insights into your data. This app provides examples of how to showcase these enrichments through the use of filters, lists and graphs. The key enrichments that we will focus on are:

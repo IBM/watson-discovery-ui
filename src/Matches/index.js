@@ -30,7 +30,7 @@ export default class Matches extends React.Component {
 
     this.state = {
       matches: this.props.matches || null,
-      sessionToken: this.props.sessionToken || ''
+      // sessionToken: this.props.sessionToken || ''
     };
   }
 
@@ -75,18 +75,6 @@ export default class Matches extends React.Component {
     } else {
       return text ? text : 'No Description';
     }
-  }
-
-  /**
-   * getScore - round up to 4 decimal places.
-   */
-  getScore(item) {
-    var score = '0.0';
-
-    if (item.score) {
-      score = item.score.toFixed(4);
-    }
-    return score;
   }
 
   /**
@@ -155,11 +143,11 @@ export default class Matches extends React.Component {
    */
   buttonClicked(item) {
     // let our parent know
-    const { sessionToken } = this.state;
+    // const { sessionToken } = this.state;
 
     this.props.onGetFullReviewRequest({
       // params required for Discovery call to generate "user clicked" event
-      sessionToken: sessionToken,
+      // sessionToken: sessionToken,
       documentId: item.id
     });
   }
@@ -196,7 +184,6 @@ export default class Matches extends React.Component {
                   text={ this.getText(item, item.textBlurb) }
                   moreButton= { this.getMoreButton(item) }
                   highlightText={ item.highlightText }
-                  score={ this.getScore(item) }
                   date={ item.date }
                   sentiment={ this.getSentiment(item) }
                 />)
@@ -213,5 +200,5 @@ export default class Matches extends React.Component {
 Matches.propTypes = {
   matches: PropTypes.arrayOf(PropTypes.object).isRequired,
   onGetFullReviewRequest: PropTypes.func.isRequired,
-  sessionToken: PropTypes.string.isRequired
+  // sessionToken: PropTypes.string.isRequired
 };

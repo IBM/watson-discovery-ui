@@ -37,8 +37,8 @@ export default class SentimentChart extends React.Component {
 
     this.state = {
       entities: this.props.entities,
-      categories: this.props.categories,
-      concepts: this.props.concepts,
+      // categories: this.props.categories,
+      // concepts: this.props.concepts,
       keywords: this.props.keywords,
       entityTypes: this.props.entityTypes,
       chartType: utils.ENTITY_FILTER,
@@ -74,22 +74,23 @@ export default class SentimentChart extends React.Component {
     this.totals.neutralNum = 0;
     this.totals.negativeNum = 0;
 
-    if (collection.results) {
-      for (var item of collection.results) {
-        if (termValue === '' || termValue === utils.SENTIMENT_TERM_ITEM || termValue === item.key) {
-          this.totals.matches = this.totals.matches + item.matching_results;
-          for (var sentiment of item.aggregations[0].results) {
-            if (sentiment.key === 'positive') {
-              this.totals.positiveNum = this.totals.positiveNum + sentiment.matching_results;
-            } else if (sentiment.key === 'neutral') {
-              this.totals.neutralNum = this.totals.neutralNum + sentiment.matching_results;
-            } else if (sentiment.key === 'negative') {
-              this.totals.negativeNum = this.totals.negativeNum + sentiment.matching_results;
-            }
-          }
-        }
-      }
-    }
+    // if (collection.results) {
+    //   for (var item of collection.results) {
+    //     if (termValue === '' || termValue === utils.SENTIMENT_TERM_ITEM || termValue === item.key) {
+    //       this.totals.matches = this.totals.matches + item.matching_results;
+    //       console.log('!!!!!!!!!!!!!! item: ' + JSON.stringify(item, null, 2));
+    //       for (var sentiment of item.aggregations[0].results) {
+    //         if (sentiment.key === 'positive') {
+    //           this.totals.positiveNum = this.totals.positiveNum + sentiment.matching_results;
+    //         } else if (sentiment.key === 'neutral') {
+    //           this.totals.neutralNum = this.totals.neutralNum + sentiment.matching_results;
+    //         } else if (sentiment.key === 'negative') {
+    //           this.totals.negativeNum = this.totals.negativeNum + sentiment.matching_results;
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
   }
 
   /**
@@ -101,28 +102,28 @@ export default class SentimentChart extends React.Component {
       chartType,
       termValue,
       entities,
-      categories,
-      concepts,
+      // categories,
+      // concepts,
       keywords,
       entityTypes
     } = this.state;
     
     if (chartType === utils.ENTITY_FILTER) {
       this.getTotals(entities, termValue);
-    } else if (chartType === utils.CATEGORY_FILTER) {
-      this.getTotals(categories, termValue);
-    } else if (chartType === utils.CONCEPT_FILTER) {
-      this.getTotals(concepts, termValue);
+    // } else if (chartType === utils.CATEGORY_FILTER) {
+    //   this.getTotals(categories, termValue);
+    // } else if (chartType === utils.CONCEPT_FILTER) {
+    //   this.getTotals(concepts, termValue);
     } else if (chartType === utils.KEYWORD_FILTER) {
       this.getTotals(keywords, termValue);
     } else if (chartType === utils.ENTITY_TYPE_FILTER) {
       this.getTotals(entityTypes, termValue);
     }
 
-    // console.log('    totalMatches: ' + this.totals.matches);
-    // console.log('    totalPositive: ' + this.totals.positiveNum);
-    // console.log('    totalNeutral: ' + this.totals.neutralNum);
-    // console.log('    totalNegative: ' + this.totals.negativeNum);
+    console.log('    totalMatches: ' + this.totals.matches);
+    console.log('    totalPositive: ' + this.totals.positiveNum);
+    console.log('    totalNeutral: ' + this.totals.neutralNum);
+    console.log('    totalNegative: ' + this.totals.negativeNum);
 
     var ret = {
       // legend
@@ -176,17 +177,19 @@ export default class SentimentChart extends React.Component {
    * getTermOptions - get the term items available to be selected by the user.
    */
   getTermOptions() {
-    const { chartType, entities, categories, concepts, keywords, entityTypes } = this.state;
+    const { chartType, entities, 
+      // categories, concepts, 
+      keywords, entityTypes } = this.state;
     var options = [{ key: -1, value: utils.SENTIMENT_TERM_ITEM, text: utils.SENTIMENT_TERM_ITEM }];
     var collection;
 
     // select based on the filter type
     if (chartType === utils.ENTITY_FILTER) {
       collection = entities.results;
-    } else if (chartType === utils.CATEGORY_FILTER) {
-      collection = categories.results;
-    } else if (chartType === utils.CONCEPT_FILTER) {
-      collection = concepts.results;
+    // } else if (chartType === utils.CATEGORY_FILTER) {
+    //   collection = categories.results;
+    // } else if (chartType === utils.CONCEPT_FILTER) {
+    //   collection = concepts.results;
     } else if (chartType === utils.KEYWORD_FILTER) {
       collection = keywords.results;
     } else if (chartType === utils.ENTITY_TYPE_FILTER) {
@@ -208,15 +211,15 @@ export default class SentimentChart extends React.Component {
   // items we are graphing.
   static getDerivedStateFromProps(props, state) {
     if (props.entities !== state.entities ||
-        props.categories !== state.categories ||
-        props.concepts !== state.concepts ||
+        // props.categories !== state.categories ||
+        // props.concepts !== state.concepts ||
         props.keywords !== state.keywords ||
         props.entityTypes !== state.entityTypes ||
         props.term !== state.termValue) {
       return {
         entities: props.entities,
-        categories: props.categories,
-        concepts: props.concepts,
+        // categories: props.categories,
+        // concepts: props.concepts,
         keywords: props.keywords,
         entityTypes: props.entityTypes,
         termValue: props.term
@@ -300,8 +303,8 @@ export default class SentimentChart extends React.Component {
 // type check to ensure we are called correctly
 SentimentChart.propTypes = {
   entities: PropTypes.object,
-  categories: PropTypes.object,
-  concepts: PropTypes.object,
+  // categories: PropTypes.object,
+  // concepts: PropTypes.object,
   keywords: PropTypes.object,
   entityTypes: PropTypes.object,
   chartType: PropTypes.string,

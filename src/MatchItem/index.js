@@ -19,8 +19,8 @@ import PropTypes from 'prop-types';
 import { List } from 'semantic-ui-react';
 
 /**
- * This object renders  a single review, with accompanying rating, 
- * score, date, etc.
+ * This object renders a single review, with accompanying sentiment rating, 
+ * date, etc.
  */
 const MatchItem = props => (
   <List.Item>
@@ -38,13 +38,10 @@ const MatchItem = props => (
       </List.Description>
     </List.Content>
     <List.Content>
-      Score: { props.score }
-    </List.Content>
-    <List.Content>
       Date: { props.date }
     </List.Content>
     <List.Content>
-      Sentiment: { props.sentiment }
+      Sentiment Score: { props.sentiment }
     </List.Content>
   </List.Item>
 );
@@ -55,7 +52,6 @@ MatchItem.propTypes = {
   text: PropTypes.string.isRequired,
   moreButton: PropTypes.object.isRequired,
   date: PropTypes.string.isRequired,
-  score: PropTypes.string.isRequired,
   sentiment: PropTypes.object.isRequired
 };
 

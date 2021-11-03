@@ -15,8 +15,8 @@
  */
 
 module.exports = {
-  setEnvironmentId(environmentId) {
-    this.environment_id = environmentId;
+  setProjectId(projectId) {
+    this.project_id = projectId;
   },
   setCollectionId(collectionId) {
     this.collection_id = collectionId;
@@ -25,7 +25,7 @@ module.exports = {
     const params = Object.assign({
       type: 'click',
       data: {
-        environment_id: this.environment_id,
+        project_id: this.project_id,
         collection_id: this.collection_id,
         document_id: documentId,
         session_token: sessionToken

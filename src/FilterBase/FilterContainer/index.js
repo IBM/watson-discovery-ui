@@ -171,17 +171,34 @@ class FilterContainer extends React.Component {
    * render - Render the filter container and its filter item children.
    */
   render() {
-    return (
-      <div>
-        <Container textAlign='left'>
-          <div className="matches--list">
-            {this.getCollection().map(item =>
-              this.getRenderObjectForItem(item))
-            }
-          </div>
-        </Container>
-      </div>
-    );
+    let noMatchesFound = false;
+    if (this.getCollection() === undefined || this.getCollection().length == 0) {
+      noMatchesFound = true;
+    }
+
+    if (noMatchesFound) {
+      return (
+        <div>
+          <Container textAlign='left'>
+            <div className="matches--list">
+              <a className="ui red label">No Matches Found</a>
+            </div>
+          </Container>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Container textAlign='left'>
+            <div className="matches--list">
+              {this.getCollection().map(item =>
+                this.getRenderObjectForItem(item))
+              }
+            </div>
+          </Container>
+        </div>
+      );
+    }
   }
 }
 

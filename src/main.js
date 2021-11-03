@@ -22,8 +22,8 @@ import Matches from './Matches';
 import PaginationMenu from './PaginationMenu';
 import SearchField from './SearchField';
 import EntitiesFilter from './EntitiesFilter';
-import CategoriesFilter from './CategoriesFilter';
-import ConceptsFilter from './ConceptsFilter';
+// import CategoriesFilter from './CategoriesFilter';
+// import ConceptsFilter from './ConceptsFilter';
 import KeywordsFilter from './KeywordsFilter';
 import EntityTypesFilter from './EntityTypesFilter';
 import TagCloudRegion from './TagCloudRegion';
@@ -43,8 +43,8 @@ class Main extends React.Component {
     const { 
       // query data
       entities, 
-      categories, 
-      concepts, 
+      // categories, 
+      // concepts, 
       keywords,
       entityTypes,
       data,
@@ -61,8 +61,8 @@ class Main extends React.Component {
       sortOrder,
       // for filters
       selectedEntities,
-      selectedCategories,
-      selectedConcepts,
+      // selectedCategories,
+      // selectedConcepts,
       selectedKeywords,
       selectedEntityTypes,
       // matches panel
@@ -76,15 +76,15 @@ class Main extends React.Component {
       // sentiment chart
       sentimentTerm,
       // token for usage metrics
-      sessionToken
+      // sessionToken
     } = this.props;
 
     // change in state fires re-render of components
     this.state = {
       // query data
       entities: entities && parseEntities(entities),
-      categories: categories && parseCategories(categories),
-      concepts: concepts && parseConcepts(concepts),
+      // categories: categories && parseCategories(categories),
+      // concepts: concepts && parseConcepts(concepts),
       keywords: keywords && parseKeywords(keywords),
       entityTypes: entityTypes && parseEntityTypes(entityTypes),
       data: data,   // data should already be formatted
@@ -102,8 +102,8 @@ class Main extends React.Component {
       sortOrder: sortOrder || utils.sortKeys[0].sortBy,
       // used by filters
       selectedEntities: selectedEntities || new Set(),
-      selectedCategories: selectedCategories || new Set(),
-      selectedConcepts: selectedConcepts || new Set(),
+      // selectedCategories: selectedCategories || new Set(),
+      // selectedConcepts: selectedConcepts || new Set(),
       selectedKeywords: selectedKeywords || new Set(),
       selectedEntityTypes: selectedEntityTypes || new Set(),
       // tag cloud
@@ -118,7 +118,7 @@ class Main extends React.Component {
       // misc panel
       currentPage: currentPage || '1',  // which page of matches are we showing
       activeFilterIndex: 0,             // which filter index is expanded/active
-      sessionToken: sessionToken || ''
+      // sessionToken: sessionToken || ''
     };
   }
 
@@ -133,10 +133,11 @@ class Main extends React.Component {
    * display a default graph.
    */
   updateDocMetrics(data) {
-    var { sessionToken, documentId } = data;
+    var { documentId } = data;
+    // var { sessionToken, documentId } = data;
 
     const qs = queryString.stringify({
-      sessionToken: sessionToken,
+      // sessionToken: sessionToken,
       documentId: documentId
     });
 
@@ -236,8 +237,8 @@ class Main extends React.Component {
 
   /**
    * sortOrderChange - (callback function)
-   * User has changed how to sort the matches (defaut
-   * is by highest score first). Save the value for
+   * User has changed how to sort the matches (default
+   * is by highest sentiment score first). Save the value for
    * all subsequent queries to discovery.
    */
 
@@ -270,6 +271,7 @@ class Main extends React.Component {
         }
       }
 
+      console.log('internalSortKey: ' + internalSortKey);
       // sort by internal key
       sortedData.sort(this.sortBy(internalSortKey));
       data.results = sortedData;
@@ -298,34 +300,34 @@ class Main extends React.Component {
     // reflect what items have been selected).
     const { entities, selectedEntities, 
       categories, selectedCategories, 
-      concepts, selectedConcepts,
+      // concepts, selectedConcepts,
       keywords, selectedKeywords,
       entityTypes, selectedEntityTypes,
       searchQuery  } = this.state;
-    if (cloudType === utils.CATEGORY_FILTER) {
-      var fullName = this.buildFullTagName(selectedTagValue, categories.results);
-      if (selectedCategories.has(fullName)) {
-        selectedCategories.delete(fullName);
-      } else {
-        selectedCategories.add(fullName);
-      }
-      this.setState({
-        selectedCategories: selectedCategories
-      });
+    // if (cloudType === utils.CATEGORY_FILTER) {
+    //   var fullName = this.buildFullTagName(selectedTagValue, categories.results);
+    //   if (selectedCategories.has(fullName)) {
+    //     selectedCategories.delete(fullName);
+    //   } else {
+    //     selectedCategories.add(fullName);
+    //   }
+    //   this.setState({
+    //     selectedCategories: selectedCategories
+    //   });
 
-    } else if (cloudType == utils.CONCEPT_FILTER) {
-      fullName = this.buildFullTagName(selectedTagValue, concepts.results);
-      if (selectedConcepts.has(fullName)) {
-        selectedConcepts.delete(fullName);
-      } else {
-        selectedConcepts.add(fullName);
-      }
-      this.setState({
-        selectedConcepts: selectedConcepts
-      });
+    // } else if (cloudType == utils.CONCEPT_FILTER) {
+    //   fullName = this.buildFullTagName(selectedTagValue, concepts.results);
+    //   if (selectedConcepts.has(fullName)) {
+    //     selectedConcepts.delete(fullName);
+    //   } else {
+    //     selectedConcepts.add(fullName);
+    //   }
+    //   this.setState({
+    //     selectedConcepts: selectedConcepts
+    //   });
 
-    } else if (cloudType == utils.KEYWORD_FILTER) {
-      fullName = this.buildFullTagName(selectedTagValue, keywords.results);
+    if (cloudType == utils.KEYWORD_FILTER) {
+      var fullName = this.buildFullTagName(selectedTagValue, keywords.results);
       if (selectedKeywords.has(fullName)) {
         selectedKeywords.delete(fullName);
       } else {
@@ -400,10 +402,10 @@ class Main extends React.Component {
 
     if (chartType === utils.ENTITY_FILTER) {
       trendQuery = 'enriched_text.entities.text::' + term;
-    } else if (chartType === utils.CATEGORY_FILTER) {
-      trendQuery = 'enriched_text.categories.label::' + term;
-    } else if (chartType === utils.CONCEPT_FILTER) {
-      trendQuery = 'enriched_text.concepts.text::' + term;
+    // } else if (chartType === utils.CATEGORY_FILTER) {
+    //   trendQuery = 'enriched_text.categories.label::' + term;
+    // } else if (chartType === utils.CONCEPT_FILTER) {
+    //   trendQuery = 'enriched_text.concepts.text::' + term;
     } else if (chartType === utils.KEYWORD_FILTER) {
       trendQuery = 'enriched_text.keywords.text::' + term;
     } else if (chartType === utils.ENTITY_TYPE_FILTER) {
@@ -457,8 +459,8 @@ class Main extends React.Component {
     const searchQuery = query;
     var { 
       selectedEntities, 
-      selectedCategories, 
-      selectedConcepts,
+      // selectedCategories, 
+      // selectedConcepts,
       selectedKeywords,
       selectedEntityTypes,
       queryType,
@@ -470,8 +472,8 @@ class Main extends React.Component {
     // clear filters if this a new text search
     if (clearFilters) {
       selectedEntities.clear();
-      selectedCategories.clear();
-      selectedConcepts.clear();
+      // selectedCategories.clear();
+      // selectedConcepts.clear();
       selectedKeywords.clear();
       selectedEntityTypes.clear();
     }
@@ -491,13 +493,25 @@ class Main extends React.Component {
     history.pushState({}, {}, `/${searchQuery.replace(/ /g, '+')}`);
     const filterString = this.buildFilterStringForQuery();
 
+    // let passagesData = {
+    //   enabled: returnPassages,
+    //   per_document: true,
+    //   max_per_document: 1,
+    //   count: 1000
+    // };
+
+    console.log('RETURN PASSAGES: ' + returnPassages);
     // build query string, with filters and optional params
+    // if user wants passages, turn off highlighting
+    var highlightsOn = ! returnPassages;
+    console.log('TURN ON HIGHLIGHTS: ' + highlightsOn);
     const qs = queryString.stringify({
       query: searchQuery,
       filters: filterString,
       count: (limitResults == true ? 100 : 1000),
       sort: sortOrder,
-      returnPassages: returnPassages,
+      highlight: highlightsOn,
+      // QueryLargePassages: passagesData,
       queryType: (queryType === utils.QUERY_NATURAL_LANGUAGE ? 
         'natural_language_query' : 'query:'),
     });
@@ -512,22 +526,25 @@ class Main extends React.Component {
         }
       })
       .then(json => {
+        // console.log('+++ DISCO RESULTS JSON +++');
+        // console.log(JSON.stringify(json, null, 2));
         var data = utils.parseData(json);
-        const sessionToken = data.sessionToken;
+        // const sessionToken = data.sessionToken;
         var passages = [];
 
         if (returnPassages) {
-          passages = parsePassages(json);
-          // console.log('+++ PASSAGES RESULTS +++');
-          // const util = require('util');
-          // console.log(util.inspect(passages.results, false, null));
+          console.log('+++ PASSAGES RESULTS +++');
+          // console.log(JSON.stringify(data.results, null, 2));
+          // console.log(JSON.stringify(json, null, 2));
+          // passages = parsePassages(json);
+          console.log('+++ PASSAGES PARSED RESULTS +++');
+          // console.log(JSON.stringify(passages, null, 2));
         }
 
-        data = utils.formatData(data, passages, filterString);
+        data = utils.formatData(data, returnPassages, filterString);
         
         console.log('+++ DISCO RESULTS +++');
-        // const util = require('util');
-        // console.log(util.inspect(data.results, false, null));
+        // console.log(JSON.stringify(data.results, null, 2));
         console.log('numMatches: ' + data.results.length);
       
         // add up totals for the sentiment of reviews
@@ -536,8 +553,8 @@ class Main extends React.Component {
         this.setState({
           data: data,
           entities: parseEntities(json),
-          categories: parseCategories(json),
-          concepts: parseConcepts(json),
+          // categories: parseCategories(json),
+          // concepts: parseConcepts(json),
           keywords: parseKeywords(json),
           entityTypes: parseEntityTypes(json),
           loading: false,
@@ -549,7 +566,7 @@ class Main extends React.Component {
           trendData: null,
           sentimentTerm: utils.SENTIMENT_TERM_ITEM,
           trendTerm: utils.TRENDING_TERM_ITEM,
-          sessionToken: sessionToken
+          // sessionToken: sessionToken
         });
         scrollToMain();
       })
@@ -598,8 +615,8 @@ class Main extends React.Component {
   buildFilterStringForQuery() {
     var { 
       selectedEntities, 
-      selectedCategories, 
-      selectedConcepts,
+      // selectedCategories, 
+      // selectedConcepts,
       selectedKeywords,
       selectedEntityTypes
     } = this.state;
@@ -611,14 +628,14 @@ class Main extends React.Component {
     filterString = filterString + entitiesString;
       
     // add any category filters, if selected
-    var categoryString = this.buildFilterStringForFacet(selectedCategories,
-      'enriched_text.categories.label::', filterString === '');
-    filterString = filterString + categoryString;
+    // var categoryString = this.buildFilterStringForFacet(selectedCategories,
+    //   'enriched_text.categories.label::', filterString === '');
+    // filterString = filterString + categoryString;
 
     // add any concept filters, if selected
-    var conceptString = this.buildFilterStringForFacet(selectedConcepts,
-      'enriched_text.concepts.text::', filterString === '');
-    filterString = filterString + conceptString;
+    // var conceptString = this.buildFilterStringForFacet(selectedConcepts,
+    //   'enriched_text.concepts.text::', filterString === '');
+    // filterString = filterString + conceptString;
 
     // add any keyword filters, if selected
     var keywordString = this.buildFilterStringForFacet(selectedKeywords,
@@ -657,7 +674,8 @@ class Main extends React.Component {
    * getMatches - return collection matches to be rendered.
    */
   getMatches() {
-    const { data, currentPage, sessionToken } = this.state;
+    // const { data, currentPage, sessionToken } = this.state;
+    const { data, currentPage } = this.state;
 
     if (!data) {
       return null;
@@ -671,7 +689,7 @@ class Main extends React.Component {
     return (
       <Matches 
         matches={ pageOfMatches }
-        sessionToken= { sessionToken }
+        // sessionToken= { sessionToken }
         onGetFullReviewRequest={this.updateDocMetrics.bind(this)}
       />
     );
@@ -717,36 +735,36 @@ class Main extends React.Component {
   /**
    * getCategoriesFilter - return categories filter object to be rendered.
    */
-  getCategoriesFilter() {
-    const { categories, selectedCategories } = this.state;
-    if (!categories) {
-      return null;
-    }
-    return (
-      <CategoriesFilter 
-        onFilterItemsChange={this.filtersChanged.bind(this)}
-        categories={categories.results}
-        selectedCategories={selectedCategories}
-      />
-    );
-  }
+  // getCategoriesFilter() {
+  //   const { categories, selectedCategories } = this.state;
+  //   if (!categories) {
+  //     return null;
+  //   }
+  //   return (
+  //     <CategoriesFilter 
+  //       onFilterItemsChange={this.filtersChanged.bind(this)}
+  //       categories={categories.results}
+  //       selectedCategories={selectedCategories}
+  //     />
+  //   );
+  // }
 
   /**
    * getConceptsFilter - return concepts filter object to be rendered.
    */
-  getConceptsFilter() {
-    const { concepts, selectedConcepts } = this.state;
-    if (!concepts) {
-      return null;
-    }
-    return (
-      <ConceptsFilter 
-        onFilterItemsChange={this.filtersChanged.bind(this)}
-        concepts={concepts.results}
-        selectedConcepts={selectedConcepts}
-      />
-    );
-  }
+  // getConceptsFilter() {
+  //   const { concepts, selectedConcepts } = this.state;
+  //   if (!concepts) {
+  //     return null;
+  //   }
+  //   return (
+  //     <ConceptsFilter 
+  //       onFilterItemsChange={this.filtersChanged.bind(this)}
+  //       concepts={concepts.results}
+  //       selectedConcepts={selectedConcepts}
+  //     />
+  //   );
+  // }
 
   /**
    * getKeywordsFilter - return keywords filter object to be rendered.
@@ -787,8 +805,12 @@ class Main extends React.Component {
    */
   render() {
     const { loading, data, error, searchQuery,
-      entities, categories, concepts, keywords, entityTypes,
-      selectedEntities, selectedCategories, selectedConcepts, selectedKeywords, selectedEntityTypes,
+      entities, 
+      // categories, concepts, 
+      keywords, entityTypes,
+      selectedEntities, 
+      // selectedCategories, selectedConcepts, 
+      selectedKeywords, selectedEntityTypes,
       numMatches, numPositive, numNeutral, numNegative,
       tagCloudType, trendData, trendLoading, trendError, trendTerm,
       queryType, returnPassages, limitResults, sortOrder,
@@ -806,10 +828,10 @@ class Main extends React.Component {
 
     var filtersOn = false;
     if (selectedEntities.size > 0 ||
-      selectedCategories.size > 0 ||
-      selectedConcepts.size > 0 ||
-      selectedKeywords.size > 0 ||
-      selectedEntityTypes.size > 0) {
+//      selectedCategories.size > 0 ||
+//      selectedConcepts.size > 0 ||
+        selectedEntityTypes.size > 0 ||
+        selectedKeywords.size > 0 ) {
       filtersOn = true;
     }
 
@@ -870,30 +892,6 @@ class Main extends React.Component {
               </Accordion.Content>
             </Accordion>
             <Accordion styled>
-              <Accordion.Title 
-                active={activeFilterIndex == utils.CATEGORY_DATA_INDEX}
-                index={utils.CATEGORY_DATA_INDEX}
-                onClick={this.handleAccordionClick.bind(this)}>
-                <Icon name='dropdown' />
-                Categories
-              </Accordion.Title>
-              <Accordion.Content active={activeFilterIndex == utils.CATEGORY_DATA_INDEX}>
-                {this.getCategoriesFilter()}
-              </Accordion.Content>
-            </Accordion>
-            <Accordion styled>
-              <Accordion.Title 
-                active={activeFilterIndex == utils.CONCEPT_DATA_INDEX}
-                index={utils.CONCEPT_DATA_INDEX}
-                onClick={this.handleAccordionClick.bind(this)}>
-                <Icon name='dropdown' />
-                Concepts
-              </Accordion.Title>
-              <Accordion.Content active={activeFilterIndex == utils.CONCEPT_DATA_INDEX}>
-                {this.getConceptsFilter()}
-              </Accordion.Content>
-            </Accordion>
-            <Accordion styled>
               <Accordion.Title
                 active={activeFilterIndex == utils.KEYWORD_DATA_INDEX}
                 index={utils.KEYWORD_DATA_INDEX}
@@ -908,12 +906,12 @@ class Main extends React.Component {
             <Accordion styled>
               <Accordion.Title
                 active={activeFilterIndex == utils.ENTITY_TYPE_DATA_INDEX}
-                index={utils.ENTITY_TYPE_DATA_INDEX}
+                index={utils.ENTITY_TYPE_INDEX}
                 onClick={this.handleAccordionClick.bind(this)}>
                 <Icon name='dropdown' />
                 Entity Types
               </Accordion.Title>
-              <Accordion.Content active={activeFilterIndex == utils.ENTITY_TYPE_DATA_INDEX}>
+              <Accordion.Content active={activeFilterIndex == utils.ENTITY_TYPE_INDEX}>
                 {this.getEntityTypesFilter()}
               </Accordion.Content>
             </Accordion>
@@ -926,8 +924,8 @@ class Main extends React.Component {
             <Grid.Row>
               <TagCloudRegion
                 entities={entities}
-                categories={categories}
-                concepts={concepts}
+                // categories={categories}
+                // concepts={concepts}
                 keywords={keywords}
                 entityTypes={entityTypes}
                 tagCloudType={tagCloudType}
@@ -939,7 +937,7 @@ class Main extends React.Component {
 
           {/* Results */}
 
-          <Grid.Column width={7}>
+          <Grid.Column width={13}>
             <Grid.Row>
               {loading ? (
                 <div className="results">
@@ -999,46 +997,6 @@ class Main extends React.Component {
             </Grid.Row>
           </Grid.Column>
 
-          <Grid.Column width={6}>
-
-            {/* Sentiment Chart Region */}
-
-            <Grid.Row className='rrr'>
-              <SentimentChart
-                entities={entities}
-                categories={categories}
-                concepts={concepts}
-                keywords={keywords}
-                entityTypes={entityTypes}
-                term={sentimentTerm}
-                onSentimentTermChanged={this.sentimentTermChanged.bind(this)}
-              />
-            </Grid.Row>
-
-            <Divider hidden/>
-            <Divider/>
-            <Divider hidden/>
-
-            {/* Trend Chart Region */}
-
-            <Grid.Row className='ttt'>
-              <div className="trend-chart">
-                <TrendChart
-                  trendData={trendData}
-                  trendLoading={trendLoading}
-                  trendError={trendError}
-                  entities={entities}
-                  categories={categories}
-                  concepts={concepts}
-                  keywords={keywords}
-                  entityTypes={entityTypes}
-                  term={trendTerm}
-                  onGetTrendDataRequest={this.getTrendData.bind(this)}
-                />
-              </div>
-            </Grid.Row>
-
-          </Grid.Column>
         </Grid.Row>
       </Grid>
     );
@@ -1049,7 +1007,7 @@ const parsePassages = data => ({
   rawResponse: Object.assign({}, data),
   // sentiment: data.aggregations[0].results.reduce((accumulator, result) =>
   //   Object.assign(accumulator, { [result.key]: result.matching_results }), {}),
-  results: data.result.passages
+  results: data.result.results[0].document_passages
 });
 
 /**
@@ -1063,18 +1021,18 @@ const parseEntities = data => ({
 /**
  * parseCategories - convert raw search results into collection of categories.
  */
-const parseCategories = data => ({
-  rawResponse: Object.assign({}, data),
-  results: data.result.aggregations[utils.CATEGORY_DATA_INDEX].results
-});
+// const parseCategories = data => ({
+//   rawResponse: Object.assign({}, data),
+//   results: data.result.aggregations[utils.CATEGORY_DATA_INDEX].results
+// });
 
 /**
  * parseConcepts - convert raw search results into collection of concepts.
  */
-const parseConcepts = data => ({
-  rawResponse: Object.assign({}, data),
-  results: data.result.aggregations[utils.CONCEPT_DATA_INDEX].results
-});
+// const parseConcepts = data => ({
+//   rawResponse: Object.assign({}, data),
+//   results: data.result.aggregations[utils.CONCEPT_DATA_INDEX].results
+// });
 
 /**
  * parseKeywords - convert raw search results into collection of keywords.
@@ -1106,14 +1064,14 @@ function scrollToMain() {
 Main.propTypes = {
   data: PropTypes.object,
   entities: PropTypes.object,
-  categories: PropTypes.object,
-  concepts: PropTypes.object,
+  // categories: PropTypes.object,
+  // concepts: PropTypes.object,
   keywords: PropTypes.object,
   entityTypes: PropTypes.object,
   searchQuery: PropTypes.string,
   selectedEntities: PropTypes.object,
-  selectedCategories: PropTypes.object,
-  selectedConcepts: PropTypes.object,
+  // selectedCategories: PropTypes.object,
+  // selectedConcepts: PropTypes.object,
   selectedKeywords: PropTypes.object,
   selectedEntityTypes: PropTypes.object,
   numMatches: PropTypes.number,

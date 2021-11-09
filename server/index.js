@@ -139,9 +139,8 @@ function createServer() {
     const qs = queryString.stringify({ 
       query: searchQuery,
       count: 1000,
-      highlight: true,
-      returnPassages: false,
-      queryType: 'natural_language_query'
+      queryType: 'natural_language_query',
+      sort: '-enriched_text.sentiment.score'
     });
     const fullUrl = req.protocol + '://' + req.get('host');
 
@@ -157,7 +156,7 @@ function createServer() {
 
         // get all the results data in right format
         var matches = utils.parseData(json);
-        matches = utils.formatData(matches, []);
+        matches = utils.formatData(matches, false);
         var totals = utils.getTotals(matches);
 
         res.render('index',

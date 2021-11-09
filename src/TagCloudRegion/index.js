@@ -91,7 +91,6 @@ export default class TagCloudRegion extends React.Component {
    * change the values show in the tag cloud.
    */
   cloudTypeChange(event, selection) {
-    console.log('TAG CLOUD FILTER CHANGED: ' + selection.value);
     this.setState({
       tagCloudType: selection.value
     });

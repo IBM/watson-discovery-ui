@@ -436,7 +436,7 @@ class Main extends React.Component {
   buildFullTagName(tag, collection) {
     // find the tag in collection
     for (var i=0; i<collection.length; i++) {
-      console.log('compare tag: ' + tag + ' with: ' + collection[i].key);
+      // console.log('compare tag: ' + tag + ' with: ' + collection[i].key);
       if (collection[i].key === tag) {
         // return the full tag so we can match the entries
         // listed in the filters (which also show num of matches)

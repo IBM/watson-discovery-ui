@@ -107,7 +107,7 @@ export default class Matches extends React.Component {
    */
   getMoreButton(item) {
     return <Modal
-      trigger={ <Button className="review-button" onClick={this.buttonClicked.bind(this, item)}>more...</Button> } 
+      trigger={ <Button className="review-button">more...</Button> } 
       closeIcon
       dimmer='blurring'
     >
@@ -136,20 +136,6 @@ export default class Matches extends React.Component {
         </div>
       </Modal.Content>
     </Modal>;
-  }
-
-  /**
-   * buttonClicked - user has clicked to see the full review.
-   */
-  buttonClicked(item) {
-    // let our parent know
-    // const { sessionToken } = this.state;
-
-    this.props.onGetFullReviewRequest({
-      // params required for Discovery call to generate "user clicked" event
-      // sessionToken: sessionToken,
-      documentId: item.id
-    });
   }
 
   // Important - this is needed to ensure changes to main properties
@@ -199,6 +185,4 @@ export default class Matches extends React.Component {
 // type check to ensure we are called correctly
 Matches.propTypes = {
   matches: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onGetFullReviewRequest: PropTypes.func.isRequired,
-  // sessionToken: PropTypes.string.isRequired
 };

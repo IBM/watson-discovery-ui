@@ -22,136 +22,17 @@ exports[`renders correctly 1`] = `
     </div>
   </h2>
   <div
-    className="ui compact right floated menu"
+    className="ui left aligned container"
   >
     <div
-      aria-expanded={false}
-      className="ui item simple dropdown"
-      onBlur={[Function]}
-      onChange={[Function]}
-      onClick={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onMouseDown={[Function]}
-      role="listbox"
-      tabIndex={0}
+      className="matches--list"
     >
-      <div
-        aria-atomic={true}
-        aria-live="polite"
-        className="divider text"
-        role="alert"
+      <a
+        className="ui red label"
       >
-        Entities
-      </div>
-      <i
-        aria-hidden="true"
-        className="dropdown icon"
-        onClick={[Function]}
-      />
-      <div
-        className="menu transition"
-      >
-        <div
-          aria-checked={true}
-          aria-selected={true}
-          className="active selected item"
-          onClick={[Function]}
-          role="option"
-          style={
-            Object {
-              "pointerEvents": "all",
-            }
-          }
-        >
-          <span
-            className="text"
-          >
-            Entities
-          </span>
-        </div>
-        <div
-          aria-checked={false}
-          aria-selected={false}
-          className="item"
-          onClick={[Function]}
-          role="option"
-          style={
-            Object {
-              "pointerEvents": "all",
-            }
-          }
-        >
-          <span
-            className="text"
-          >
-            Categories
-          </span>
-        </div>
-        <div
-          aria-checked={false}
-          aria-selected={false}
-          className="item"
-          onClick={[Function]}
-          role="option"
-          style={
-            Object {
-              "pointerEvents": "all",
-            }
-          }
-        >
-          <span
-            className="text"
-          >
-            Concepts
-          </span>
-        </div>
-        <div
-          aria-checked={false}
-          aria-selected={false}
-          className="item"
-          onClick={[Function]}
-          role="option"
-          style={
-            Object {
-              "pointerEvents": "all",
-            }
-          }
-        >
-          <span
-            className="text"
-          >
-            Keywords
-          </span>
-        </div>
-        <div
-          aria-checked={false}
-          aria-selected={false}
-          className="item"
-          onClick={[Function]}
-          role="option"
-          style={
-            Object {
-              "pointerEvents": "all",
-            }
-          }
-        >
-          <span
-            className="text"
-          >
-            Entity Types
-          </span>
-        </div>
-      </div>
+        No Matches Found
+      </a>
     </div>
-  </div>
-  <div
-    className="ui clearing hidden divider"
-  />
-  <div>
-    <div
-      className="word-cloud"
-    />
   </div>
 </div>
 `;

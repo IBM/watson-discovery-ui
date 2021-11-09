@@ -23,11 +23,8 @@ require('dotenv').config({
 require('isomorphic-fetch');
 const queryString = require('query-string');
 const queryBuilder = require('./query-builder');
-const queryTrendBuilder = require('./query-builder-trending');
-// const discoEvents = require('./disco-events');
 const WatsonDiscoverySetup = require('../lib/watson-discovery-setup');
 const DiscoveryV2 = require('ibm-watson/discovery/v2');
-const { IamAuthenticator } = require('ibm-watson/auth');
 const utils = require('../lib/utils');
 
 /**
@@ -50,12 +47,9 @@ arrayOfFiles.forEach(function(file) {
 // out of memory errors.
 discoveryDocs = discoveryDocs.slice(0,300);
 
+// Note that credentials are pulled from env
 const discovery = new DiscoveryV2({
   version: '2020-08-30',
-  authenticator: new IamAuthenticator({
-    apikey: 'hyZeFTi9g_SyaEGkJEWKAiyyl-1TG6p0V2hEoVuaAG56',
-  }),
-  serviceUrl: 'https://api.us-south.discovery.watson.cloud.ibm.com/instances/40b3d31e-de49-4bf6-8645-fd24e28a1f7b',
 });
 
 const discoverySetup = new WatsonDiscoverySetup(discovery);
@@ -83,14 +77,9 @@ const WatsonDiscoServer = new Promise((resolve) => {
       console.log('collection_id: ' + collection_id);
       queryBuilder.setProjectId(project_id);
       queryBuilder.setCollectionId(collection_id);
-      queryTrendBuilder.setProjectId(project_id);
-      queryTrendBuilder.setCollectionId(collection_id);
-      // discoEvents.setProjectId(project_id);
-      // discoEvents.setCollectionId(collection_id);
 
       collectionParams.documents = discoveryDocs;
-      console.log('Begin loading ' + discoveryDocs.length + 
-        ' json files into discovery. Please be patient as this can take several minutes.');
+      console.log('Begin loading json files into discovery. Please be patient as this can take several minutes.');
       discoverySetup.loadCollectionFiles(collectionParams);
       resolve(createServer());
     }
@@ -104,56 +93,12 @@ const WatsonDiscoServer = new Promise((resolve) => {
 function createServer() {
   const server = require('./express');
 
-  // server.get('/api/createEvent', (req, res) => {
-  //   const { sessionToken, documentId } = req.query;
-  //   console.log('sessionToken: ' + sessionToken);
-  //   // console.log('IN api/metrics');
-
-  //   var discoEventsParams = discoEvents.createEvent(documentId, sessionToken);
-
-  //   discovery.createEvent(discoEventsParams)
-  //     .then(response => res.json(response))
-  //     .catch(error => {
-  //       if (error.message === 'Number of free queries per month exceeded') {
-  //         res.status(429).json(error);
-  //       } else {
-  //         res.status(error.code).json(error);
-  //       }
-  //     });
-  // });
-
-  // handles search request from search bar
-  server.get('/api/trending', (req, res) => {
-    const { query, filters, count } = req.query;
-
-    console.log('In /api/trending: query = ' + query);
-
-    // build params for the trending search request
-    var params = {};
-    params.query = query;
-
-    // add any filters and a limit to the number of matches that can be found
-    if (filters) {
-      params.filter = filters;
-    }
-    params.count = count;
-
-    var searchParams = queryTrendBuilder.search(params);
-    discovery.query(searchParams)
-      .then(response => res.json(response))
-      .catch(error => {
-        if (error.message === 'Number of free queries per month exceeded') {
-          res.status(429).json(error);
-        } else {
-          res.status(error.code).json(error);
-        }
-      });
-  });
-
   // handles search request from search bar
   server.get('/api/search', (req, res) => {
-    const { query, filters, count, returnPassages, sort, queryType } = req.query;
+    const { query, filters, count, sort, queryType } = req.query;
     var params = {};
+
+    console.log('In /api/search query');
 
     // add query and the type of query
     if (queryType == 'natural_language_query') {
@@ -168,8 +113,6 @@ function createServer() {
     }
 
     params.count = count;
-    // params.passagesCount = count;
-    // params.passages = returnPassages;
     if (! sort) {
       params.sort = utils.BY_HIGHEST_QUERY;
     } else {
@@ -177,7 +120,6 @@ function createServer() {
     }
     
     var searchParams = queryBuilder.search(params);
-    console.log('In /api/search query = ' + searchParams);
     discovery.query(searchParams)
       .then(response => res.json(response))
       .catch(error => {
@@ -191,16 +133,17 @@ function createServer() {
 
   // handles search string appened to url
   server.get('/:searchQuery', function(req, res){
+    console.log('In /:searchQuery: query');
+
     var searchQuery = req.params.searchQuery.replace(/\+/g, ' ');
     const qs = queryString.stringify({ 
       query: searchQuery,
       count: 1000,
+      highlight: true,
       returnPassages: false,
       queryType: 'natural_language_query'
     });
     const fullUrl = req.protocol + '://' + req.get('host');
-
-    console.log('In /:searchQuery: query = ' + qs);
 
     fetch(fullUrl + `/api/search?${qs}`)
       .then(response => {
@@ -221,8 +164,6 @@ function createServer() {
           {
             data: matches,
             entities: json,
-            // categories: json,
-            // concepts: json,
             keywords: json,
             entityTypes: json,
             searchQuery,
@@ -230,7 +171,6 @@ function createServer() {
             numPositive: totals.numPositive,
             numNeutral: totals.numNeutral,
             numNegative: totals.numNegative,
-            // sessionToken: json.result.session_token,
             error: null
           }
         );
@@ -244,47 +184,37 @@ function createServer() {
 
   // initial start-up request
   server.get('/*', function(req, res) {
-    console.log('In /*');
-
     // this is the inital query to the discovery service
-    console.log('Initial Search Query at start-up');
-    let passagesData = {
-      enabled: true,
-      count: 1000
-    };
+    console.log('Initial startup query');
+
     const params = queryBuilder.search({ 
       naturalLanguageQuery: '',
       count: 1000,
-      sort: '-enriched_text.sentiment.score',
-      // passages: false
-      QueryLargePassages: passagesData
+      sort: '-enriched_text.sentiment.score'
     });
-    console.log('In startup query = ' + JSON.stringify(params, null, 2));
 
     return new Promise((resolve, reject) => {
       discovery.query(params)
         .then(results =>  {
 
-          console.log('++++++++++++ DISCO RESULTS ++++++++++++++++++++');
+          // console.log('++++++++++++ DISCO RESULTS ++++++++++++++++++++');
           // console.log(JSON.stringify(results, null, 2));
 
           // get all the results data in right format
           var matches = utils.parseData(results);
-          matches = utils.formatData(matches, []);
+          // false = we do not want to see passages initially
+          matches = utils.formatData(matches, false);
           var totals = utils.getTotals(matches);
     
           res.render('index', { 
             data: matches, 
             entities: results,
-            // categories: results,
-            // concepts: results,
             keywords: results,
             entityTypes: results,
             numMatches: matches.results.length,
             numPositive: totals.numPositive,
             numNeutral: totals.numNeutral,
             numNegative: totals.numNegative,
-            // sessionToken: results.result.session_token
           });
     
           resolve(results);

@@ -47,7 +47,6 @@ class EntityTypesFilter extends FilterContainer {
    * of all entity items.
    */
   getCollection() {
-    console.log('Get ENTITY TYPES Collection');
     const { entityTypes } = this.state;
     return entityTypes;
   }

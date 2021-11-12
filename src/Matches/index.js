@@ -29,8 +29,7 @@ export default class Matches extends React.Component {
     super(...props);
 
     this.state = {
-      matches: this.props.matches || null,
-      // sessionToken: this.props.sessionToken || ''
+      matches: this.props.matches || null
     };
   }
 

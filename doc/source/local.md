@@ -6,9 +6,11 @@ This document shows how to run the `watson-discovery-ui` application on your loc
 
 1. [Clone the repo](#1-clone-the-repo)
 1. [Create your Watson Discovery service](#2-create-your-watson-discovery-service)
-1. [Load Discovery files and configure collection](#3-load-discovery-files-and-configure-collection)
-1. [Add Watson Discovery credentials](#4-add-watson-discovery-credentials)
-1. [Run the application](#5-run-the-application)
+1. [Create a new project](#3-create-a-new-project)
+1. [Upload data files into collection](#4-upload-data-files-into-collection)
+1. [Enrich the data](#5-enrich-the-data)
+1. [Add Watson Discovery credentials](#6-add-watson-discovery-credentials)
+1. [Run the application](#7-run-the-application)
 
 ## 1. Clone the repo
 
@@ -20,69 +22,106 @@ git clone https://github.com/IBM/watson-discovery-ui
 
 To create your Watson Discovery service:
 
-  1. Click **Create resource** on your IBM Cloud dashboard.
+  1. Click `Create resource` on your IBM Cloud dashboard.
 
   2. Search the catalog for `discovery`.
 
-  3. Click the **Discovery** tile to launch the create panel.
+  3. Click the `Discovery` tile to launch the create panel.
 
-![create-service](https://raw.githubusercontent.com/IBM/pattern-utils/master/watson-discovery/discover-service-create.png)
+![provision-disco](images/provision-disco.png)
 
-From the panel, enter a unique name, a region and resource group, and a plan type (select the default **lite** plan). Click **Create** to create and enable your service.
+Enter a unique name, select a location, and select the default **Plus** plan.
 
-## 3. Load Discovery files and configure collection
+**NOTE**: The first instance of the Plus plan for IBM Watson Discovery comes with a free 30-day trial. If you no longer require your Plus instance for Watson Discovery after going through this exercise, you can delete it.
 
-Launch the **Watson Discovery** tool. Create a new data collection by selecting the **Update your own data** option. Give the data collection a unique name.
+![launch-disco](images/launch-disco.png)
 
-![create-collection](images/create-collection.png)
+From the Discovery instance page, click `Launch Watson Discovery`.
 
-When prompted to get started by **uploading your data**, select and upload the first 2 json documents located in your local `data/airbnb` directory. Once uploaded, you can then use the **Configure data** option to add the **Keyword Extraction** enrichment, as show here:
+## 3. Create a new project
 
-![upload_data_into_collection](images/add-keyword-enrichment.gif)
+The landing page for the Discovery service shows you a list of current projects. Click `New project`.
 
-> Note: failure to do this will result in no **keywords** being shown in the app.
+![project-page](images/project-page.png)
 
-Once the enrichments are selected, use the **Apply changes to collection** button to upload the remaining json files found in `data/airbnb`. **Warning** - this make take several minutes to complete.
+Give the project a unique name and select the `Document Retrieval` option, then click `Next`.
 
-> There may be a limit to the number of files you can upload, based on your IBM Cloud account permissions.
+![project-create](images/project-create.png)
 
-## 4. Add Watson Discovery credentials
+## 4. Upload data files into collection
+
+The next step is telling Discovery where your data will come from. In this code pattern, we will be uploading the data from JSON data files, so click `Upload data`, and then click `Next`.
+
+![project-data-source](images/project-data-source.png)
+
+Enter a collection name, then click `Next`.
+
+![collection-name](images/collection-name.png)
+
+**NOTE**: The Watson Discovery service queries are defaulted to be performed on all collections within a project. For this reason, it is advised that you create a new project to contain the collection we will be creating for this code pattern.
+
+To load our AirBnB reviews, click on `Drag and drop files here or upload` button to select and upload the JSON review files located in your local `data/airbnb` directory.
+
+![collection-load-data](images/collection-load-data.png)
+
+When you complete the action, click `Finish`.
+
+Be patient as the data files are uploaded. Discovery provides alerts to tell you when the upload is complete.
+
+## 5. Enrich the data
+
+Click `Manage collections` on the left to show all of the collections associated with your project.
+
+**Note**: To change which project you are currently working on, you can click `My projects` at the top of the page.
+
+![project-collections-page](images/project-collections-page.png)
+
+When you click the collection that you just created, you will see that all 999 reviews have been loaded.
+
+![collection-panel](images/collection-panel.png)
+
+Select the `Enrichments` tab. As you can see, the default enrichments are Part of speech and Entities v2. For this review data, you are also going to include Keywords and Sentiment of Document.
+
+![collection-enrichments](images/collection-enrichments.png)
+
+For each of these new enrichments, click `Fields to enrich`, and select the `text` field.
+
+Click `Apply changes and reprocess` to add the enrichments.
+
+## 6. Add Watson Discovery credentials
 
 Next, you'll need to add the Watson Discovery credentials to the .env file.
 
 1. From the home directory of your cloned local repo, create a .env file by copying it from the sample version.
 
-```bash
-cp env.sample .env
-```
+    ```bash
+    cp env.sample .env
+    ```
 
 2. Locate the service credentials listed on the home page of your Discovery service and copy the `API Key` and `URL` values.
 
-![get-creds](https://raw.githubusercontent.com/IBM/pattern-utils/master/watson-discovery/get-creds.png)
+    ![launch-disco](images/launch-disco.png)
 
-3. From your Discovery service collection page, locate the credentials for your collection by clicking the dropdown button located at the top right. Copy the `Collection ID` and `Environment ID` values.
+3. You also need your project ID, which you can get from the Watson Discovery Integrate and deploy panel for your project.
 
-<p align="center">
-  <img width="400" src="images/get-creds.png">
-</p>
+    ![project-id](images/project-id.png)
 
 4. Take the copied values and paste them into the `.env` file:
 
-```bash
-# Copy this file to .env and replace the credentials with
-# your own before starting the app.
+    ```bash
+    # Copy this file to .env and replace the credentials with
+    # your own before starting the app.
 
-# Watson Discovery
-DISCOVERY_URL=<add_discovery_url>
-DISCOVERY_ENVIRONMENT_ID=<add_discovery_environment_id>
-DISCOVERY_COLLECTION_ID=<add_discovery_collection_id>
-DISCOVERY_APIKEY=<add_discovery_iam_apikey>
+    # Watson Discovery
+    DISCOVERY_PROJECT_ID=0a3f4e2d-bb5e-9999-8888-631535710b06
+    DISCOVERY_APIKEY=hyZeFTi9g_zzzzzzzz-1TG6p0V2hEoVuaAG56
+    DISCOVERY_URL=https://api.us-south.discovery.watson.cloud.ibm.com/instances/40b3d31e-9999-8888-fd24e28a1f7b
 
-# Run locally on a non-default port (default is 3000)
-# PORT=3000
-```
+    # Run locally on a non-default port (default is 3000)
+    # PORT=3000
+    ```
 
-## 5. Run the application
+## 7. Run the application
 
 Install [Node.js](https://nodejs.org/en/) runtime or NPM.
 

@@ -4,19 +4,18 @@
 
 # Develop a fully featured web app built on the Watson Discovery Service
 
-**Note:** This code pattern uses Watson Discovery V1, and will not work with Discovery V2. However, you can still use it to learn the Discovery features. Future plans include updating the code pattern to work with Discovery V2.
+>**Note:** This code pattern has been updated to work with Watson Discovery V2. Unfortunately, some of the original features of the V1 version are no longer supported and had to be removed - please keep this in mind as you view the source code, documentation and accompanying video.
 
 In this code pattern, we walk you through a working example of a web application that queries and manipulates data from the Watson Discovery Service. This web app contains multiple UI components that you can use as a starting point for developing your own Watson Discovery Service applications. 
 
 The main benefit of using the Watson Discovery Service is its powerful analytics engine that provides cognitive enrichments and insights into your data. This app provides examples of how to showcase these enrichments through the use of filters, lists and graphs. The key enrichments that we will focus on are:
 
 * Entities - people, companies, organizations, cities, and more.
-* Categories - classification of the data into a hierarchy of categories up to 5 levels deep.
-* Concepts - identified general concepts that aren't necessarily referenced in the data.
 * Keywords - important topics typically used to index or search the data.
 * Sentiment - the overall positive or negative sentiment of each document.
+* Parts of Speech - recognizes parts of speech, including nouns, verbs, adjectives, adverbs, conjunctions, interjections, and numerals.
 
-For this code pattern, we will be using data that contains reviews of Airbnb properties located in the Austin, TX area. 
+For this code pattern, we will be using data that contains reviews of Airbnb properties located in the Austin, TX area.
 
 When the reader has completed this code pattern, they will understand how to:
 
@@ -44,18 +43,10 @@ Here is a rough sketch of the main UI screen, followed by a description of each 
 1. List Filters: Multiple drop-down lists of filters that are applied to the search resullts. Each drop down list contains entities, categories, concepts and keywords associated with the results. For each drop down filter item, the number of matches will also be displayed. If a user selects a filter item, a new search will be conducted and will update the results panel (#3). Filter items selected will also effect what is shown in the tag cloud (#4).
 1. Search results and pagination menu: Shows a page of result items (e.g. 5 per page) and a pagination menu to allow the user to scroll through pages of result items. There will also be a drop-down menu that will allow the user to sort the entries based on date, score, and sentiment value.
 1. Tag cloud filter: Similar to the list filters (#2) but in a different format. One set of filter items (either entities, categories, concepts or keywords) can be displayed at one time. User can select/deselect items in the cloud to turn on/off filters. Applied filters in both filter views (#2 and #4) will always be in sync.
-1. Trend chart: Chart to show the sentiment trend for a specific entity, category, concept, or keyword over time. The data will reflect the current matching result set.
-1. Sentiment chart: Donut chart that shows the total percentages of postive, neutral and negative reviews of selected entities, categories, concepts, or keywords. The data will reflect the current matching result set.
+1. Trend chart: Chart to show the sentiment trend for a specific entity, category, concept, or keyword over time. The data will reflect the current matching result set. **[Removed with V2 update]**
+1. Sentiment chart: Donut chart that shows the total percentages of postive, neutral and negative reviews of selected entities, categories, concepts, or keywords. The data will reflect the current matching result set. **[Removed with V2 update]**
 
 > Note: see [DEVELOPING.md](DEVELOPING.md) for project structure.
-
-## Watson Discovery Continuous Relevancy Training
-
-This feature provides the ability of the Discovery service to learn from user behavior. By clicking on the "read more" button attached to each review, the user can inform Discovery that a particular review is more relevant than other non-clicked reviews. Discovery can than use that information to improve the ranking of results for future queries.
-
-For more information about this feature, read about it [here](https://cloud.ibm.com/docs/services/discovery/continuous-training.html#crt).
-
-> NOTE: This feature is only available with the "advanced" Watson Discovery service plan. This code pattern assumes the "lite" or "free" plan, so this feature is not enabled by default. For those users with the ability to create a paid Discovery plan, please link to the [`advanced-disco-plan`](https://github.com/IBM/watson-discovery-ui/tree/advanced-disco-plan) branch associated with this repo. The instructions and the `Deploy to IBM Cloud` button on that branch will initiate the creation of an "advanced" Discovery service.
 
 ## Included components
 
@@ -74,23 +65,147 @@ For more information about this feature, read about it [here](https://cloud.ibm.
 
 [![video](https://img.youtube.com/vi/5EEmQwcjUa4/0.jpg)](https://youtu.be/5EEmQwcjUa4)
 
-## Deployment options
+# Steps
 
-Click on one of the options below for instructions on deploying the app.
+1. [Clone the repo](#1-clone-the-repo)
+1. [Create your Watson Discovery service](#2-create-your-watson-discovery-service)
+1. [Create a new project](#3-create-a-new-project)
+1. [Upload data files into collection](#4-upload-data-files-into-collection)
+1. [Enrich the data](#5-enrich-the-data)
+1. [Add Watson Discovery credentials](#6-add-watson-discovery-credentials)
+1. [Run the application](#7-run-the-application)
 
-|   |   |   |
-| - | - | - |
-| [![openshift](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/openshift.png)](doc/source/openshift.md) | [![public](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/cf.png)](doc/source/cf.md) | [![local](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/local.png)](doc/source/local.md) |
+## 1. Clone the repo
+
+```bash
+git clone https://github.com/IBM/watson-discovery-ui
+```
+
+## 2. Create your Watson Discovery service
+
+To create your Watson Discovery service:
+
+  1. Click `Create resource` on your IBM Cloud dashboard.
+
+  2. Search the catalog for `discovery`.
+
+  3. Click the `Discovery` tile to launch the create panel.
+
+![provision-disco](doc/source/images/provision-disco.png)
+
+Enter a unique name, select a location, and select the default **Plus** plan.
+
+>**NOTE**: The first instance of the Plus plan for IBM Watson Discovery comes with a free 30-day trial. If you no longer require your Plus instance for Watson Discovery after going through this exercise, you can delete it.
+
+![launch-disco](doc/source/images/launch-disco.png)
+
+From the Discovery instance page, click `Launch Watson Discovery`.
+
+## 3. Create a new project
+
+The landing page for the Discovery service shows you a list of current projects. Click `New project`.
+
+![project-page](doc/source/images/project-page.png)
+
+Give the project a unique name and select the `Document Retrieval` option, then click `Next`.
+
+![project-create](doc/source/images/project-create.png)
+
+## 4. Upload data files into collection
+
+The next step is telling Discovery where your data will come from. In this code pattern, we will be uploading the data from JSON data files, so click `Upload data`, and then click `Next`.
+
+![project-data-source](doc/source/images/project-data-source.png)
+
+Enter a collection name, then click `Next`.
+
+![collection-name](doc/source/images/collection-name.png)
+
+>**NOTE**: The Watson Discovery service queries are defaulted to be performed on all collections within a project. For this reason, it is advised that you create a new project to contain the collection we will be creating for this code pattern.
+
+To load our AirBnB reviews, click on `Drag and drop files here or upload` button to select and upload the JSON review files located in your local `data/airbnb` directory.
+
+![collection-load-data](doc/source/images/collection-load-data.png)
+
+When you complete the action, click `Finish`.
+
+Be patient as the data files are uploaded. Discovery provides alerts to tell you when the upload is complete.
+
+## 5. Enrich the data
+
+Click `Manage collections` on the left to show all of the collections associated with your project.
+
+>**Note**: To change which project you are currently working on, you can click `My projects` at the top of the page.
+
+![project-collections-page](doc/source/images/project-collections-page.png)
+
+When you click the collection that you just created, you will see that all 999 reviews have been loaded.
+
+![collection-panel](doc/source/images/collection-panel.png)
+
+Select the `Enrichments` tab. As you can see, the default enrichments are Part of speech and Entities v2. For this review data, you are also going to include Keywords and Sentiment of Document.
+
+![collection-enrichments](doc/source/images/collection-enrichments.png)
+
+For each of these new enrichments, click `Fields to enrich`, and select the `text` field.
+
+Click `Apply changes and reprocess` to add the enrichments.
+
+## 6. Add Watson Discovery credentials
+
+Next, you'll need to add the Watson Discovery credentials to the .env file.
+
+1. From the home directory of your cloned local repo, create a .env file by copying it from the sample version.
+
+    ```bash
+    cp env.sample .env
+    ```
+
+2. Locate the service credentials listed on the home page of your Discovery service and copy the `API Key` and `URL` values.
+
+    ![launch-disco](doc/source/images/launch-disco.png)
+
+3. You also need your project ID, which you can get from the Watson Discovery Integrate and deploy panel for your project.
+
+    ![project-id](doc/source/images/project-id.png)
+
+4. Take the copied values and paste them into the `.env` file:
+
+    ```bash
+    # Copy this file to .env and replace the credentials with
+    # your own before starting the app.
+
+    # Watson Discovery
+    DISCOVERY_PROJECT_ID=0a3f4e2d-bb5e-9999-8888-631535710b06
+    DISCOVERY_APIKEY=hyZeFTi9g_zzzzzzzz-1TG6p0V2hEoVuaAG56
+    DISCOVERY_URL=https://api.us-south.discovery.watson.cloud.ibm.com/instances/40b3d31e-9999-8888-fd24e28a1f7b
+
+    # Run locally on a non-default port (default is 3000)
+    # PORT=3000
+    ```
+
+## 7. Run the application
+
+Install [Node.js](https://nodejs.org/en/) runtime or NPM.
+
+Then run:
+
+```bash
+npm install
+npm start
+```
+
+The application will be available in your browser at `http://localhost:3000`.
+
+>**NOTE**: The server host can be changed as required in app.js and `PORT` can be set in the `.env` file.
 
 # Sample UI layout
 
-![sample_output](doc/source/images/sample-output.png)
+![sample_output](doc/source/images/sample-output-v2.png)
 
 Note that each review will be truncated to 200 characters or less. A `more...` button will be provided for each review, and when clicked, the full review title and text will be displayed in a pop-up modal window, as shown below:
 
 ![full_review](doc/source/images/review-popup.png)
-
-If the `more...` button is clicked, the review data will be passed back to Discovery so that it can be logged as a relevant review for the query. Refer to the [Watson Discovery Continuous Relevancy Training](#watson-discovery-continuous-relevancy-training) section above for more information on this feature.
 
 # Troubleshooting
 
@@ -110,7 +225,7 @@ be usable on restart. If you used `Deploy to IBM Cloud` the restart should be au
 
 * No keywords appear in the app
 
-  > This can be due to not having a proper configuration file assigned to your data collection. See [Step 3](#3-load-the-discovery-files) above.
+  > This can be due to not having a enrichments enabled in your data collection. See [Step 5](#5-enrich-the-data) above.
 
 * When using the `Deploy to IBM Cloud` button, you get a failure during the `Deploy Stage`, as shown in this log message:
 

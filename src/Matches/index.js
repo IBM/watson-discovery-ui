@@ -29,8 +29,7 @@ export default class Matches extends React.Component {
     super(...props);
 
     this.state = {
-      matches: this.props.matches || null,
-      sessionToken: this.props.sessionToken || ''
+      matches: this.props.matches || null
     };
   }
 
@@ -78,18 +77,6 @@ export default class Matches extends React.Component {
   }
 
   /**
-   * getScore - round up to 4 decimal places.
-   */
-  getScore(item) {
-    var score = '0.0';
-
-    if (item.score) {
-      score = item.score.toFixed(4);
-    }
-    return score;
-  }
-
-  /**
    * getSentiment - determine which icon to display to represent
    * positive, negative, and neutral sentiment.
    */
@@ -119,7 +106,7 @@ export default class Matches extends React.Component {
    */
   getMoreButton(item) {
     return <Modal
-      trigger={ <Button className="review-button" onClick={this.buttonClicked.bind(this, item)}>more...</Button> } 
+      trigger={ <Button className="review-button">more...</Button> } 
       closeIcon
       dimmer='blurring'
     >
@@ -148,20 +135,6 @@ export default class Matches extends React.Component {
         </div>
       </Modal.Content>
     </Modal>;
-  }
-
-  /**
-   * buttonClicked - user has clicked to see the full review.
-   */
-  buttonClicked(item) {
-    // let our parent know
-    const { sessionToken } = this.state;
-
-    this.props.onGetFullReviewRequest({
-      // params required for Discovery call to generate "user clicked" event
-      sessionToken: sessionToken,
-      documentId: item.id
-    });
   }
 
   // Important - this is needed to ensure changes to main properties
@@ -196,7 +169,6 @@ export default class Matches extends React.Component {
                   text={ this.getText(item, item.textBlurb) }
                   moreButton= { this.getMoreButton(item) }
                   highlightText={ item.highlightText }
-                  score={ this.getScore(item) }
                   date={ item.date }
                   sentiment={ this.getSentiment(item) }
                 />)
@@ -212,6 +184,4 @@ export default class Matches extends React.Component {
 // type check to ensure we are called correctly
 Matches.propTypes = {
   matches: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onGetFullReviewRequest: PropTypes.func.isRequired,
-  sessionToken: PropTypes.string.isRequired
 };

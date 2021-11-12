@@ -17,7 +17,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TagCloud } from 'react-tagcloud';
-import { Menu, Dropdown, Header, Divider, Icon } from 'semantic-ui-react';
+import { Menu, Dropdown, Header, Divider, Container, Icon } from 'semantic-ui-react';
 const utils = require('../../lib/utils');
 
 var _gDoUpdate = true;    // determines if we render update or not
@@ -36,8 +36,6 @@ export default class TagCloudRegion extends React.Component {
 
     this.state = {
       entities: this.props.entities,
-      categories: this.props.categories,
-      concepts: this.props.concepts,
       keywords: this.props.keywords,
       entityTypes: this.props.entityTypes,
       tagCloudType: this.props.tagCloudType
@@ -52,19 +50,19 @@ export default class TagCloudRegion extends React.Component {
     const {
       tagCloudType,
       entities,
-      categories,
-      concepts,
       keywords,
       entityTypes
     } = this.state;
 
-    // console.log('tagCloudType: ' + tagCloudType);
+    if (keywords.results === undefined || keywords.results.length == 0 ||
+      entities.results === undefined || entities.results.length == 0 ||
+      entityTypes.results === undefined || entityTypes.results.length == 0) {
+      return undefined;
+    }
+
+    // console.log('getTagCloudItems for type: ' + tagCloudType);
     var oldArray = [];
-    if (tagCloudType === utils.CATEGORY_FILTER) {
-      oldArray = JSON.parse(JSON.stringify(categories.results));
-    } else if (tagCloudType === utils.CONCEPT_FILTER) {
-      oldArray = JSON.parse(JSON.stringify(concepts.results));
-    } else if (tagCloudType === utils.KEYWORD_FILTER) {
+    if (tagCloudType === utils.KEYWORD_FILTER) {
       oldArray = JSON.parse(JSON.stringify(keywords.results));
     } else if (tagCloudType === utils.ENTITY_FILTER) {
       oldArray = JSON.parse(JSON.stringify(entities.results));
@@ -127,33 +125,6 @@ export default class TagCloudRegion extends React.Component {
     return true;
   }
 
-  // Important - this is needed to ensure changes to main properties
-  // are propagated down to our component. In this case, some other
-  // search or filter event has occurred which has changed the list 
-  // items we are showing.
-  static getDerivedStateFromProps(props, state) {
-    _gDoUpdate = false;
-    
-    // to avoid unnecessary updates, check if data has actually changed
-    if (props.categories.results !== state.categories.results ||
-        props.concepts.results !== state.concepts.results ||
-        props.keywords.results !== state.keywords.results ||
-        props.entities.results !== state.entities.results ||
-        props.entityTypes.results !== state.entityTypes.results) {
-      _gDoUpdate = true;
-      return {
-        categories: props.categories,
-        concepts: props.concepts,
-        keywords: props.keywords,
-        entities: props.entities,
-        entityTypes: props.entityTypes
-      };
-    }
-
-    // no change in state
-    return null;
-  }
-
   // Only do update if something has changed
   // NOTE: we need to do this for this specific component because it
   // draws itself randomly each time, which we want to avoid when
@@ -161,11 +132,31 @@ export default class TagCloudRegion extends React.Component {
   /*eslint no-unused-vars: ["error", { "args": "none" }]*/
   shouldComponentUpdate(nextProps, nextState) {
     if (_gDoUpdate) {
+      // console.log('shouldComponentUpdate TRUE');
       return true;
     } else {
+      // console.log('shouldComponentUpdate FALSE');
       _gDoUpdate = true;
       return false;
     }
+  }
+
+  // Important - this is needed to ensure changes to main properties
+  // are propagated down to our component. In this case, some other
+  // search or filter event has occured which has changed the list of 
+  // items we are displaying in our tag cloud.
+  static getDerivedStateFromProps(props, state) {
+    if (props.entities !== state.entities ||
+        props.keywords !== state.keywords ||
+        props.entityTypes !== state.entityTypes) {
+      return {
+        entities: props.entities,
+        keywords: props.keywords,
+        entityTypes: props.entityTypes
+      };
+    }
+    // no change in state
+    return null;
   }
 
   /**
@@ -176,6 +167,11 @@ export default class TagCloudRegion extends React.Component {
       luminosity: 'light',
       hue: 'blue'
     };
+
+    let noMatchesFound = false;
+    if (this.getTagCloudItems() === undefined || this.getTagCloudItems().length == 0) {
+      noMatchesFound = true;
+    }
 
     return (
       <div>
@@ -188,26 +184,37 @@ export default class TagCloudRegion extends React.Component {
             </Header.Subheader>
           </Header.Content>
         </Header>
-        <Menu compact floated='right'>
-          <Dropdown 
-            simple
-            item
-            onChange={ this.cloudTypeChange.bind(this) }
-            defaultValue={ utils.ENTITY_FILTER }
-            options={ utils.filterTypes }
-          />
-        </Menu>
-        <Divider clearing hidden/>
-        <div>
-          <TagCloud 
-            tags={ this.getTagCloudItems() }
-            minSize={12}
-            maxSize={35}
-            colorOptions={options}
-            className="word-cloud"
-            onClick={this.tagSelected.bind(this)}
-          />
-        </div>
+      
+        { noMatchesFound ? (
+          <Container textAlign='left'>
+            <div className="matches--list">
+              <a className="ui red label">No Matches Found</a>
+            </div>
+          </Container>
+        ) : (
+          <div>
+            <Menu compact floated='right'>
+              <Dropdown 
+                simple
+                item
+                onChange={ this.cloudTypeChange.bind(this) }
+                defaultValue={ utils.ENTITY_FILTER }
+                options={ utils.filterTypes }
+              />
+            </Menu>
+            <Divider clearing hidden/>
+            <div>
+              <TagCloud 
+                tags={ this.getTagCloudItems() }
+                minSize={12}
+                maxSize={35}
+                colorOptions={options}
+                className="word-cloud"
+                onClick={this.tagSelected.bind(this)}
+              />
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -215,8 +222,6 @@ export default class TagCloudRegion extends React.Component {
 
 TagCloudRegion.propTypes = {
   entities: PropTypes.object,
-  categories: PropTypes.object,
-  concepts: PropTypes.object,
   keywords: PropTypes.object,
   entityTypes: PropTypes.object,
   tagCloudSelection: PropTypes.string,

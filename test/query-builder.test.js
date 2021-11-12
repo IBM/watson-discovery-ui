@@ -18,18 +18,15 @@ import queryBuilder from '../server/query-builder';
 
 beforeEach(() => {
   queryBuilder.setCollectionId('collection');
-  queryBuilder.setEnvironmentId('environment');
+  queryBuilder.setProjectId('project');
 });
 
 describe('Query builder returns params for discovery service', () => {
   test('when opts are NOT passed', () => {
     expect(queryBuilder.search()).toEqual({
-      environmentId: 'environment',
-      collectionId: 'collection',
-      highlight: true,
+      projectId: 'project',
+      collectionIds: [ 'collection' ],
       aggregation: '[term(enriched_text.entities.text).term(enriched_text.sentiment.document.label),' +
-      'term(enriched_text.categories.label).term(enriched_text.sentiment.document.label),' +
-      'term(enriched_text.concepts.text).term(enriched_text.sentiment.document.label),' +
       'term(enriched_text.keywords.text).term(enriched_text.sentiment.document.label),' +
       'term(enriched_text.entities.type).term(enriched_text.sentiment.document.label)]'
     });
@@ -37,25 +34,20 @@ describe('Query builder returns params for discovery service', () => {
 
   test('when opts are passed', () => {
     expect(queryBuilder.search({
-      filter: 'enriched_text.categories.label::"test"',
+      filter: 'enriched_text.keywords.label::"test"',
       count: 500,
       naturalLanguageQuery: 'test',
-      passages: false,
       sort: 'enriched_text.sentiment.document.score'
     })).toEqual({
-      environmentId: 'environment',
-      collectionId: 'collection',
-      highlight: true,
+      projectId: 'project',
+      collectionIds: [ 'collection' ],
       aggregation: 
         '[term(enriched_text.entities.text).term(enriched_text.sentiment.document.label),' +
-        'term(enriched_text.categories.label).term(enriched_text.sentiment.document.label),' +
-        'term(enriched_text.concepts.text).term(enriched_text.sentiment.document.label),' +
         'term(enriched_text.keywords.text).term(enriched_text.sentiment.document.label),' +
         'term(enriched_text.entities.type).term(enriched_text.sentiment.document.label)]',
       naturalLanguageQuery: 'test',
-      filter: 'enriched_text.categories.label::"test"',
+      filter: 'enriched_text.keywords.label::"test"',
       count: 500,
-      passages: false,
       sort: 'enriched_text.sentiment.document.score'
     });
   });
